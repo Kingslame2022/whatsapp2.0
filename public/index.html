@@ -61,44 +61,17 @@
   .hint { color: var(--wa-meta); font-size: 12px; margin-top: 10px; line-height: 1.5; }
   .owner-link { color: var(--wa-meta); font-size: 11px; margin-top: 24px; text-decoration: underline; cursor: pointer; }
 
-  /* Banned-Screen */
-  .banned-screen {
-    flex: 1; display: flex; flex-direction: column;
-    background: #0a0a0a; color: #fff;
-    justify-content: center; align-items: center;
-    padding: 32px 24px; text-align: center;
-  }
-  .banned-screen .icon {
-    width: 88px; height: 88px; border-radius: 50%;
-    background: #3a1010; color: #ff6b6b;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 42px; margin-bottom: 26px;
-    border: 2px solid #4a1818;
-  }
+  .banned-screen { flex: 1; display: flex; flex-direction: column; background: #0a0a0a; color: #fff; justify-content: center; align-items: center; padding: 32px 24px; text-align: center; }
+  .banned-screen .icon { width: 88px; height: 88px; border-radius: 50%; background: #3a1010; color: #ff6b6b; display: flex; align-items: center; justify-content: center; font-size: 42px; margin-bottom: 26px; border: 2px solid #4a1818; }
   .banned-screen h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; letter-spacing: .3px; }
-  .banned-screen .num {
-    font-family: 'Courier New', monospace; font-size: 17px;
-    color: #8e8e93; margin-bottom: 24px; padding: 8px 16px;
-    background: #1c1c1e; border-radius: 8px;
-  }
-  .banned-screen .msg {
-    font-size: 14.5px; line-height: 1.6; color: #b0b0b0;
-    max-width: 340px; margin-bottom: 28px;
-  }
-  .banned-screen .status-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 16px; border-radius: 20px;
-    font-size: 13px; font-weight: 600; margin-bottom: 20px;
-  }
+  .banned-screen .num { font-family: 'Courier New', monospace; font-size: 17px; color: #8e8e93; margin-bottom: 24px; padding: 8px 16px; background: #1c1c1e; border-radius: 8px; }
+  .banned-screen .msg { font-size: 14.5px; line-height: 1.6; color: #b0b0b0; max-width: 340px; margin-bottom: 28px; }
+  .banned-screen .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 20px; }
   .banned-screen .status-badge.pending { background: #3a2f0a; color: #ffa726; }
   .banned-screen .status-badge.approved { background: #0f2a14; color: #4caf50; }
   .banned-screen .status-badge.denied { background: #3a1010; color: #ff6b6b; }
   .banned-screen .actions { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 300px; }
-  .banned-screen .actions button {
-    width: 100%; padding: 14px; border-radius: 8px;
-    font-size: 15px; font-weight: 600; cursor: pointer; border: 0;
-    letter-spacing: .3px;
-  }
+  .banned-screen .actions button { width: 100%; padding: 14px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; border: 0; letter-spacing: .3px; }
   .banned-screen .actions .primary { background: #25d366; color: #000; }
   .banned-screen .actions .primary:disabled { background: #3a3a3c; color: #8e8e93; cursor: not-allowed; }
   .banned-screen .actions .secondary { background: transparent; color: #8e8e93; border: 1px solid #3a3a3c; }
@@ -168,7 +141,6 @@
   .check-screen .check-result { margin-top: 18px; padding: 12px 14px; border-radius: 10px; font-size: 14px; display: none; }
   .check-screen .check-result.show { display: block; }
   .check-screen .check-result.locked { background: #2a1f0a; color: #ffa726; }
-  .check-screen .check-result.ok { background: #0f2a14; color: #4caf50; }
   .check-screen .check-result.info { background: #1c1c1e; color: #8e8e93; }
 
   .country-picker { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex; align-items: flex-end; justify-content: center; z-index: 250; }
@@ -181,7 +153,7 @@
 
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; animation: fade .15s; }
   @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
-  .modal .box { background: #fff; border-radius: 6px; padding: 22px; max-width: 340px; width: 100%; box-shadow: 0 8px 30px rgba(0,0,0,.3); }
+  .modal .box { background: #fff; border-radius: 6px; padding: 22px; max-width: 340px; width: 100%; box-shadow: 0 8px 30px rgba(0,0,0,.3); max-height: 80vh; overflow-y: auto; }
   .modal .box h2 { color: var(--wa-green); margin-bottom: 10px; font-size: 17px; font-weight: 600; }
   .modal .box p { color: var(--wa-text); margin-bottom: 16px; line-height: 1.5; font-size: 14px; }
   .modal .box input, .modal .box textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--wa-divider); border-radius: 4px; font-size: 15px; margin-bottom: 12px; outline: none; font-family: inherit; }
@@ -245,6 +217,7 @@ let socket = null;
 let currentPeer = null;
 let chatMessages = {};
 let peerProfiles = {};
+let contacts = {};
 let bannedPollTimer = null;
 
 function api(path, opts = {}) {
@@ -299,6 +272,40 @@ function avatarFor(label, size, pic) {
   if (pic) div.appendChild(el('img', { src: pic, alt: '' }));
   else div.textContent = (label || '').replace(/[^\d]/g, '').slice(-2) || '??';
   return div;
+}
+
+// ---------- Theme ----------
+function hexShade(hex, percent) {
+  const h = (hex || '#075e54').replace('#', '');
+  if (h.length !== 6) return hex;
+  const num = parseInt(h, 16);
+  let r = (num >> 16) + Math.round(255 * percent / 100);
+  let g = ((num >> 8) & 0x00ff) + Math.round(255 * percent / 100);
+  let b = (num & 0x0000ff) + Math.round(255 * percent / 100);
+  r = Math.max(0, Math.min(255, r));
+  g = Math.max(0, Math.min(255, g));
+  b = Math.max(0, Math.min(255, b));
+  return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+}
+
+function applyTheme(theme) {
+  const root = document.documentElement;
+  const t = theme || {};
+  if (t.bg)        root.style.setProperty('--wa-bg', t.bg);
+  else             root.style.removeProperty('--wa-bg');
+  if (t.btn) {
+    root.style.setProperty('--wa-green', t.btn);
+    root.style.setProperty('--wa-green-dark', hexShade(t.btn, -18));
+    root.style.setProperty('--wa-green-light', hexShade(t.btn, 15));
+  } else {
+    root.style.removeProperty('--wa-green');
+    root.style.removeProperty('--wa-green-dark');
+    root.style.removeProperty('--wa-green-light');
+  }
+  if (t.bubbleOut) root.style.setProperty('--wa-bubble-out', t.bubbleOut);
+  else             root.style.removeProperty('--wa-bubble-out');
+  if (t.bubbleIn)  root.style.setProperty('--wa-bubble-in', t.bubbleIn);
+  else             root.style.removeProperty('--wa-bubble-in');
 }
 
 // ---------- Modals ----------
@@ -413,12 +420,8 @@ async function refreshBannedView(number, statusHolder, actionsHolder) {
     statusHolder.appendChild(el('div', { class: 'status-badge pending' }, '⏳ Prüfung läuft'));
     actionsHolder.appendChild(el('button', { class: 'secondary', onclick: () => refreshBannedView(number, statusHolder, actionsHolder) }, 'Status aktualisieren'));
     actionsHolder.appendChild(el('button', { class: 'secondary', onclick: () => { if (bannedPollTimer) clearInterval(bannedPollTimer); renderAuth('login'); } }, 'Zum Login'));
-
-    // Auto-Refresh alle 8s
     if (bannedPollTimer) clearInterval(bannedPollTimer);
-    bannedPollTimer = setInterval(() => {
-      refreshBannedView(number, statusHolder, actionsHolder);
-    }, 8000);
+    bannedPollTimer = setInterval(() => refreshBannedView(number, statusHolder, actionsHolder), 8000);
   } else if (appeal.status === 'approved') {
     if (bannedPollTimer) { clearInterval(bannedPollTimer); bannedPollTimer = null; }
     statusHolder.appendChild(el('div', { class: 'status-badge approved' }, '✓ Freigegeben'));
@@ -428,7 +431,6 @@ async function refreshBannedView(number, statusHolder, actionsHolder) {
     statusHolder.appendChild(el('div', { class: 'status-badge denied' }, '✕ Prüfung abgelehnt'));
     actionsHolder.appendChild(el('button', { class: 'secondary', onclick: () => renderAuth('login') }, 'Zum Login'));
   } else {
-    // keine Appeal
     actionsHolder.appendChild(el('button', { class: 'primary', onclick: async () => {
       try {
         const r = await fetch('/api/appeal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ number }) });
@@ -529,7 +531,7 @@ async function loadGeneratedNumber() {
 
     const banRes = await fetch('/api/check/' + encodeURIComponent(data.number));
     const ban = await banRes.json();
-    if (ban.banned) {
+    if (ban.banned || ban.locked) {
       showBanModal(data.number, {
         onCancel: () => loadGeneratedNumber(),
         onSupport: () => toast('Support: support@whatsapp.com')
@@ -747,11 +749,13 @@ async function bootstrapAfterLogin() {
     profile = await api('/api/me');
     me = profile.number;
     localStorage.setItem('oldwhats_lastnumber', me);
+    applyTheme(profile.theme);
     if (!profile.name) {
       const name = prompt('Wie soll dein Name sein?', 'Anon') || 'Anon';
       await api('/api/profile', { method: 'POST', body: JSON.stringify({ name }) });
       profile.name = name;
     }
+    await loadContacts();
     connectSocket();
     await loadChats();
     renderChatList();
@@ -775,6 +779,10 @@ function connectSocket() {
   });
   socket.on('kicked', () => handleLocked());
   socket.on('connect_error', () => toast('Socket-Verbindung fehlgeschlagen'));
+}
+
+async function loadContacts() {
+  try { contacts = await api('/api/contacts'); } catch { contacts = {}; }
 }
 
 async function loadChats() {
@@ -827,7 +835,7 @@ async function renderChatList() {
     }).sort((a, b) => (b.last?.ts || 0) - (a.last?.ts || 0));
     for (const { peer, last } of arr) {
       const pp = peerProfiles[peer] || {};
-      const displayName = pp.name || peer;
+      const displayName = contacts[peer] || pp.name || peer;
       list.appendChild(el('div', { class: 'chatitem', onclick: () => openChat(peer) }, [
         avatarFor(displayName, 48, pp.picture),
         el('div', { class: 'info' }, [
@@ -842,19 +850,40 @@ async function renderChatList() {
 }
 
 function newChat() {
-  const modal = el('div', { class: 'modal', onclick: (e) => { if (e.target.classList.contains('modal')) modal.remove(); } }, [
-    el('div', { class: 'box' }, [
-      el('h2', {}, 'Neuer Chat'),
-      el('p', {}, 'Nummer eingeben:'),
-      el('input', { id: 'peerInput', placeholder: '+7771234567', autofocus: true, onkeydown: (e) => { if (e.key === 'Enter') submit(); } }),
-      el('div', { class: 'row' }, [
-        el('button', { class: 'cancel', onclick: () => modal.remove() }, 'Abbrechen'),
-        el('button', { class: 'ok', onclick: submit }, 'Öffnen')
-      ])
-    ])
-  ]);
+  const contactNumbers = Object.keys(contacts);
+  const modal = el('div', { class: 'modal', onclick: (e) => { if (e.target.classList.contains('modal')) modal.remove(); } });
+  const box = el('div', { class: 'box' });
+  box.appendChild(el('h2', {}, 'Neuer Chat'));
+
+  if (contactNumbers.length > 0) {
+    box.appendChild(el('p', {}, 'Kontakt auswählen oder Nummer eingeben:'));
+    const list = el('div', { style: 'max-height:200px;overflow-y:auto;margin-bottom:12px;border:1px solid var(--wa-divider);border-radius:4px' });
+    for (const num of contactNumbers) {
+      list.appendChild(el('div', {
+        style: 'padding:10px 12px;border-bottom:1px solid #eee;cursor:pointer;display:flex;justify-content:space-between;align-items:center',
+        onclick: () => { modal.remove(); openChat(num); }
+      }, [
+        el('div', {}, [
+          el('div', { style: 'font-weight:500;font-size:14px;color:var(--wa-text)' }, contacts[num]),
+          el('div', { style: 'font-size:12px;color:var(--wa-meta);font-family:Courier New,monospace' }, num)
+        ]),
+        el('span', { style: 'color:var(--wa-green);font-size:18px' }, '›')
+      ]));
+    }
+    box.appendChild(list);
+  } else {
+    box.appendChild(el('p', {}, 'Nummer eingeben:'));
+  }
+
+  box.appendChild(el('input', { id: 'peerInput', placeholder: '+7771234567', autofocus: true, onkeydown: (e) => { if (e.key === 'Enter') submit(); } }));
+  box.appendChild(el('div', { class: 'row' }, [
+    el('button', { class: 'cancel', onclick: () => modal.remove() }, 'Abbrechen'),
+    el('button', { class: 'ok', onclick: submit }, 'Öffnen')
+  ]));
+  modal.appendChild(box);
   document.body.appendChild(modal);
   setTimeout(() => document.getElementById('peerInput')?.focus(), 50);
+
   function submit() {
     const v = document.getElementById('peerInput').value.trim();
     if (!v) return;
@@ -876,7 +905,7 @@ function renderChat() {
   const app = document.getElementById('app');
   app.innerHTML = '';
   const pp = peerProfiles[currentPeer] || {};
-  const displayName = pp.name || currentPeer;
+  const displayName = contacts[currentPeer] || pp.name || currentPeer;
 
   app.appendChild(el('header', {}, [
     el('button', { class: 'back', onclick: backToList }, '←'),
@@ -969,6 +998,83 @@ function renderSettings() {
     el('div', { class: 'hint' }, 'Mit dieser Nummer und deinem Passwort loggst du dich überall ein.')
   ]));
 
+  // ----- Theme -----
+  const theme = profile.theme || {};
+  wrap.appendChild(el('div', { class: 'section' }, [
+    el('h3', {}, 'Design'),
+    el('div', { class: 'field' }, [
+      el('label', {}, 'Hintergrund'),
+      el('input', { type: 'color', id: 'themeBg', value: theme.bg || '#ece5dd', style: 'height:40px;padding:4px;cursor:pointer' })
+    ]),
+    el('div', { class: 'field' }, [
+      el('label', {}, 'Buttons & Header'),
+      el('input', { type: 'color', id: 'themeBtn', value: theme.btn || '#075e54', style: 'height:40px;padding:4px;cursor:pointer' })
+    ]),
+    el('div', { class: 'field' }, [
+      el('label', {}, 'Eigene Nachrichten (Bubble)'),
+      el('input', { type: 'color', id: 'themeBubbleOut', value: theme.bubbleOut || '#dcf8c6', style: 'height:40px;padding:4px;cursor:pointer' })
+    ]),
+    el('div', { class: 'field' }, [
+      el('label', {}, 'Andere Nachrichten (Bubble)'),
+      el('input', { type: 'color', id: 'themeBubbleIn', value: theme.bubbleIn || '#ffffff', style: 'height:40px;padding:4px;cursor:pointer' })
+    ]),
+    el('div', { class: 'btn-row', style: 'justify-content:flex-start' }, [
+      el('button', { class: 'btn', onclick: saveTheme }, 'Design speichern'),
+      el('button', { class: 'btn secondary', onclick: resetTheme }, 'Zurücksetzen')
+    ])
+  ]));
+
+  // ----- Kontakte -----
+  const contactEntries = Object.entries(contacts);
+  wrap.appendChild(el('div', { class: 'section' }, [
+    el('h3', {}, 'Kontakte'),
+    el('div', { style: 'margin-bottom:12px' }, contactEntries.length === 0
+      ? el('div', { class: 'hint' }, 'Noch keine Kontakte gespeichert.')
+      : el('div', {}, contactEntries.map(([num, name]) =>
+          el('div', {
+            style: 'display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px solid var(--wa-divider);border-radius:4px;margin-bottom:6px'
+          }, [
+            el('div', {}, [
+              el('div', { style: 'font-weight:500;font-size:14px' }, name),
+              el('div', { style: 'font-size:12px;color:var(--wa-meta);font-family:Courier New,monospace' }, num)
+            ]),
+            el('button', {
+              style: 'background:transparent;border:0;color:#c62828;font-size:18px;cursor:pointer;padding:4px 8px',
+              onclick: async () => {
+                try {
+                  await api('/api/contacts/' + encodeURIComponent(num), { method: 'DELETE' });
+                  delete contacts[num];
+                  toast('Kontakt gelöscht');
+                  renderSettings();
+                } catch (e) { toast('Fehler'); }
+              }
+            }, '✕')
+          ])
+        ))
+    ),
+    el('div', { class: 'field' }, [
+      el('label', {}, 'Nummer'),
+      el('input', { id: 'contactNumber', placeholder: '+7771234567', inputmode: 'tel' })
+    ]),
+    el('div', { class: 'field' }, [
+      el('label', {}, 'Name'),
+      el('input', { id: 'contactName', placeholder: 'Name', maxlength: 40 })
+    ]),
+    el('div', { class: 'btn-row', style: 'justify-content:flex-start' }, [
+      el('button', { class: 'btn', onclick: async () => {
+        const num = document.getElementById('contactNumber').value.trim();
+        const name = document.getElementById('contactName').value.trim();
+        if (!num || !name) { toast('Nummer und Name eingeben'); return; }
+        try {
+          await api('/api/contacts', { method: 'POST', body: JSON.stringify({ number: num, name }) });
+          contacts[num] = name;
+          toast('Kontakt gespeichert');
+          renderSettings();
+        } catch (e) { toast('Fehler'); }
+      }}, 'Kontakt speichern')
+    ])
+  ]));
+
   wrap.appendChild(el('div', { class: 'section' }, [
     el('h3', {}, 'Nummern-Check'),
     el('div', { class: 'hint', style: 'margin-bottom:12px' }, 'Prüfe, ob eine beliebige Nummer gebannt oder gesperrt ist.'),
@@ -1016,6 +1122,32 @@ async function saveProfileSettings() {
     toast('Profil gespeichert');
     renderSettings();
   } catch (e) { toast('Speichern fehlgeschlagen'); }
+}
+
+async function saveTheme() {
+  const theme = {
+    bg:        document.getElementById('themeBg').value,
+    btn:       document.getElementById('themeBtn').value,
+    bubbleOut: document.getElementById('themeBubbleOut').value,
+    bubbleIn:  document.getElementById('themeBubbleIn').value
+  };
+  try {
+    await api('/api/profile', { method: 'POST', body: JSON.stringify({ theme }) });
+    profile.theme = theme;
+    applyTheme(theme);
+    toast('Design gespeichert');
+  } catch (e) { toast('Fehler beim Speichern'); }
+}
+
+async function resetTheme() {
+  const theme = { bg: '', btn: '', bubbleOut: '', bubbleIn: '' };
+  try {
+    await api('/api/profile', { method: 'POST', body: JSON.stringify({ theme }) });
+    profile.theme = null;
+    applyTheme(null);
+    renderSettings();
+    toast('Design zurückgesetzt');
+  } catch (e) { toast('Fehler'); }
 }
 
 // ---------- Nummern-Check ----------
@@ -1117,8 +1249,8 @@ function renderNumberCheck() {
 
 function buildCheckResultBox(r) {
   if (r.locked) return el('div', { class: 'check-result show locked' }, '🔒 ' + r.number + ' ist gesperrt.');
-  if (r.status && r.status !== 200) return el('div', { class: 'check-result show info' }, 'API-Status: ' + r.status + ' — keine eindeutige Antwort.');
-  return el('div', { class: 'check-result show ok' }, '✓ ' + r.number + ' ist frei.');
+  if (r.status && r.status !== 200 && !r.banned) return el('div', { class: 'check-result show info' }, 'API-Status: ' + r.status + ' — keine eindeutige Antwort.');
+  return null;   // frei / banned → keine Box (banned zeigt Modal)
 }
 
 function openCountryPicker() {
@@ -1168,8 +1300,9 @@ function logout() {
   if (socket) { socket.disconnect(); socket = null; }
   localStorage.removeItem('oldwhats_token');
   token = null; me = null; profile = null;
-  chatMessages = {}; peerProfiles = {}; currentPeer = null;
+  chatMessages = {}; peerProfiles = {}; contacts = {}; currentPeer = null;
   checkState = { country: COUNTRIES[1], number: '', result: null };
+  applyTheme(null);
   renderAuth('login');
 }
 
@@ -1181,6 +1314,8 @@ function logout() {
     profile = await api('/api/me');
     me = profile.number;
     localStorage.setItem('oldwhats_lastnumber', me);
+    applyTheme(profile.theme);
+    await loadContacts();
     connectSocket();
     await loadChats();
     renderChatList();
