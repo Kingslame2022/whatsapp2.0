@@ -1,6 +1,5 @@
 // language: JavaScript, file: server.js, runtime: Node 18+, target: Render
-// Express + Socket.IO. Nummern-Pool persistent in numbers.json.
-// Ban-API wird serverseitig geproxied — Client bekommt nur das Ergebnis.
+// Account-System: Nummer + Passwort (scrypt), Token persistent, Messages serverseitig.
 
 const express = require('express');
 const http = require('http');
@@ -14,66 +13,169 @@ const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 
 const PORT = process.env.PORT || 3000;
-const NUMBERS_FILE = path.join(__dirname, 'numbers.json');
-const MESSAGES_FILE = path.join(__dirname, 'messages.json');
+const DATA_DIR = path.join(__dirname, 'data');
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
 
-// ---------- Persistenz ----------
-function load(file, fallback) {
-  try { return JSON.parse(fs.readFileSync(file, 'utf8')); }
-  catch { return fallback; }
-}
-function save(file, data) {
-  fs.writeFileSync(file, JSON.stringify(data, null, 2));
-}
+const USERS_FILE    = path.join(DATA_DIR, 'users.json');
+const MESSAGES_FILE = path.join(DATA_DIR, 'messages.json');
+const TOKENS_FILE   = path.join(DATA_DIR, 'tokens.json');
 
-let numbers = load(NUMBERS_FILE, {});       // { "+9791234567": { createdAt, owner } }
-let messages = load(MESSAGES_FILE, {});     // { chatId: [ {from, to, text, ts} ] }
+function load(f, fb) { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return fb; } }
+function save(f, d) { fs.writeFileSync(f, JSON.stringify(d, null, 2)); }
 
-// ---------- Nummern-Ranges ----------
+let users    = load(USERS_FILE, {});     // { "+9791234567": { hash, salt, name, picture, status, createdAt } }
+let messages = load(MESSAGES_FILE, {});  // { "chatKey": [msg, ...] }
+let tokens   = load(TOKENS_FILE, {});    // { token: number }
+
 const RANGES = ['+979', '+921', '+777', '+888'];
 
-function randomDigits(n) {
-  let s = '';
-  for (let i = 0; i < n; i++) s += Math.floor(Math.random() * 10);
-  return s;
-}
-
-// 5% Chance auf "schöne" Nummer: alle Ziffern gleich ODER aufsteigend/absteigend
-function isPretty(local) {
-  if (/^(\d)\1+$/.test(local)) return true;                    // 7777777777
-  const asc = local.split('').every((d, i, a) => i === 0 || +d === +a[i-1] + 1);
-  const desc = local.split('').every((d, i, a) => i === 0 || +d === +a[i-1] - 1);
-  return asc || desc;
-}
+function randDigits(n) { let s = ''; for (let i = 0; i < n; i++) s += Math.floor(Math.random() * 10); return s; }
+function hashPassword(password, salt) { return crypto.scryptSync(password, salt, 64).toString('hex'); }
+function makeToken() { return crypto.randomBytes(32).toString('hex'); }
 
 function generateNumber() {
-  // 5% Chance: pretty, sonst random. Retry bis frei.
-  for (let attempt = 0; attempt < 100; attempt++) {
+  for (let i = 0; i < 500; i++) {
     const range = RANGES[Math.floor(Math.random() * RANGES.length)];
-    const local = Math.random() < 0.05
-      ? randomDigits(7).split('').map((_, i, a) => a[0]).join('')  // erstmal Platzhalter
-      : randomDigits(7);
-    let candidate = range + local;
+    let local;
     if (Math.random() < 0.05) {
-      // pretty: alle gleich
       const d = Math.floor(Math.random() * 10);
-      candidate = range + String(d).repeat(7);
+      local = String(d).repeat(7);
+    } else {
+      local = randDigits(7);
     }
-    if (!numbers[candidate]) {
-      numbers[candidate] = { createdAt: Date.now(), owner: null };
-      save(NUMBERS_FILE, numbers);
-      return candidate;
-    }
+    const candidate = range + local;
+    if (!users[candidate]) return candidate;
   }
-  // Fallback: erzwinge freie Nummer
-  let candidate;
-  do { candidate = RANGES[0] + randomDigits(7); } while (numbers[candidate]);
-  numbers[candidate] = { createdAt: Date.now(), owner: null };
-  save(NUMBERS_FILE, numbers);
-  return candidate;
+  let c;
+  do { c = RANGES[0] + randDigits(7); } while (users[c]);
+  return c;
 }
 
-// ---------- Ban-Check API (Proxy) ----------
+function auth(req, res, next) {
+  const h = req.headers.authorization || '';
+  const token = h.replace(/^Bearer\s+/i, '').trim();
+  const num = tokens[token];
+  if (!num || !users[num]) return res.status(401).json({ error: 'unauthorized' });
+  req.user = num;
+  next();
+}
+
+app.use(express.json({ limit: '5mb' }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// ----- Nummer vorschlagen (noch nicht beansprucht) -----
+app.post('/api/generate', (req, res) => {
+  res.json({ number: generateNumber() });
+});
+
+// ----- Registrierung: Nummer + Passwort -----
+app.post('/api/register', (req, res) => {
+  const { number, password } = req.body || {};
+  if (!number || !password) return res.status(400).json({ error: 'missing fields' });
+  if (!RANGES.some(r => number.startsWith(r))) return res.status(400).json({ error: 'invalid range' });
+  if (String(password).length < 4) return res.status(400).json({ error: 'password_too_short' });
+  if (users[number]) return res.status(409).json({ error: 'number_taken' });
+
+  const salt = crypto.randomBytes(16).toString('hex');
+  users[number] = {
+    hash: hashPassword(password, salt),
+    salt,
+    name: '',
+    picture: null,
+    status: 'Hey! Nutze OldWhats.',
+    createdAt: Date.now()
+  };
+  save(USERS_FILE, users);
+
+  const token = makeToken();
+  tokens[token] = number;
+  save(TOKENS_FILE, tokens);
+  res.json({ number, token });
+});
+
+// ----- Login -----
+app.post('/api/login', (req, res) => {
+  const { number, password } = req.body || {};
+  if (!number || !password) return res.status(400).json({ error: 'missing fields' });
+  const u = users[number];
+  if (!u) return res.status(401).json({ error: 'invalid' });
+  if (hashPassword(password, u.salt) !== u.hash) return res.status(401).json({ error: 'invalid' });
+
+  const token = makeToken();
+  tokens[token] = number;
+  save(TOKENS_FILE, tokens);
+  res.json({ number, token });
+});
+
+// ----- Logout -----
+app.post('/api/logout', auth, (req, res) => {
+  const h = req.headers.authorization || '';
+  const token = h.replace(/^Bearer\s+/i, '').trim();
+  delete tokens[token];
+  save(TOKENS_FILE, tokens);
+  res.json({ ok: true });
+});
+
+// ----- Eigenes Profil -----
+app.get('/api/me', auth, (req, res) => {
+  const u = users[req.user];
+  res.json({
+    number: req.user,
+    name: u.name,
+    picture: u.picture,
+    status: u.status,
+    createdAt: u.createdAt
+  });
+});
+
+app.post('/api/profile', auth, (req, res) => {
+  const { name, picture, status } = req.body || {};
+  const u = users[req.user];
+  if (typeof name === 'string') u.name = name.slice(0, 40);
+  if (typeof status === 'string') u.status = status.slice(0, 80);
+  if (typeof picture === 'string' || picture === null) u.picture = picture;
+  save(USERS_FILE, users);
+  res.json({ ok: true });
+});
+
+// ----- Peer-Profil (Name, Bild) -----
+app.get('/api/user/:number', auth, (req, res) => {
+  const u = users[req.params.number];
+  if (!u) return res.json({ number: req.params.number, exists: false });
+  res.json({
+    number: req.params.number,
+    exists: true,
+    name: u.name,
+    picture: u.picture,
+    status: u.status
+  });
+});
+
+// ----- Chats-Liste -----
+app.get('/api/chats', auth, (req, res) => {
+  const me = req.user;
+  const peers = new Set();
+  for (const key of Object.keys(messages)) {
+    const [a, b] = key.split('|');
+    if (a === me) peers.add(b);
+    if (b === me) peers.add(a);
+  }
+  const out = [...peers].map(p => {
+    const key = [me, p].sort().join('|');
+    const msgs = messages[key] || [];
+    const last = msgs[msgs.length - 1] || null;
+    return { peer: p, last };
+  }).sort((a, b) => (b.last?.ts || 0) - (a.last?.ts || 0));
+  res.json(out);
+});
+
+// ----- Nachrichten mit Peer -----
+app.get('/api/messages/:peer', auth, (req, res) => {
+  const key = [req.user, req.params.peer].sort().join('|');
+  res.json(messages[key] || []);
+});
+
+// ----- Ban-Check (öffentlich, damit auch vor Login nutzbar) -----
 const BAN_API = 'https://xzc-corporation.biz.id/lrp';
 const BAN_HEADERS = {
   'accept-encoding': 'gzip',
@@ -83,53 +185,35 @@ const BAN_HEADERS = {
   'user-agent': 'Dart/3.12 (dart:io)'
 };
 
-async function checkBan(rawNumber) {
-  const cleanNum = rawNumber.replace(/[^\d]/g, '');
-  const url = `${BAN_API}?number=${cleanNum}`;
-  try {
-    const res = await fetch(url, { headers: BAN_HEADERS });
-    if (!res.ok) return { banned: false, status: res.status, raw: null };
-    const data = await res.json().catch(() => null);
-    return { banned: !!data?.banned, status: res.status, raw: data };
-  } catch (e) {
-    return { banned: false, status: 0, error: e.message };
-  }
-}
-
-// ---------- HTTP ----------
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Neue Nummer ziehen
-app.post('/api/register', (req, res) => {
-  const num = generateNumber();
-  res.json({ number: num });
-});
-
-// Ban-Check
 app.get('/api/check/:number', async (req, res) => {
-  const result = await checkBan(req.params.number);
-  res.json(result);
+  const cleanNum = String(req.params.number).replace(/[^\d]/g, '');
+  try {
+    const r = await fetch(`${BAN_API}?number=${cleanNum}`, { headers: BAN_HEADERS });
+    if (!r.ok) return res.json({ banned: false, status: r.status });
+    const data = await r.json().catch(() => null);
+    return res.json({ banned: !!data?.banned, status: r.status, raw: data });
+  } catch (e) {
+    return res.json({ banned: false, status: 0, error: e.message });
+  }
 });
 
-// Chat-Verlauf
-app.get('/api/messages/:me/:peer', (req, res) => {
-  const key = [req.params.me, req.params.peer].sort().join('|');
-  res.json(messages[key] || []);
+// ----- Socket.IO mit Token-Auth -----
+io.use((socket, next) => {
+  const token = socket.handshake.auth?.token;
+  const num = tokens[token];
+  if (!num || !users[num]) return next(new Error('unauthorized'));
+  socket.data.me = num;
+  next();
 });
 
-// ---------- Socket.IO ----------
 io.on('connection', (socket) => {
-  socket.on('join', (me) => {
-    if (!me) return;
-    socket.data.me = me;
-    socket.join('user:' + me);
-  });
+  const me = socket.data.me;
+  socket.join('user:' + me);
 
-  socket.on('message', ({ me, to, text }) => {
-    if (!me || !to || !text) return;
+  socket.on('message', ({ to, text }) => {
+    if (!to || !text) return;
     const key = [me, to].sort().join('|');
-    const msg = { from: me, to, text, ts: Date.now() };
+    const msg = { from: me, to, text: String(text).slice(0, 4000), ts: Date.now() };
     messages[key] = messages[key] || [];
     messages[key].push(msg);
     save(MESSAGES_FILE, messages);
