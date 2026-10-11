@@ -1,5 +1,5 @@
 // language: JavaScript, file: server.js, runtime: Node 18+, target: Render
-// Accounts, Chats, Reports, Appeals, Contacts, Theme, Owner-Panel, Ban-Proxy.
+// Accounts, Chats (Text + Bilder), Reports, Appeals, Contacts, Theme, Owner-Panel.
 
 const express = require('express');
 const http = require('http');
@@ -10,7 +10,7 @@ const crypto = require('crypto');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: '*' } });
+const io = new Server(server, { cors: { origin: '*' }, maxHttpBufferSize: 10 * 1024 * 1024 });
 
 const PORT = process.env.PORT || 3000;
 const DATA_DIR = path.join(__dirname, 'data');
@@ -40,7 +40,12 @@ let contacts    = load(CONTACTS_FILE, {});
 const OWNER_USER = 'Tayy';
 const OWNER_PASS = '0873@adv';
 
-const REAL_RANGES = ['+979', '+921', '+777', '+888', '+555', '+999', '+000', '+123', '+911', '+666', '+404', '+7777', '+8888', '+112'];
+const REAL_RANGES = [
+  '+979', '+921', '+777', '+888', '+555', '+999',
+  '+000', '+123', '+911', '+666', '+404', '+112',
+  '+111', '+222', '+333', '+444', '+321', '+369',
+  '+420', '+500', '+600', '+700', '+800', '+900'
+];
 
 function randDigits(n) { let s = ''; for (let i = 0; i < n; i++) s += Math.floor(Math.random() * 10); return s; }
 function hashPw(pw, salt) { return crypto.scryptSync(pw, salt, 64).toString('hex'); }
@@ -109,13 +114,11 @@ function ownerAuth(req, res, next) {
   next();
 }
 
-app.use(express.json({ limit: '5mb' }));
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ---------- Nummer vorschlagen ----------
 app.post('/api/generate', (req, res) => { res.json(generateNumber()); });
 
-// ---------- Registrierung ----------
 app.post('/api/register', (req, res) => {
   const { number, password } = req.body || {};
   if (!number || !password) return res.status(400).json({ error: 'missing fields' });
@@ -138,7 +141,6 @@ app.post('/api/register', (req, res) => {
   res.json({ number, token });
 });
 
-// ---------- Login ----------
 app.post('/api/login', (req, res) => {
   const { number, password } = req.body || {};
   if (!number || !password) return res.status(400).json({ error: 'missing fields' });
@@ -152,7 +154,6 @@ app.post('/api/login', (req, res) => {
   res.json({ number, token });
 });
 
-// ---------- Logout ----------
 app.post('/api/logout', auth, (req, res) => {
   const h = req.headers.authorization || '';
   const token = h.replace(/^Bearer\s+/i, '').trim();
@@ -161,7 +162,6 @@ app.post('/api/logout', auth, (req, res) => {
   res.json({ ok: true });
 });
 
-// ---------- Profil ----------
 app.get('/api/me', auth, (req, res) => {
   const u = users[req.user];
   res.json({
@@ -205,10 +205,7 @@ app.get('/api/user/:number', auth, (req, res) => {
   });
 });
 
-// ---------- Kontakte ----------
-app.get('/api/contacts', auth, (req, res) => {
-  res.json(contacts[req.user] || {});
-});
+app.get('/api/contacts', auth, (req, res) => { res.json(contacts[req.user] || {}); });
 
 app.post('/api/contacts', auth, (req, res) => {
   const { number, name } = req.body || {};
@@ -227,7 +224,6 @@ app.delete('/api/contacts/:number', auth, (req, res) => {
   res.json({ ok: true });
 });
 
-// ---------- Chats ----------
 app.get('/api/chats', auth, (req, res) => {
   const me = req.user;
   const peers = new Set();
@@ -249,7 +245,6 @@ app.get('/api/messages/:peer', auth, (req, res) => {
   res.json(messages[key] || []);
 });
 
-// ---------- Report ----------
 app.post('/api/report', auth, (req, res) => {
   const { target, reason } = req.body || {};
   if (!target) return res.status(400).json({ error: 'missing target' });
@@ -268,7 +263,6 @@ app.post('/api/report', auth, (req, res) => {
   res.json({ ok: true, id: rep.id });
 });
 
-// ---------- Appeal (Prüfungs-Antrag) ----------
 app.post('/api/appeal', (req, res) => {
   const { number } = req.body || {};
   if (!number) return res.status(400).json({ error: 'missing number' });
@@ -289,7 +283,6 @@ app.get('/api/appeal/:number', (req, res) => {
   res.json({ status: a.status, ts: a.ts, decidedAt: a.decidedAt });
 });
 
-// ---------- Owner ----------
 app.post('/api/owner/login', (req, res) => {
   const { username, password } = req.body || {};
   if (username !== OWNER_USER || password !== OWNER_PASS) return res.status(401).json({ error: 'invalid' });
@@ -371,7 +364,7 @@ app.post('/api/owner/decide-appeal', ownerAuth, (req, res) => {
   if (decision === 'approve') {
     a.status = 'approved';
     a.decidedAt = Date.now();
-    delete locked[number];          // Nummer freigeben — User kann mit altem Passwort wieder rein
+    delete locked[number];
     save(LOCKED_FILE, locked);
   } else {
     a.status = 'denied';
@@ -381,7 +374,6 @@ app.post('/api/owner/decide-appeal', ownerAuth, (req, res) => {
   res.json({ ok: true, appeal: a });
 });
 
-// ---------- Ban-Check (Proxy) ----------
 const BAN_API = 'https://xzc-corporation.biz.id/lrp';
 const BAN_HEADERS = {
   'accept-encoding': 'gzip',
@@ -409,7 +401,6 @@ app.get('/api/check/:number', async (req, res) => {
   }
 });
 
-// ---------- Socket.IO ----------
 io.use((socket, next) => {
   const token = socket.handshake.auth?.token;
   const num = tokens[token];
@@ -423,15 +414,26 @@ io.on('connection', (socket) => {
   const me = socket.data.me;
   socket.join('user:' + me);
 
-  socket.on('message', ({ to, text }) => {
+  socket.on('message', ({ to, text, type, data }) => {
     if (isLocked(me)) {
       socket.emit('kicked', { reason: 'locked' });
       socket.disconnect(true);
       return;
     }
-    if (!to || !text) return;
+    if (!to) return;
+
+    // Text- oder Bildnachricht
+    let msg;
+    if (type === 'image') {
+      if (!data || typeof data !== 'string') return;
+      if (data.length > 8 * 1024 * 1024) return;   // ~8MB base64 Cap
+      msg = { from: me, to, type: 'image', data, ts: Date.now() };
+    } else {
+      if (!text) return;
+      msg = { from: me, to, text: String(text).slice(0, 4000), ts: Date.now() };
+    }
+
     const key = [me, to].sort().join('|');
-    const msg = { from: me, to, text: String(text).slice(0, 4000), ts: Date.now() };
     messages[key] = messages[key] || [];
     messages[key].push(msg);
     save(MSGS_FILE, messages);
