@@ -28,63 +28,31 @@
   }
   @media (min-width: 768px) { .app { max-width: 900px; } }
 
-  header {
-    background: var(--wa-green); color: #fff;
-    padding: 10px 12px; display: flex; align-items: center; gap: 10px;
-    font-size: 17px; font-weight: 500; flex-shrink: 0;
-    box-shadow: 0 1px 3px rgba(0,0,0,.2); z-index: 10;
-  }
+  header { background: var(--wa-green); color: #fff; padding: 10px 12px; display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 500; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,.2); z-index: 10; }
   header .back { background: transparent; border: 0; color: #fff; font-size: 22px; cursor: pointer; padding: 0 6px 0 0; line-height: 1; }
-  header .avatar {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: var(--wa-green-light); display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700; flex-shrink: 0; overflow: hidden;
-  }
+  header .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--wa-green-light); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; overflow: hidden; }
   header .avatar img { width: 100%; height: 100%; object-fit: cover; }
   header .title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   header .title .sub { font-size: 11px; opacity: .85; font-weight: 400; }
   header .actions { display: flex; gap: 4px; }
   header .actions button { background: transparent; border: 0; color: #fff; font-size: 20px; cursor: pointer; padding: 4px 8px; line-height: 1; }
 
-  .auth {
-    flex: 1; display: flex; flex-direction: column; justify-content: center;
-    align-items: center; padding: 24px; text-align: center; background: #fff;
-    overflow-y: auto;
-  }
+  .auth { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; text-align: center; background: #fff; overflow-y: auto; }
   .auth .logo { width: 72px; height: 72px; border-radius: 50%; background: var(--wa-green); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 16px; }
   .auth h1 { color: var(--wa-green); font-size: 24px; margin-bottom: 6px; }
   .auth .sub { color: var(--wa-meta); font-size: 13px; margin-bottom: 24px; line-height: 1.4; }
   .auth .tabs { display: flex; gap: 0; margin-bottom: 20px; border: 1px solid var(--wa-green); border-radius: 4px; overflow: hidden; }
-  .auth .tabs button {
-    background: #fff; color: var(--wa-green); border: 0; padding: 10px 22px;
-    font-size: 14px; font-weight: 600; cursor: pointer;
-  }
+  .auth .tabs button { background: #fff; color: var(--wa-green); border: 0; padding: 10px 22px; font-size: 14px; font-weight: 600; cursor: pointer; }
   .auth .tabs button.active { background: var(--wa-green); color: #fff; }
   .auth .label { color: var(--wa-meta); font-size: 12px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; align-self: flex-start; }
-  .auth .num {
-    font-size: 22px; font-weight: 700; color: var(--wa-text);
-    padding: 14px 22px; background: #f7f7f7; border: 1px solid var(--wa-divider);
-    border-radius: 6px; margin-bottom: 10px; letter-spacing: 1px; font-family: 'Courier New', monospace;
-    width: 100%; text-align: center;
-  }
-  .auth .tier-badge {
-    display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 10px;
-    margin-bottom: 10px; font-weight: 600; letter-spacing: .3px;
-  }
+  .auth .num { font-size: 22px; font-weight: 700; color: var(--wa-text); padding: 14px 22px; background: #f7f7f7; border: 1px solid var(--wa-divider); border-radius: 6px; margin-bottom: 10px; letter-spacing: 1px; font-family: 'Courier New', monospace; width: 100%; text-align: center; }
+  .auth .tier-badge { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 10px; margin-bottom: 10px; font-weight: 600; letter-spacing: .3px; }
   .auth .tier-clean { background: #fff3c4; color: #8a6d00; }
   .auth .tier-half { background: #e0f2f1; color: #00695c; }
-  .auth input[type=text], .auth input[type=password], .auth input[type=tel] {
-    width: 100%; padding: 12px 14px; border: 1px solid var(--wa-divider);
-    border-radius: 4px; font-size: 15px; outline: none; margin-bottom: 10px;
-  }
+  .auth input[type=text], .auth input[type=password], .auth input[type=tel] { width: 100%; padding: 12px 14px; border: 1px solid var(--wa-divider); border-radius: 4px; font-size: 15px; outline: none; margin-bottom: 10px; }
   .auth input:focus { border-color: var(--wa-green); }
   .auth .full { width: 100%; }
-  .btn {
-    background: var(--wa-green); color: #fff; border: 0;
-    padding: 12px 22px; border-radius: 4px; font-size: 15px;
-    cursor: pointer; margin: 4px; font-weight: 500; letter-spacing: .3px;
-    transition: background .15s;
-  }
+  .btn { background: var(--wa-green); color: #fff; border: 0; padding: 12px 22px; border-radius: 4px; font-size: 15px; cursor: pointer; margin: 4px; font-weight: 500; letter-spacing: .3px; transition: background .15s; }
   .btn.secondary { background: var(--wa-green-light); }
   .btn:active { background: var(--wa-green-dark); }
   .btn:disabled { background: #999; cursor: not-allowed; }
@@ -93,19 +61,56 @@
   .hint { color: var(--wa-meta); font-size: 12px; margin-top: 10px; line-height: 1.5; }
   .owner-link { color: var(--wa-meta); font-size: 11px; margin-top: 24px; text-decoration: underline; cursor: pointer; }
 
+  /* Banned-Screen */
+  .banned-screen {
+    flex: 1; display: flex; flex-direction: column;
+    background: #0a0a0a; color: #fff;
+    justify-content: center; align-items: center;
+    padding: 32px 24px; text-align: center;
+  }
+  .banned-screen .icon {
+    width: 88px; height: 88px; border-radius: 50%;
+    background: #3a1010; color: #ff6b6b;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 42px; margin-bottom: 26px;
+    border: 2px solid #4a1818;
+  }
+  .banned-screen h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; letter-spacing: .3px; }
+  .banned-screen .num {
+    font-family: 'Courier New', monospace; font-size: 17px;
+    color: #8e8e93; margin-bottom: 24px; padding: 8px 16px;
+    background: #1c1c1e; border-radius: 8px;
+  }
+  .banned-screen .msg {
+    font-size: 14.5px; line-height: 1.6; color: #b0b0b0;
+    max-width: 340px; margin-bottom: 28px;
+  }
+  .banned-screen .status-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 20px;
+    font-size: 13px; font-weight: 600; margin-bottom: 20px;
+  }
+  .banned-screen .status-badge.pending { background: #3a2f0a; color: #ffa726; }
+  .banned-screen .status-badge.approved { background: #0f2a14; color: #4caf50; }
+  .banned-screen .status-badge.denied { background: #3a1010; color: #ff6b6b; }
+  .banned-screen .actions { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 300px; }
+  .banned-screen .actions button {
+    width: 100%; padding: 14px; border-radius: 8px;
+    font-size: 15px; font-weight: 600; cursor: pointer; border: 0;
+    letter-spacing: .3px;
+  }
+  .banned-screen .actions .primary { background: #25d366; color: #000; }
+  .banned-screen .actions .primary:disabled { background: #3a3a3c; color: #8e8e93; cursor: not-allowed; }
+  .banned-screen .actions .secondary { background: transparent; color: #8e8e93; border: 1px solid #3a3a3c; }
+  .banned-screen .actions .success { background: #2e7d32; color: #fff; }
+  .banned-screen .actions button:active { transform: scale(.98); }
+
   .chatlist { flex: 1; overflow-y: auto; background: #fff; }
   .chatlist .empty { padding: 60px 30px; text-align: center; color: var(--wa-meta); font-size: 14px; line-height: 1.6; }
   .chatlist .empty .icon { font-size: 48px; opacity: .3; margin-bottom: 12px; }
-  .chatitem {
-    display: flex; align-items: center; gap: 12px;
-    padding: 11px 14px; border-bottom: 1px solid #e9edef; cursor: pointer; background: #fff;
-  }
+  .chatitem { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-bottom: 1px solid #e9edef; cursor: pointer; background: #fff; }
   .chatitem:active { background: #f0f0f0; }
-  .chatitem .avatar {
-    width: 48px; height: 48px; border-radius: 50%; background: var(--wa-green-light);
-    color: #fff; display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 16px; flex-shrink: 0; overflow: hidden;
-  }
+  .chatitem .avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--wa-green-light); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; overflow: hidden; }
   .chatitem .avatar img { width: 100%; height: 100%; object-fit: cover; }
   .chatitem .info { flex: 1; min-width: 0; }
   .chatitem .name { font-weight: 500; color: var(--wa-text); font-size: 15px; margin-bottom: 2px; }
@@ -120,12 +125,7 @@
       radial-gradient(circle at 80% 70%, rgba(255,255,255,.4) 0%, transparent 40%),
       var(--wa-bg);
   }
-  .msg {
-    max-width: 78%; padding: 6px 9px 5px; margin-bottom: 4px;
-    border-radius: 7px; font-size: 14.5px; line-height: 1.35;
-    word-wrap: break-word; box-shadow: 0 1px 0.5px rgba(0,0,0,.13);
-    animation: pop .12s ease-out;
-  }
+  .msg { max-width: 78%; padding: 6px 9px 5px; margin-bottom: 4px; border-radius: 7px; font-size: 14.5px; line-height: 1.35; word-wrap: break-word; box-shadow: 0 1px 0.5px rgba(0,0,0,.13); animation: pop .12s ease-out; }
   @keyframes pop { from { transform: scale(.96); opacity: .6; } to { transform: scale(1); opacity: 1; } }
   .msg.out { background: var(--wa-bubble-out); margin-left: auto; border-top-right-radius: 0; }
   .msg.in  { background: var(--wa-bubble-in); margin-right: auto; border-top-left-radius: 0; }
@@ -139,24 +139,12 @@
   .settings .section { padding: 20px 16px; border-bottom: 1px solid #eee; }
   .settings .section h3 { color: var(--wa-green); font-size: 13px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 14px; font-weight: 600; }
   .settings .profile-row { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
-  .settings .profile-pic {
-    width: 72px; height: 72px; border-radius: 50%; background: var(--wa-green-light);
-    color: #fff; display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 26px; flex-shrink: 0; cursor: pointer;
-    overflow: hidden; position: relative;
-  }
+  .settings .profile-pic { width: 72px; height: 72px; border-radius: 50%; background: var(--wa-green-light); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 26px; flex-shrink: 0; cursor: pointer; overflow: hidden; position: relative; }
   .settings .profile-pic img { width: 100%; height: 100%; object-fit: cover; }
-  .settings .profile-pic .cam {
-    position: absolute; bottom: 0; right: 0; background: var(--wa-green);
-    width: 22px; height: 22px; border-radius: 50%; display: flex;
-    align-items: center; justify-content: center; font-size: 11px; border: 2px solid #fff;
-  }
+  .settings .profile-pic .cam { position: absolute; bottom: 0; right: 0; background: var(--wa-green); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; border: 2px solid #fff; }
   .settings .field { margin-bottom: 14px; }
   .settings .field label { display: block; color: var(--wa-meta); font-size: 12px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .3px; }
-  .settings .field input, .settings .field .value {
-    width: 100%; padding: 10px 12px; border: 1px solid var(--wa-divider);
-    border-radius: 4px; font-size: 15px; outline: none; background: #fff; color: var(--wa-text);
-  }
+  .settings .field input, .settings .field .value { width: 100%; padding: 10px 12px; border: 1px solid var(--wa-divider); border-radius: 4px; font-size: 15px; outline: none; background: #fff; color: var(--wa-text); }
   .settings .field input:focus { border-color: var(--wa-green); }
   .settings .field .value { font-family: 'Courier New', monospace; font-weight: 700; background: #f7f7f7; color: var(--wa-green-dark); }
   .settings .hint { color: var(--wa-meta); font-size: 12px; margin-top: 8px; line-height: 1.5; }
@@ -169,23 +157,12 @@
   .check-screen .topbar .action:disabled { color: #3a3a3c; cursor: not-allowed; }
   .check-screen .body { flex: 1; overflow-y: auto; padding: 4px 16px 30px; }
   .check-screen .section-label { color: #8e8e93; font-size: 14px; margin: 18px 0 10px; font-weight: 400; }
-  .check-screen .country-row {
-    display: flex; align-items: center; justify-content: space-between;
-    background: #1c1c1e; padding: 14px 16px; border-radius: 10px 10px 0 0;
-    cursor: pointer; font-size: 17px;
-  }
+  .check-screen .country-row { display: flex; align-items: center; justify-content: space-between; background: #1c1c1e; padding: 14px 16px; border-radius: 10px 10px 0 0; cursor: pointer; font-size: 17px; }
   .check-screen .country-row.readonly { cursor: default; }
   .check-screen .country-row .chev { color: #8e8e93; font-size: 18px; }
-  .check-screen .number-row {
-    display: flex; align-items: center; gap: 12px;
-    background: #1c1c1e; padding: 14px 16px;
-    border-radius: 0 0 10px 10px; border-top: 1px solid #2c2c2e; font-size: 17px;
-  }
+  .check-screen .number-row { display: flex; align-items: center; gap: 12px; background: #1c1c1e; padding: 14px 16px; border-radius: 0 0 10px 10px; border-top: 1px solid #2c2c2e; font-size: 17px; }
   .check-screen .number-row .prefix { color: #8e8e93; font-family: 'Courier New', monospace; }
-  .check-screen .number-row input {
-    flex: 1; background: transparent; border: 0; outline: none;
-    color: #fff; font-size: 17px; font-family: 'Courier New', monospace; letter-spacing: .5px;
-  }
+  .check-screen .number-row input { flex: 1; background: transparent; border: 0; outline: none; color: #fff; font-size: 17px; font-family: 'Courier New', monospace; letter-spacing: .5px; }
   .check-screen .number-row input::placeholder { color: #48484a; }
   .check-screen .number-row .display { color: #fff; font-family: 'Courier New', monospace; letter-spacing: .5px; }
   .check-screen .check-result { margin-top: 18px; padding: 12px 14px; border-radius: 10px; font-size: 14px; display: none; }
@@ -193,7 +170,6 @@
   .check-screen .check-result.locked { background: #2a1f0a; color: #ffa726; }
   .check-screen .check-result.ok { background: #0f2a14; color: #4caf50; }
   .check-screen .check-result.info { background: #1c1c1e; color: #8e8e93; }
-  .check-screen .report-row { margin-top: 16px; display: flex; justify-content: flex-end; }
 
   .country-picker { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex; align-items: flex-end; justify-content: center; z-index: 250; }
   .country-picker .sheet { background: #1c1c1e; width: 100%; max-width: 480px; max-height: 70vh; border-radius: 14px 14px 0 0; display: flex; flex-direction: column; overflow: hidden; color: #fff; }
@@ -215,56 +191,27 @@
   .modal .box .row button { padding: 9px 16px; border: 0; border-radius: 4px; font-size: 14px; cursor: pointer; font-weight: 500; }
   .modal .box .row .cancel { background: #eee; color: #333; }
   .modal .box .row .ok { background: var(--wa-green); color: #fff; }
-  .modal .box .row .danger { background: #c62828; color: #fff; }
 
-  /* Ban-Modal — 1/1 Screenshot */
-  .ban-modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,.7);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 300; padding: 20px;
-    animation: fade .15s;
-  }
-  .ban-modal {
-    background: #2a2a2a;
-    border-radius: 12px;
-    width: 100%; max-width: 280px;
-    overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0,0,0,.5);
-    animation: banIn .2s ease-out;
-  }
+  .ban-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: flex; align-items: center; justify-content: center; z-index: 300; padding: 20px; animation: fade .15s; }
+  .ban-modal { background: #2a2a2a; border-radius: 12px; width: 100%; max-width: 280px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,.5); animation: banIn .2s ease-out; }
   @keyframes banIn { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
-  .ban-modal .content {
-    padding: 22px 18px 20px;
-    color: #fff;
-    text-align: center;
-    font-size: 14.5px;
-    line-height: 1.45;
-    font-weight: 400;
-  }
-  .ban-modal .content .num-line {
-    display: block;
-    font-weight: 600;
-    font-size: 15px;
-    margin: 3px 0;
-    color: #fff;
-  }
+  .ban-modal .content { padding: 22px 18px 20px; color: #fff; text-align: center; font-size: 14.5px; line-height: 1.45; font-weight: 400; }
+  .ban-modal .content .num-line { display: block; font-weight: 600; font-size: 15px; margin: 3px 0; color: #fff; }
   .ban-modal .buttons { display: flex; border-top: 1px solid #3d3d3d; }
-  .ban-modal .buttons button {
-    flex: 1; background: transparent; border: 0; color: #25d366;
-    padding: 14px 16px; font-size: 14.5px; font-weight: 500; cursor: pointer;
-    transition: background .12s;
-  }
+  .ban-modal .buttons button { flex: 1; background: transparent; border: 0; color: #25d366; padding: 14px 16px; font-size: 14.5px; font-weight: 500; cursor: pointer; transition: background .12s; }
   .ban-modal .buttons button:first-child { border-right: 1px solid #3d3d3d; }
   .ban-modal .buttons button:active { background: rgba(255,255,255,.06); }
 
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.85); color: #fff; padding: 10px 18px; border-radius: 20px; font-size: 13px; z-index: 400; animation: toastIn .2s ease-out; }
   @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
-  /* Owner-Panel */
   .owner-panel { flex: 1; display: flex; flex-direction: column; background: #0a0a0a; color: #fff; overflow: hidden; }
   .owner-panel .topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #2c2c2e; flex-shrink: 0; }
   .owner-panel .topbar .title { font-size: 17px; font-weight: 600; }
   .owner-panel .topbar button { background: transparent; border: 0; color: #ff6b6b; font-size: 14px; cursor: pointer; }
+  .owner-panel .tabs { display: flex; border-bottom: 1px solid #2c2c2e; flex-shrink: 0; }
+  .owner-panel .tabs button { flex: 1; background: transparent; border: 0; color: #8e8e93; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; }
+  .owner-panel .tabs button.active { color: #25d366; border-bottom-color: #25d366; }
   .owner-panel .list { flex: 1; overflow-y: auto; padding: 12px; }
   .owner-panel .report-card { background: #1c1c1e; border-radius: 10px; padding: 14px; margin-bottom: 10px; }
   .owner-panel .report-card .meta-row { font-size: 12px; color: #8e8e93; margin-bottom: 6px; display: flex; justify-content: space-between; }
@@ -280,6 +227,8 @@
   .owner-panel .report-card .status.locked { background: #3a1010; color: #ff6b6b; }
   .owner-panel .report-card .status.unlocked { background: #0f2a14; color: #4caf50; }
   .owner-panel .report-card .status.dismissed { background: #2c2c2e; color: #8e8e93; }
+  .owner-panel .report-card .status.approved { background: #0f2a14; color: #4caf50; }
+  .owner-panel .report-card .status.denied { background: #3a1010; color: #ff6b6b; }
   .owner-panel .empty { padding: 60px 30px; text-align: center; color: #8e8e93; font-size: 14px; line-height: 1.6; }
 </style>
 </head>
@@ -296,13 +245,17 @@ let socket = null;
 let currentPeer = null;
 let chatMessages = {};
 let peerProfiles = {};
+let bannedPollTimer = null;
 
 function api(path, opts = {}) {
   const headers = Object.assign({ 'Content-Type': 'application/json' }, opts.headers || {});
   if (token) headers['Authorization'] = 'Bearer ' + token;
   return fetch(path, Object.assign({}, opts, { headers })).then(async r => {
     const data = await r.json().catch(() => ({}));
-    if (!r.ok) throw Object.assign(new Error(data.error || ('http_' + r.status)), { status: r.status, data });
+    if (!r.ok) {
+      if (r.status === 403 && data.error === 'locked') handleLocked();
+      throw Object.assign(new Error(data.error || ('http_' + r.status)), { status: r.status, data });
+    }
     return data;
   });
 }
@@ -408,8 +361,93 @@ function showReportModal(target) {
   setTimeout(() => reasonInput.focus(), 50);
 }
 
+// ---------- Banned ----------
+function handleLocked() {
+  const wasNumber = me || localStorage.getItem('oldwhats_lastnumber') || '';
+  if (socket) { socket.disconnect(); socket = null; }
+  localStorage.removeItem('oldwhats_token');
+  token = null;
+  chatMessages = {}; peerProfiles = {}; currentPeer = null;
+  renderBannedScreen(wasNumber);
+}
+
+async function renderBannedScreen(number) {
+  if (bannedPollTimer) { clearInterval(bannedPollTimer); bannedPollTimer = null; }
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const statusHolder = el('div', { id: 'bannedStatus' });
+  const actionsHolder = el('div', { class: 'actions', id: 'bannedActions' });
+
+  const screen = el('div', { class: 'banned-screen' }, [
+    el('div', { class: 'icon' }, '🚫'),
+    el('h1', {}, 'Du bist banned'),
+    el('div', { class: 'num' }, number || '—'),
+    el('div', { class: 'msg' }, 'Diese Nummer wurde gesperrt und kann nicht mehr verwendet werden. Du kannst eine Prüfung anfordern — der Betreiber entscheidet dann, ob die Sperre aufgehoben wird.'),
+    statusHolder,
+    actionsHolder
+  ]);
+  app.appendChild(screen);
+
+  await refreshBannedView(number, statusHolder, actionsHolder);
+}
+
+async function refreshBannedView(number, statusHolder, actionsHolder) {
+  if (!number) {
+    statusHolder.innerHTML = '';
+    actionsHolder.innerHTML = '';
+    actionsHolder.appendChild(el('button', { class: 'secondary', onclick: () => renderAuth('login') }, 'Zum Login'));
+    return;
+  }
+
+  let appeal = { status: null };
+  try {
+    const r = await fetch('/api/appeal/' + encodeURIComponent(number));
+    appeal = await r.json();
+  } catch {}
+
+  statusHolder.innerHTML = '';
+  actionsHolder.innerHTML = '';
+
+  if (appeal.status === 'pending') {
+    statusHolder.appendChild(el('div', { class: 'status-badge pending' }, '⏳ Prüfung läuft'));
+    actionsHolder.appendChild(el('button', { class: 'secondary', onclick: () => refreshBannedView(number, statusHolder, actionsHolder) }, 'Status aktualisieren'));
+    actionsHolder.appendChild(el('button', { class: 'secondary', onclick: () => { if (bannedPollTimer) clearInterval(bannedPollTimer); renderAuth('login'); } }, 'Zum Login'));
+
+    // Auto-Refresh alle 8s
+    if (bannedPollTimer) clearInterval(bannedPollTimer);
+    bannedPollTimer = setInterval(() => {
+      refreshBannedView(number, statusHolder, actionsHolder);
+    }, 8000);
+  } else if (appeal.status === 'approved') {
+    if (bannedPollTimer) { clearInterval(bannedPollTimer); bannedPollTimer = null; }
+    statusHolder.appendChild(el('div', { class: 'status-badge approved' }, '✓ Freigegeben'));
+    actionsHolder.appendChild(el('button', { class: 'success', onclick: () => renderAuth('login') }, 'Zum Login'));
+  } else if (appeal.status === 'denied') {
+    if (bannedPollTimer) { clearInterval(bannedPollTimer); bannedPollTimer = null; }
+    statusHolder.appendChild(el('div', { class: 'status-badge denied' }, '✕ Prüfung abgelehnt'));
+    actionsHolder.appendChild(el('button', { class: 'secondary', onclick: () => renderAuth('login') }, 'Zum Login'));
+  } else {
+    // keine Appeal
+    actionsHolder.appendChild(el('button', { class: 'primary', onclick: async () => {
+      try {
+        const r = await fetch('/api/appeal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ number }) });
+        const data = await r.json();
+        if (data.status === 'pending' || data.ok) {
+          toast('Prüfung angefordert');
+          refreshBannedView(number, statusHolder, actionsHolder);
+        } else {
+          toast('Fehler: ' + (data.error || 'unbekannt'));
+        }
+      } catch (e) { toast('Fehler: ' + e.message); }
+    }}, 'Prüfung anfordern'));
+    actionsHolder.appendChild(el('button', { class: 'secondary', onclick: () => renderAuth('login') }, 'Zum Login'));
+  }
+}
+
 // ---------- Auth ----------
 function renderAuth(mode = 'register') {
+  if (bannedPollTimer) { clearInterval(bannedPollTimer); bannedPollTimer = null; }
   const app = document.getElementById('app');
   app.innerHTML = '';
 
@@ -491,7 +529,12 @@ async function loadGeneratedNumber() {
 
     const banRes = await fetch('/api/check/' + encodeURIComponent(data.number));
     const ban = await banRes.json();
-    if (ban.banned) showBanModal(data.number);
+    if (ban.banned) {
+      showBanModal(data.number, {
+        onCancel: () => loadGeneratedNumber(),
+        onSupport: () => toast('Support: support@whatsapp.com')
+      });
+    }
   } catch (e) {
     display.textContent = 'Fehler';
   }
@@ -523,10 +566,17 @@ async function doRegister() {
     const data = await api('/api/register', { method: 'POST', body: JSON.stringify({ number, password: pw }) });
     token = data.token; me = data.number;
     localStorage.setItem('oldwhats_token', token);
+    localStorage.setItem('oldwhats_lastnumber', me);
     await bootstrapAfterLogin();
   } catch (e) {
-    if (e.data?.error === 'number_taken') { toast('Nummer schon vergeben — neu ziehen'); loadGeneratedNumber(); }
-    else toast('Fehler: ' + (e.data?.error || e.message));
+    if (e.status === 403 && e.data?.error === 'locked') {
+      localStorage.setItem('oldwhats_lastnumber', number);
+      renderBannedScreen(number);
+    } else if (e.data?.error === 'number_taken') {
+      toast('Nummer schon vergeben — neu ziehen'); loadGeneratedNumber();
+    } else {
+      toast('Fehler: ' + (e.data?.error || e.message));
+    }
     btn.disabled = false; btn.textContent = 'Registrieren';
   }
 }
@@ -541,9 +591,15 @@ async function doLogin() {
     const data = await api('/api/login', { method: 'POST', body: JSON.stringify({ number, password: pw }) });
     token = data.token; me = data.number;
     localStorage.setItem('oldwhats_token', token);
+    localStorage.setItem('oldwhats_lastnumber', me);
     await bootstrapAfterLogin();
   } catch (e) {
-    toast('Nummer oder Passwort falsch');
+    if (e.status === 403 && e.data?.error === 'locked') {
+      localStorage.setItem('oldwhats_lastnumber', number);
+      renderBannedScreen(number);
+    } else {
+      toast('Nummer oder Passwort falsch');
+    }
     btn.disabled = false; btn.textContent = 'Anmelden';
   }
 }
@@ -582,7 +638,7 @@ async function doOwnerLogin() {
     const data = await ownerApi('/api/owner/login', { method: 'POST', body: JSON.stringify({ username, password }) });
     ownerToken = data.token;
     localStorage.setItem('oldwhats_ownertoken', ownerToken);
-    renderOwnerPanel();
+    renderOwnerPanel('reports');
   } catch (e) {
     toast('Zugangsdaten falsch');
     btn.disabled = false; btn.textContent = 'Owner anmelden';
@@ -590,12 +646,12 @@ async function doOwnerLogin() {
 }
 
 // ---------- Owner Panel ----------
-async function renderOwnerPanel() {
+async function renderOwnerPanel(tab = 'reports') {
   const app = document.getElementById('app');
   app.innerHTML = '';
   const panel = el('div', { class: 'owner-panel' });
   panel.appendChild(el('div', { class: 'topbar' }, [
-    el('div', { class: 'title' }, 'Reports'),
+    el('div', { class: 'title' }, 'Owner'),
     el('button', { onclick: () => {
       ownerApi('/api/owner/logout', { method: 'POST' }).catch(() => {});
       localStorage.removeItem('oldwhats_ownertoken');
@@ -603,30 +659,33 @@ async function renderOwnerPanel() {
       renderAuth('owner');
     }}, 'Logout')
   ]));
+  panel.appendChild(el('div', { class: 'tabs' }, [
+    el('button', { class: tab === 'reports' ? 'active' : '', onclick: () => renderOwnerPanel('reports') }, 'Reports'),
+    el('button', { class: tab === 'appeals' ? 'active' : '', onclick: () => renderOwnerPanel('appeals') }, 'Prüfungen')
+  ]));
   const list = el('div', { class: 'list', id: 'ownerList' }, [el('div', { class: 'empty' }, 'Lade…')]);
   panel.appendChild(list);
   app.appendChild(panel);
 
+  if (tab === 'reports') await loadReports(list);
+  else await loadAppeals(list);
+}
+
+async function loadReports(list) {
   try {
     const reports = await ownerApi('/api/owner/reports');
     list.innerHTML = '';
-    if (reports.length === 0) {
-      list.appendChild(el('div', { class: 'empty' }, 'Keine Reports.'));
-      return;
-    }
+    if (reports.length === 0) { list.appendChild(el('div', { class: 'empty' }, 'Keine Reports.')); return; }
     for (const r of reports) {
       const card = el('div', { class: 'report-card' }, [
-        el('div', { class: 'meta-row' }, [
-          el('span', {}, 'von ' + r.reporter),
-          el('span', {}, fmtDate(r.ts))
-        ]),
+        el('div', { class: 'meta-row' }, [el('span', {}, 'von ' + r.reporter), el('span', {}, fmtDate(r.ts))]),
         el('div', { class: 'target' }, r.target),
         r.reason ? el('div', { class: 'reason' }, r.reason) : null,
         r.status === 'pending'
           ? el('div', { class: 'actions' }, [
-              el('button', { class: 'lock', onclick: () => decide(r.id, 'lock') }, 'Sperren'),
-              el('button', { class: 'unlock', onclick: () => decide(r.id, 'unlock') }, 'Freigeben'),
-              el('button', { class: 'dismiss', onclick: () => decide(r.id, 'dismiss') }, 'Verwerfen')
+              el('button', { class: 'lock', onclick: () => decideReport(r.id, 'lock') }, 'Sperren'),
+              el('button', { class: 'unlock', onclick: () => decideReport(r.id, 'unlock') }, 'Freigeben'),
+              el('button', { class: 'dismiss', onclick: () => decideReport(r.id, 'dismiss') }, 'Verwerfen')
             ])
           : el('div', { class: 'status ' + r.status }, r.status)
       ]);
@@ -637,14 +696,48 @@ async function renderOwnerPanel() {
     list.appendChild(el('div', { class: 'empty' }, 'Fehler: ' + e.message));
   }
 
-  async function decide(id, decision) {
+  async function decideReport(id, decision) {
     try {
       await ownerApi('/api/owner/decide', { method: 'POST', body: JSON.stringify({ reportId: id, decision }) });
-      toast('Entschieden: ' + decision);
-      renderOwnerPanel();
-    } catch (e) {
-      toast('Fehler: ' + e.message);
+      toast(decision === 'lock' ? 'Gesperrt — User wurde gekickt' : 'Entschieden: ' + decision);
+      renderOwnerPanel('reports');
+    } catch (e) { toast('Fehler: ' + e.message); }
+  }
+}
+
+async function loadAppeals(list) {
+  try {
+    const appeals = await ownerApi('/api/owner/appeals');
+    list.innerHTML = '';
+    if (appeals.length === 0) { list.appendChild(el('div', { class: 'empty' }, 'Keine Prüfungs-Anträge.')); return; }
+    for (const a of appeals) {
+      const card = el('div', { class: 'report-card' }, [
+        el('div', { class: 'meta-row' }, [
+          el('span', {}, 'angefragt ' + fmtDate(a.appealTs)),
+          el('span', {}, a.isLocked ? 'gesperrt' : 'nicht gesperrt')
+        ]),
+        el('div', { class: 'target' }, a.number),
+        el('div', { class: 'reason' }, 'Status: ' + a.appealStatus),
+        a.appealStatus === 'pending'
+          ? el('div', { class: 'actions' }, [
+              el('button', { class: 'unlock', onclick: () => decideAppeal(a.number, 'approve') }, 'Freigeben'),
+              el('button', { class: 'dismiss', onclick: () => decideAppeal(a.number, 'deny') }, 'Ablehnen')
+            ])
+          : el('div', { class: 'status ' + a.appealStatus }, a.appealStatus)
+      ]);
+      list.appendChild(card);
     }
+  } catch (e) {
+    list.innerHTML = '';
+    list.appendChild(el('div', { class: 'empty' }, 'Fehler: ' + e.message));
+  }
+
+  async function decideAppeal(number, decision) {
+    try {
+      await ownerApi('/api/owner/decide-appeal', { method: 'POST', body: JSON.stringify({ number, decision }) });
+      toast(decision === 'approve' ? 'Freigegeben — User kann wieder einloggen' : 'Abgelehnt');
+      renderOwnerPanel('appeals');
+    } catch (e) { toast('Fehler: ' + e.message); }
   }
 }
 
@@ -653,6 +746,7 @@ async function bootstrapAfterLogin() {
   try {
     profile = await api('/api/me');
     me = profile.number;
+    localStorage.setItem('oldwhats_lastnumber', me);
     if (!profile.name) {
       const name = prompt('Wie soll dein Name sein?', 'Anon') || 'Anon';
       await api('/api/profile', { method: 'POST', body: JSON.stringify({ name }) });
@@ -679,6 +773,7 @@ function connectSocket() {
     if (currentPeer && (msg.from === currentPeer || msg.to === currentPeer)) renderChat();
     else loadChats().then(renderChatList);
   });
+  socket.on('kicked', () => handleLocked());
   socket.on('connect_error', () => toast('Socket-Verbindung fehlgeschlagen'));
 }
 
@@ -870,10 +965,7 @@ function renderSettings() {
 
   wrap.appendChild(el('div', { class: 'section' }, [
     el('h3', {}, 'Deine Nummer'),
-    el('div', { class: 'field' }, [
-      el('label', {}, 'Zugewiesen'),
-      el('div', { class: 'value' }, me || '—')
-    ]),
+    el('div', { class: 'field' }, [el('label', {}, 'Zugewiesen'), el('div', { class: 'value' }, me || '—')]),
     el('div', { class: 'hint' }, 'Mit dieser Nummer und deinem Passwort loggst du dich überall ein.')
   ]));
 
@@ -1011,17 +1103,7 @@ function renderNumberCheck() {
           oninput: (e) => { checkState.number = e.target.value; } })
       ]),
 
-      resultHolder,
-
-      el('div', { class: 'report-row' }, [
-        el('button', { class: 'btn', style: 'background:#c62828;font-size:13px;padding:8px 14px',
-          onclick: () => {
-            const digits = (checkState.number || '').replace(/\D/g, '');
-            if (!digits) { toast('Erst Nummer eingeben'); return; }
-            showReportModal(checkState.country.code + digits);
-          }
-        }, '🚩 Melden')
-      ])
+      resultHolder
     ])
   ]);
   app.appendChild(screen);
@@ -1034,7 +1116,6 @@ function renderNumberCheck() {
 }
 
 function buildCheckResultBox(r) {
-  if (r.banned) return null;
   if (r.locked) return el('div', { class: 'check-result show locked' }, '🔒 ' + r.number + ' ist gesperrt.');
   if (r.status && r.status !== 200) return el('div', { class: 'check-result show info' }, 'API-Status: ' + r.status + ' — keine eindeutige Antwort.');
   return el('div', { class: 'check-result show ok' }, '✓ ' + r.number + ' ist frei.');
@@ -1066,7 +1147,14 @@ async function runNumberCheck() {
     const res = await fetch('/api/check/' + encodeURIComponent(fullNumber));
     const data = await res.json();
     checkState.result = { banned: !!data.banned, locked: !!data.locked, status: data.status, number: fullNumber };
-    if (data.banned) showBanModal(fullNumber, { onSupport: () => toast('Support: support@whatsapp.com') });
+
+    if (data.banned) {
+      showBanModal(fullNumber, {
+        onCancel: () => {},
+        onSupport: () => toast('Support: support@whatsapp.com')
+      });
+    }
+
     const holder = document.getElementById('checkResultInline');
     holder.innerHTML = '';
     const box = buildCheckResultBox(checkState.result);
@@ -1087,16 +1175,25 @@ function logout() {
 
 // ---------- Boot ----------
 (async function boot() {
-  if (ownerToken) { renderOwnerPanel(); return; }
+  if (ownerToken) { renderOwnerPanel('reports'); return; }
   if (!token) { renderAuth('register'); return; }
   try {
     profile = await api('/api/me');
     me = profile.number;
+    localStorage.setItem('oldwhats_lastnumber', me);
     connectSocket();
     await loadChats();
     renderChatList();
   } catch (e) {
-    if (e.status === 401) { localStorage.removeItem('oldwhats_token'); token = null; renderAuth('login'); }
+    if (e.status === 401 || (e.status === 403 && e.data?.error === 'locked')) {
+      localStorage.removeItem('oldwhats_token');
+      token = null;
+      if (e.status === 403) {
+        renderBannedScreen(localStorage.getItem('oldwhats_lastnumber') || '');
+      } else {
+        renderAuth('login');
+      }
+    }
     else { toast('Fehler: ' + e.message); renderAuth('login'); }
   }
 })();
