@@ -1,5 +1,5 @@
 // language: JavaScript, file: server.js, runtime: Node 18+, target: Render
-// Accounts, Chats, Reports, Appeals, Owner-Panel, Ban-API-Proxy, Locked = Kick + Block.
+// Accounts, Chats, Reports, Appeals, Contacts, Theme, Owner-Panel, Ban-Proxy.
 
 const express = require('express');
 const http = require('http');
@@ -16,13 +16,14 @@ const PORT = process.env.PORT || 3000;
 const DATA_DIR = path.join(__dirname, 'data');
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
 
-const USERS_FILE   = path.join(DATA_DIR, 'users.json');
-const MSGS_FILE    = path.join(DATA_DIR, 'messages.json');
-const TOKENS_FILE  = path.join(DATA_DIR, 'tokens.json');
-const REPORTS_FILE = path.join(DATA_DIR, 'reports.json');
-const LOCKED_FILE  = path.join(DATA_DIR, 'locked.json');
-const OWNER_FILE   = path.join(DATA_DIR, 'ownertokens.json');
-const APPEALS_FILE = path.join(DATA_DIR, 'appeals.json');
+const USERS_FILE    = path.join(DATA_DIR, 'users.json');
+const MSGS_FILE     = path.join(DATA_DIR, 'messages.json');
+const TOKENS_FILE   = path.join(DATA_DIR, 'tokens.json');
+const REPORTS_FILE  = path.join(DATA_DIR, 'reports.json');
+const LOCKED_FILE   = path.join(DATA_DIR, 'locked.json');
+const OWNER_FILE    = path.join(DATA_DIR, 'ownertokens.json');
+const APPEALS_FILE  = path.join(DATA_DIR, 'appeals.json');
+const CONTACTS_FILE = path.join(DATA_DIR, 'contacts.json');
 
 function load(f, fb) { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return fb; } }
 function save(f, d) { fs.writeFileSync(f, JSON.stringify(d, null, 2)); }
@@ -33,7 +34,8 @@ let tokens      = load(TOKENS_FILE, {});
 let reports     = load(REPORTS_FILE, []);
 let locked      = load(LOCKED_FILE, {});
 let ownerTokens = load(OWNER_FILE, {});
-let appeals     = load(APPEALS_FILE, {});   // { "+num": { ts, status, decidedAt } }
+let appeals     = load(APPEALS_FILE, {});
+let contacts    = load(CONTACTS_FILE, {});
 
 const OWNER_USER = 'Tayy';
 const OWNER_PASS = '0873@adv';
@@ -121,7 +123,11 @@ app.post('/api/register', (req, res) => {
   if (users[number]) return res.status(409).json({ error: 'number_taken' });
 
   const salt = crypto.randomBytes(16).toString('hex');
-  users[number] = { hash: hashPw(password, salt), salt, name: '', picture: null, status: 'Hey! Nutze OldWhats.', createdAt: Date.now() };
+  users[number] = {
+    hash: hashPw(password, salt), salt,
+    name: '', picture: null, status: 'Hey! Nutze OldWhats.',
+    theme: null, createdAt: Date.now()
+  };
   save(USERS_FILE, users);
 
   const token = makeToken();
@@ -153,15 +159,23 @@ app.post('/api/logout', auth, (req, res) => {
 
 app.get('/api/me', auth, (req, res) => {
   const u = users[req.user];
-  res.json({ number: req.user, name: u.name, picture: u.picture, status: u.status, createdAt: u.createdAt });
+  res.json({ number: req.user, name: u.name, picture: u.picture, status: u.status, theme: u.theme || null, createdAt: u.createdAt });
 });
 
 app.post('/api/profile', auth, (req, res) => {
-  const { name, picture, status } = req.body || {};
+  const { name, picture, status, theme } = req.body || {};
   const u = users[req.user];
   if (typeof name === 'string') u.name = name.slice(0, 40);
   if (typeof status === 'string') u.status = status.slice(0, 80);
   if (typeof picture === 'string' || picture === null) u.picture = picture;
+  if (theme && typeof theme === 'object') {
+    u.theme = {
+      bg:        String(theme.bg        || '').slice(0, 20),
+      btn:       String(theme.btn       || '').slice(0, 20),
+      bubbleOut: String(theme.bubbleOut || '').slice(0, 20),
+      bubbleIn:  String(theme.bubbleIn  || '').slice(0, 20)
+    };
+  }
   save(USERS_FILE, users);
   res.json({ ok: true });
 });
@@ -172,6 +186,27 @@ app.get('/api/user/:number', auth, (req, res) => {
   res.json({ number: req.params.number, exists: true, name: u.name, picture: u.picture, status: u.status });
 });
 
+// ----- Contacts -----
+app.get('/api/contacts', auth, (req, res) => { res.json(contacts[req.user] || {}); });
+
+app.post('/api/contacts', auth, (req, res) => {
+  const { number, name } = req.body || {};
+  if (!number || !name) return res.status(400).json({ error: 'missing' });
+  contacts[req.user] = contacts[req.user] || {};
+  contacts[req.user][number] = String(name).slice(0, 40);
+  save(CONTACTS_FILE, contacts);
+  res.json({ ok: true });
+});
+
+app.delete('/api/contacts/:number', auth, (req, res) => {
+  if (contacts[req.user]) {
+    delete contacts[req.user][req.params.number];
+    save(CONTACTS_FILE, contacts);
+  }
+  res.json({ ok: true });
+});
+
+// ----- Chats -----
 app.get('/api/chats', auth, (req, res) => {
   const me = req.user;
   const peers = new Set();
@@ -193,33 +228,35 @@ app.get('/api/messages/:peer', auth, (req, res) => {
   res.json(messages[key] || []);
 });
 
+// ----- Reports -----
 app.post('/api/report', auth, (req, res) => {
   const { target, reason } = req.body || {};
   if (!target) return res.status(400).json({ error: 'missing target' });
   if (target === req.user) return res.status(400).json({ error: 'self_report' });
-  const rep = { id: crypto.randomBytes(8).toString('hex'), reporter: req.user, target, reason: String(reason || '').slice(0, 500), ts: Date.now(), status: 'pending', decidedAt: null };
+  const rep = {
+    id: crypto.randomBytes(8).toString('hex'),
+    reporter: req.user, target,
+    reason: String(reason || '').slice(0, 500),
+    ts: Date.now(), status: 'pending', decidedAt: null
+  };
   reports.push(rep);
   save(REPORTS_FILE, reports);
   res.json({ ok: true, id: rep.id });
 });
 
-// ----- Appeal (Prüfungs-Antrag) -----
-// Öffentlich, weil der User schon gekickt sein kann (kein Token mehr)
+// ----- Appeals -----
 app.post('/api/appeal', (req, res) => {
   const { number } = req.body || {};
   if (!number) return res.status(400).json({ error: 'missing number' });
   if (!isLocked(number)) return res.status(400).json({ error: 'not_locked' });
-
   const existing = appeals[number];
   if (existing && existing.status === 'pending') return res.json({ ok: true, status: 'pending', ts: existing.ts });
   if (existing && existing.status === 'approved') return res.json({ ok: true, status: 'approved' });
-
   appeals[number] = { ts: Date.now(), status: 'pending', decidedAt: null };
   save(APPEALS_FILE, appeals);
   res.json({ ok: true, status: 'pending' });
 });
 
-// Status abfragen (public)
 app.get('/api/appeal/:number', (req, res) => {
   const a = appeals[req.params.number];
   if (!a) return res.json({ status: null });
@@ -276,7 +313,6 @@ app.post('/api/owner/decide', ownerAuth, (req, res) => {
   res.json({ ok: true, report: rep });
 });
 
-// Appeals-Liste für Owner — kombiniert mit locked-Infos
 app.get('/api/owner/appeals', ownerAuth, (req, res) => {
   const out = Object.entries(appeals).map(([number, a]) => {
     const lockInfo = locked[number] || null;
@@ -305,8 +341,7 @@ app.post('/api/owner/decide-appeal', ownerAuth, (req, res) => {
   if (decision === 'approve') {
     a.status = 'approved';
     a.decidedAt = Date.now();
-    // Nummer freigeben
-    delete locked[number];
+    delete locked[number];           // Nummer freigeben — User kann mit altem Passwort wieder rein
     save(LOCKED_FILE, locked);
   } else {
     a.status = 'denied';
@@ -331,14 +366,19 @@ app.get('/api/check/:number', async (req, res) => {
   const isLockedNow = isLocked(req.params.number) || isLocked('+' + cleanNum);
   try {
     const r = await fetch(`${BAN_API}?number=${cleanNum}`, { headers: BAN_HEADERS });
-    if (!r.ok) return res.json({ banned: false, locked: isLockedNow, status: r.status });
     const data = await r.json().catch(() => null);
-    return res.json({ banned: !!data?.banned, locked: isLockedNow, status: r.status, raw: data });
+    return res.json({
+      banned: r.status === 403 ? true : !!data?.banned,
+      locked: isLockedNow,
+      status: r.status,
+      raw: data
+    });
   } catch (e) {
     return res.json({ banned: false, locked: isLockedNow, status: 0, error: e.message });
   }
 });
 
+// ----- Socket -----
 io.use((socket, next) => {
   const token = socket.handshake.auth?.token;
   const num = tokens[token];
