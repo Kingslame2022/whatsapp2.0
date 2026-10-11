@@ -7,7 +7,7 @@
 <title>WhatsApp</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif; background: #000; }
+  html, body { height: 100%; font-family: -apple-system, 'SF Pro Text', 'Roboto', 'Helvetica Neue', Arial, sans-serif; background: #000; }
   :root {
     --wa-green: #075e54;
     --wa-green-dark: #054d44;
@@ -32,7 +32,6 @@
   }
   @media (min-width: 768px) { .app { max-width: 900px; } }
 
-  /* ---------- Header ---------- */
   header { background: var(--wa-green); color: #fff; padding: 10px 12px; display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 500; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,.2); z-index: 10; }
   header .back { background: transparent; border: 0; color: #fff; font-size: 22px; cursor: pointer; padding: 0 6px 0 0; line-height: 1; }
   header .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--wa-green-light); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; overflow: hidden; }
@@ -42,7 +41,6 @@
   header .actions { display: flex; gap: 4px; }
   header .actions button { background: transparent; border: 0; color: #fff; font-size: 20px; cursor: pointer; padding: 4px 8px; line-height: 1; }
 
-  /* ---------- Auth ---------- */
   .auth { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; text-align: center; background: #fff; overflow-y: auto; }
   .auth .logo { width: 72px; height: 72px; border-radius: 50%; background: var(--wa-green); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 16px; }
   .auth h1 { color: var(--wa-green); font-size: 24px; margin-bottom: 6px; }
@@ -67,7 +65,6 @@
   .hint { color: var(--wa-meta); font-size: 12px; margin-top: 10px; line-height: 1.5; }
   .owner-link { color: var(--wa-meta); font-size: 11px; margin-top: 24px; text-decoration: underline; cursor: pointer; }
 
-  /* ---------- Banned-Screen ---------- */
   .banned-screen { flex: 1; display: flex; flex-direction: column; background: #0a0a0a; color: #fff; justify-content: center; align-items: center; padding: 32px 24px; text-align: center; }
   .banned-screen .icon { width: 88px; height: 88px; border-radius: 50%; background: #3a1010; color: #ff6b6b; display: flex; align-items: center; justify-content: center; font-size: 42px; margin-bottom: 26px; border: 2px solid #4a1818; }
   .banned-screen h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; letter-spacing: .3px; }
@@ -85,7 +82,6 @@
   .banned-screen .actions .success { background: #2e7d32; color: #fff; }
   .banned-screen .actions button:active { transform: scale(.98); }
 
-  /* ---------- Chat-Liste ---------- */
   .chatlist-wrap { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column; }
   .chatlist { flex: 1; overflow-y: auto; background: var(--wa-surface); }
   .chatlist .empty { padding: 60px 30px; text-align: center; color: var(--wa-surface-sub); font-size: 14px; line-height: 1.6; }
@@ -99,7 +95,6 @@
   .chatitem .preview { color: var(--wa-surface-sub); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .chatitem .meta { color: var(--wa-surface-sub); font-size: 11px; text-align: right; flex-shrink: 0; }
 
-  /* ---------- FAB unten links ---------- */
   .fab {
     position: absolute;
     left: 16px; bottom: 16px;
@@ -113,7 +108,6 @@
   }
   .fab:active { transform: scale(.94); }
 
-  /* ---------- Chat-View ---------- */
   .chatview { flex: 1; display: flex; flex-direction: column; background: var(--wa-bg); overflow: hidden; }
   .messages {
     flex: 1; overflow-y: auto; padding: 10px 8px;
@@ -128,11 +122,14 @@
   .msg.in  { background: var(--wa-bubble-in); margin-right: auto; border-top-left-radius: 0; color: var(--wa-text); }
   .msg .time { font-size: 10.5px; color: var(--wa-meta); text-align: right; margin-top: 2px; }
   .msg .tick { color: #4fc3f7; margin-left: 3px; }
+  .msg.image { padding: 4px 4px 2px; }
+  .msg.image img { display: block; max-width: 100%; width: 240px; border-radius: 5px; cursor: pointer; }
+  .msg.image .time { padding-right: 4px; }
   .composer { display: flex; gap: 6px; padding: 6px 8px; background: #f0f0f0; border-top: 1px solid #ddd; flex-shrink: 0; align-items: flex-end; }
-  .composer input { flex: 1; padding: 10px 14px; border: 0; border-radius: 18px; font-size: 15px; outline: none; background: #fff; }
-  .composer button { background: var(--wa-green); color: #fff; border: 0; border-radius: 50%; width: 40px; height: 40px; font-size: 17px; cursor: pointer; flex-shrink: 0; }
+  .composer input[type=text] { flex: 1; padding: 10px 14px; border: 0; border-radius: 18px; font-size: 15px; outline: none; background: #fff; }
+  .composer .attach { background: transparent; color: #667781; border: 0; font-size: 22px; cursor: pointer; padding: 4px 6px; line-height: 1; }
+  .composer .send { background: var(--wa-green); color: #fff; border: 0; border-radius: 50%; width: 40px; height: 40px; font-size: 17px; cursor: pointer; flex-shrink: 0; }
 
-  /* ---------- Settings ---------- */
   .settings { flex: 1; overflow-y: auto; background: #fff; }
   .settings .section { padding: 20px 16px; border-bottom: 1px solid #eee; }
   .settings .section h3 { color: var(--wa-green); font-size: 13px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 14px; font-weight: 600; }
@@ -147,7 +144,6 @@
   .settings .field .value { font-family: 'Courier New', monospace; font-weight: 700; background: #f7f7f7; color: var(--wa-green-dark); }
   .settings .hint { color: var(--wa-meta); font-size: 12px; margin-top: 8px; line-height: 1.5; }
 
-  /* ---------- Nummern-Check ---------- */
   .check-screen { flex: 1; display: flex; flex-direction: column; background: #0a0a0a; color: #fff; overflow: hidden; }
   .check-screen .topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; flex-shrink: 0; font-size: 17px; background: #0a0a0a; }
   .check-screen .topbar .cancel { color: #fff; background: transparent; border: 0; font-size: 17px; cursor: pointer; padding: 0; }
@@ -164,10 +160,6 @@
   .check-screen .number-row input { flex: 1; background: transparent; border: 0; outline: none; color: #fff; font-size: 17px; font-family: 'Courier New', monospace; letter-spacing: .5px; }
   .check-screen .number-row input::placeholder { color: #48484a; }
   .check-screen .number-row .display { color: #fff; font-family: 'Courier New', monospace; letter-spacing: .5px; }
-  .check-screen .check-result { margin-top: 18px; padding: 12px 14px; border-radius: 10px; font-size: 14px; display: none; }
-  .check-screen .check-result.show { display: block; }
-  .check-screen .check-result.locked { background: #2a1f0a; color: #ffa726; }
-  .check-screen .check-result.info { background: #1c1c1e; color: #8e8e93; }
 
   .country-picker { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex; align-items: flex-end; justify-content: center; z-index: 250; }
   .country-picker .sheet { background: #1c1c1e; width: 100%; max-width: 480px; max-height: 70vh; border-radius: 14px 14px 0 0; display: flex; flex-direction: column; overflow: hidden; color: #fff; }
@@ -177,7 +169,6 @@
   .country-picker .sheet .item:active { background: #2c2c2e; }
   .country-picker .sheet .item .code { color: #8e8e93; font-family: 'Courier New', monospace; }
 
-  /* ---------- Modal ---------- */
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; animation: fade .15s; }
   @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
   .modal .box { background: #fff; border-radius: 6px; padding: 22px; max-width: 360px; width: 100%; box-shadow: 0 8px 30px rgba(0,0,0,.3); max-height: 80vh; overflow-y: auto; }
@@ -196,22 +187,77 @@
   .modal .contact-item .cnum { font-size: 12px; color: var(--wa-meta); font-family: 'Courier New', monospace; }
   .modal .contact-list { max-height: 240px; overflow-y: auto; margin-bottom: 12px; border: 1px solid var(--wa-divider); border-radius: 4px; }
 
-  /* ---------- Ban-Modal ---------- */
-  .ban-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: flex; align-items: center; justify-content: center; z-index: 300; padding: 20px; animation: fade .15s; }
-  .ban-modal { background: #2a2a2a; border-radius: 12px; width: 100%; max-width: 280px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,.5); animation: banIn .2s ease-out; }
-  @keyframes banIn { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
-  .ban-modal .content { padding: 22px 18px 20px; color: #fff; text-align: center; font-size: 14.5px; line-height: 1.45; font-weight: 400; }
-  .ban-modal .content .num-line { display: block; font-weight: 600; font-size: 15px; margin: 3px 0; color: #fff; }
-  .ban-modal .buttons { display: flex; border-top: 1px solid #3d3d3d; }
-  .ban-modal .buttons button { flex: 1; background: transparent; border: 0; color: #25d366; padding: 14px 16px; font-size: 14.5px; font-weight: 500; cursor: pointer; transition: background .12s; }
-  .ban-modal .buttons button:first-child { border-right: 1px solid #3d3d3d; }
-  .ban-modal .buttons button:active { background: rgba(255,255,255,.06); }
+  /* ---------- Info-Modal (Ban / Locked / Unlocked) ---------- */
+  .info-modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.55);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 300; padding: 24px;
+    animation: fade .18s ease-out;
+  }
+  .info-modal {
+    background: #2c2c2e;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 282px;
+    overflow: hidden;
+    box-shadow: 0 14px 50px rgba(0,0,0,.6);
+    animation: modalIn .22s cubic-bezier(.2,.9,.3,1.2);
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(.9); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .info-modal .body {
+    padding: 26px 20px 24px;
+    color: #f2f2f7;
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.45;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    word-wrap: break-word;
+  }
+  .info-modal .body .num-line {
+    display: block;
+    font-weight: 600;
+    font-size: 15px;
+    margin: 3px 0;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+  }
+  .info-modal .body .icon-line {
+    display: block;
+    font-size: 34px;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .info-modal .actions { display: flex; }
+  .info-modal .actions button {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    color: #25d366;
+    padding: 15px 12px;
+    font-size: 15px;
+    font-weight: 400;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    transition: background .12s;
+  }
+  .info-modal .actions button:not(:last-child) { border-right: 1px solid #3a3a3c; }
+  .info-modal .actions button:active { background: rgba(255,255,255,.06); }
 
-  /* ---------- Toast ---------- */
+  /* Lightbox für Bild */
+  .lightbox {
+    position: fixed; inset: 0; background: rgba(0,0,0,.92);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 500; padding: 20px;
+  }
+  .lightbox img { max-width: 100%; max-height: 100%; border-radius: 6px; }
+
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.85); color: #fff; padding: 10px 18px; border-radius: 20px; font-size: 13px; z-index: 400; animation: toastIn .2s ease-out; }
   @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
-  /* ---------- Owner-Panel ---------- */
   .owner-panel { flex: 1; display: flex; flex-direction: column; background: #0a0a0a; color: #fff; overflow: hidden; }
   .owner-panel .topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #2c2c2e; flex-shrink: 0; }
   .owner-panel .topbar .title { font-size: 17px; font-weight: 600; }
@@ -254,6 +300,7 @@ let chatMessages = {};
 let peerProfiles = {};
 let contacts = {};
 let bannedPollTimer = null;
+let lastLockedNum = null;
 
 function api(path, opts = {}) {
   const headers = Object.assign({ 'Content-Type': 'application/json' }, opts.headers || {});
@@ -301,6 +348,7 @@ function el(tag, attrs = {}, children = []) {
 function fmtTime(ts) { const d = new Date(ts); return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0'); }
 function fmtDate(ts) { const d = new Date(ts); return d.toLocaleDateString() + ' ' + fmtTime(ts); }
 function toast(msg) { const t = el('div', { class: 'toast' }, msg); document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 function avatarFor(label, size, pic) {
   const div = el('div', { class: 'avatar', style: `width:${size}px;height:${size}px;font-size:${Math.round(size*0.35)}px` });
@@ -335,12 +383,8 @@ function isLight(hex) {
 function applyTheme(theme) {
   const root = document.documentElement;
   const t = theme || {};
-
-  // Chat-Hintergrund
   if (t.bg) root.style.setProperty('--wa-bg', t.bg);
   else      root.style.removeProperty('--wa-bg');
-
-  // Buttons / Header
   if (t.btn) {
     root.style.setProperty('--wa-green', t.btn);
     root.style.setProperty('--wa-green-dark', hexShade(t.btn, -18));
@@ -350,14 +394,10 @@ function applyTheme(theme) {
     root.style.removeProperty('--wa-green-dark');
     root.style.removeProperty('--wa-green-light');
   }
-
-  // Bubbles
   if (t.bubbleOut) root.style.setProperty('--wa-bubble-out', t.bubbleOut);
   else             root.style.removeProperty('--wa-bubble-out');
   if (t.bubbleIn)  root.style.setProperty('--wa-bubble-in', t.bubbleIn);
   else             root.style.removeProperty('--wa-bubble-in');
-
-  // Home / Chat-Liste Surface
   if (t.surface) {
     root.style.setProperty('--wa-surface', t.surface);
     const light = isLight(t.surface);
@@ -372,37 +412,91 @@ function applyTheme(theme) {
   }
 }
 
-// ---------- Modals ----------
+// ---------- Info-Modal (zentral für alle Popups) ----------
+function showInfoModal({ icon, text, number, buttons }) {
+  const overlay = el('div', { class: 'info-modal-overlay' });
+  const body = el('div', { class: 'body' });
+  if (icon) body.appendChild(el('span', { class: 'icon-line' }, icon));
+  if (text) body.appendChild(document.createTextNode(text + ' '));
+  if (number) body.appendChild(el('span', { class: 'num-line' }, number));
+  if (text && number) body.appendChild(document.createTextNode(' '));
+  if (text && !number) {} // text already added
+  // falls both text mit Lücke davor und nach — sauberer Fallback
+  const actions = el('div', { class: 'actions' });
+  for (const b of (buttons || [{ label: 'OK' }])) {
+    actions.appendChild(el('button', {
+      onclick: () => { overlay.remove(); b.onClick?.(); }
+    }, b.label));
+  }
+  const modal = el('div', { class: 'info-modal' }, [body, actions]);
+  overlay.appendChild(modal);
+  overlay.onclick = (e) => { if (e.target === overlay) { overlay.remove(); } };
+  document.body.appendChild(overlay);
+  return overlay;
+}
+
 function showBanModal(number, opts = {}) {
-  const overlay = el('div', { class: 'ban-modal-overlay' });
-  const modal = el('div', { class: 'ban-modal' }, [
-    el('div', { class: 'content' }, [
-      'Your phone number ',
-      el('span', { class: 'num-line' }, number),
-      ' is banned from using WhatsApp. Please contact customer support for assistance.'
-    ]),
-    el('div', { class: 'buttons' }, [
-      el('button', { onclick: () => { overlay.remove(); opts.onCancel?.(); } }, 'Cancel'),
-      el('button', { onclick: () => { overlay.remove(); opts.onSupport?.(); } }, 'Support')
-    ])
+  const overlay = el('div', { class: 'info-modal-overlay' });
+  const body = el('div', { class: 'body' }, [
+    'Your phone number ',
+    el('span', { class: 'num-line' }, number),
+    ' is banned from using WhatsApp. Please contact customer support for assistance.'
   ]);
+  const actions = el('div', { class: 'actions' }, [
+    el('button', { onclick: () => { overlay.remove(); opts.onCancel?.(); } }, 'Cancel'),
+    el('button', { onclick: () => { overlay.remove(); opts.onSupport?.(); } }, 'Support')
+  ]);
+  const modal = el('div', { class: 'info-modal' }, [body, actions]);
   overlay.appendChild(modal);
   overlay.onclick = (e) => { if (e.target === overlay) { overlay.remove(); opts.onCancel?.(); } };
   document.body.appendChild(overlay);
 }
 
-function showConfirm(title, message, onOk, opts = {}) {
-  const overlay = el('div', { class: 'ban-modal-overlay' });
-  const modal = el('div', { class: 'ban-modal' }, [
-    el('div', { class: 'content' }, [
-      el('div', { style: 'font-weight:600;font-size:15px;margin-bottom:8px' }, title),
-      message
-    ]),
-    el('div', { class: 'buttons' }, [
-      el('button', { onclick: () => { overlay.remove(); } }, 'Cancel'),
-      el('button', { onclick: () => { overlay.remove(); onOk?.(); }, style: opts.okColor ? `color:${opts.okColor}` : '' }, opts.okText || 'OK')
-    ])
+function showLockedModal(number, opts = {}) {
+  const overlay = el('div', { class: 'info-modal-overlay' });
+  const body = el('div', { class: 'body' }, [
+    'Your phone number ',
+    el('span', { class: 'num-line' }, number),
+    ' has been locked by the operator. You can request a review or contact support.'
   ]);
+  const actions = el('div', { class: 'actions' }, [
+    el('button', { onclick: () => { overlay.remove(); opts.onCancel?.(); } }, 'Cancel'),
+    el('button', { onclick: () => { overlay.remove(); opts.onSupport?.(); } }, 'Support')
+  ]);
+  const modal = el('div', { class: 'info-modal' }, [body, actions]);
+  overlay.appendChild(modal);
+  overlay.onclick = (e) => { if (e.target === overlay) { overlay.remove(); opts.onCancel?.(); } };
+  document.body.appendChild(overlay);
+}
+
+function showUnlockedModal(number, opts = {}) {
+  const overlay = el('div', { class: 'info-modal-overlay' });
+  const body = el('div', { class: 'body' }, [
+    el('span', { class: 'icon-line' }, '✓'),
+    'Your phone number ',
+    el('span', { class: 'num-line' }, number),
+    ' has been unlocked. You can log in again with your password.'
+  ]);
+  const actions = el('div', { class: 'actions' }, [
+    el('button', { onclick: () => { overlay.remove(); opts.onOk?.(); } }, 'Log in')
+  ]);
+  const modal = el('div', { class: 'info-modal' }, [body, actions]);
+  overlay.appendChild(modal);
+  overlay.onclick = (e) => { if (e.target === overlay) { overlay.remove(); opts.onOk?.(); } };
+  document.body.appendChild(overlay);
+}
+
+function showConfirm(title, message, onOk, opts = {}) {
+  const overlay = el('div', { class: 'info-modal-overlay' });
+  const body = el('div', { class: 'body' }, [
+    el('div', { style: 'font-weight:600;font-size:15px;margin-bottom:8px;color:#fff' }, title),
+    message
+  ]);
+  const actions = el('div', { class: 'actions' }, [
+    el('button', { onclick: () => { overlay.remove(); } }, 'Cancel'),
+    el('button', { onclick: () => { overlay.remove(); onOk?.(); } }, opts.okText || 'OK')
+  ]);
+  const modal = el('div', { class: 'info-modal' }, [body, actions]);
   overlay.appendChild(modal);
   overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
   document.body.appendChild(overlay);
@@ -432,9 +526,17 @@ function showReportModal(target) {
   setTimeout(() => reasonInput.focus(), 50);
 }
 
+function showLightbox(src) {
+  const overlay = el('div', { class: 'lightbox', onclick: () => overlay.remove() }, [
+    el('img', { src })
+  ]);
+  document.body.appendChild(overlay);
+}
+
 // ---------- Banned ----------
 function handleLocked() {
   const wasNumber = me || localStorage.getItem('oldwhats_lastnumber') || '';
+  lastLockedNum = wasNumber;
   if (socket) { socket.disconnect(); socket = null; }
   localStorage.removeItem('oldwhats_token');
   token = null;
@@ -476,6 +578,17 @@ async function refreshBannedView(number, statusHolder, actionsHolder) {
     const r = await fetch('/api/appeal/' + encodeURIComponent(number));
     appeal = await r.json();
   } catch {}
+
+  // Änderung prüfen
+  if (appeal.status === 'approved' && lastLockedNum === number) {
+    // Popup "freigegeben" einmalig
+    if (!localStorage.getItem('oldwhats_unlockShown_' + number)) {
+      localStorage.setItem('oldwhats_unlockShown_' + number, '1');
+      if (bannedPollTimer) { clearInterval(bannedPollTimer); bannedPollTimer = null; }
+      showUnlockedModal(number, { onOk: () => renderAuth('login') });
+      return;
+    }
+  }
 
   statusHolder.innerHTML = '';
   actionsHolder.innerHTML = '';
@@ -595,8 +708,14 @@ async function loadGeneratedNumber() {
 
     const banRes = await fetch('/api/check/' + encodeURIComponent(data.number));
     const ban = await banRes.json();
-    if (ban.banned || ban.locked) {
+
+    if (ban.banned) {
       showBanModal(data.number, {
+        onCancel: () => loadGeneratedNumber(),
+        onSupport: () => toast('Support: support@whatsapp.com')
+      });
+    } else if (ban.locked) {
+      showLockedModal(data.number, {
         onCancel: () => loadGeneratedNumber(),
         onSupport: () => toast('Support: support@whatsapp.com')
       });
@@ -637,7 +756,10 @@ async function doRegister() {
   } catch (e) {
     if (e.status === 403 && e.data?.error === 'locked') {
       localStorage.setItem('oldwhats_lastnumber', number);
-      renderBannedScreen(number);
+      showLockedModal(number, {
+        onCancel: () => renderBannedScreen(number),
+        onSupport: () => toast('Support: support@whatsapp.com')
+      });
     } else if (e.data?.error === 'number_taken') {
       toast('Nummer schon vergeben — neu ziehen'); loadGeneratedNumber();
     } else {
@@ -662,7 +784,10 @@ async function doLogin() {
   } catch (e) {
     if (e.status === 403 && e.data?.error === 'locked') {
       localStorage.setItem('oldwhats_lastnumber', number);
-      renderBannedScreen(number);
+      showLockedModal(number, {
+        onCancel: () => renderBannedScreen(number),
+        onSupport: () => toast('Support: support@whatsapp.com')
+      });
     } else {
       toast('Nummer oder Passwort falsch');
     }
@@ -670,7 +795,7 @@ async function doLogin() {
   }
 }
 
-// ---------- Owner Login ----------
+// ---------- Owner ----------
 function renderOwnerLogin() {
   const app = document.getElementById('app');
   app.innerHTML = '';
@@ -711,7 +836,6 @@ async function doOwnerLogin() {
   }
 }
 
-// ---------- Owner Panel ----------
 async function renderOwnerPanel(tab = 'reports') {
   const app = document.getElementById('app');
   app.innerHTML = '';
@@ -865,7 +989,7 @@ async function loadPeerProfile(peer) {
   try { peerProfiles[peer] = await api('/api/user/' + encodeURIComponent(peer)); } catch {}
 }
 
-// ---------- Chat-Liste mit FAB ----------
+// ---------- Chat-Liste ----------
 async function renderChatList() {
   const app = document.getElementById('app');
   app.innerHTML = '';
@@ -901,24 +1025,23 @@ async function renderChatList() {
     for (const { peer, last } of arr) {
       const pp = peerProfiles[peer] || {};
       const displayName = contacts[peer] || pp.name || peer;
+      let preview = 'Tippe um zu chatten';
+      if (last) preview = last.type === 'image' ? '📷 Foto' : last.text;
       list.appendChild(el('div', { class: 'chatitem', onclick: () => openChat(peer) }, [
         avatarFor(displayName, 48, pp.picture),
         el('div', { class: 'info' }, [
           el('div', { class: 'name' }, displayName),
-          el('div', { class: 'preview' }, last ? last.text : 'Tippe um zu chatten')
+          el('div', { class: 'preview' }, preview)
         ]),
         el('div', { class: 'meta' }, last ? fmtTime(last.ts) : '')
       ]));
     }
   }
   wrap.appendChild(list);
-
-  // FAB unten links
   wrap.appendChild(el('button', { class: 'fab', title: 'Neuer Chat', onclick: openContactsSheet }, '+'));
   app.appendChild(wrap);
 }
 
-// ---------- Kontakte-Sheet ----------
 function openContactsSheet() {
   const contactNumbers = Object.keys(contacts);
   const overlay = el('div', { class: 'modal', onclick: (e) => { if (e.target.classList.contains('modal')) overlay.remove(); } });
@@ -999,10 +1122,17 @@ function renderChat() {
   const view = el('div', { class: 'chatview' });
   const messages = el('div', { class: 'messages', id: 'messages' });
   view.appendChild(messages);
+
+  // Bild-Picker (hidden)
+  const fileInput = el('input', { type: 'file', accept: 'image/*', id: 'imgPicker', style: 'display:none',
+    onchange: onImagePicked });
+
   const composer = el('div', { class: 'composer' }, [
-    el('input', { id: 'composerInput', placeholder: 'Nachricht', autocomplete: 'off',
+    el('button', { class: 'attach', title: 'Bild senden', onclick: () => document.getElementById('imgPicker').click() }, '📎'),
+    el('input', { type: 'text', id: 'composerInput', placeholder: 'Nachricht', autocomplete: 'off',
       onkeydown: (e) => { if (e.key === 'Enter') sendMessage(); } }),
-    el('button', { onclick: sendMessage }, '➤')
+    el('button', { class: 'send', onclick: sendMessage }, '➤'),
+    fileInput
   ]);
   view.appendChild(composer);
   app.appendChild(view);
@@ -1010,14 +1140,26 @@ function renderChat() {
   const key = [me, currentPeer].sort().join('|');
   const msgs = chatMessages[key] || [];
   for (const m of msgs) {
-    const out = m.from === me;
-    messages.appendChild(el('div', { class: 'msg ' + (out ? 'out' : 'in') }, [
-      el('div', {}, m.text),
-      el('div', { class: 'time' }, [fmtTime(m.ts), out ? el('span', { class: 'tick' }, '✓✓') : null])
-    ]));
+    messages.appendChild(buildMessageEl(m));
   }
   messages.scrollTop = messages.scrollHeight;
   setTimeout(() => document.getElementById('composerInput')?.focus(), 50);
+}
+
+function buildMessageEl(m) {
+  const out = m.from === me;
+  const wrap = el('div', { class: 'msg ' + (out ? 'out' : 'in') + (m.type === 'image' ? ' image' : '') });
+  if (m.type === 'image') {
+    const img = el('img', { src: m.data, alt: '', onclick: () => showLightbox(m.data) });
+    wrap.appendChild(img);
+  } else {
+    wrap.appendChild(el('div', {}, m.text));
+  }
+  wrap.appendChild(el('div', { class: 'time' }, [
+    fmtTime(m.ts),
+    out ? el('span', { class: 'tick' }, '✓✓') : null
+  ]));
+  return wrap;
 }
 
 function sendMessage() {
@@ -1028,6 +1170,32 @@ function sendMessage() {
   input.value = '';
   input.focus();
 }
+
+function onImagePicked(e) {
+  const file = e.target.files[0];
+  if (!file || !currentPeer) return;
+  if (!file.type.startsWith('image/')) { toast('Nur Bilder'); return; }
+
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      // Downscale auf max 1280px Breite/Höhe, jpeg q 0.82
+      const max = 1280;
+      const ratio = Math.min(max / img.width, max / img.height, 1);
+      const w = Math.round(img.width * ratio), h = Math.round(img.height * ratio);
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = c.toDataURL('image/jpeg', 0.82);
+      socket.emit('message', { to: currentPeer, type: 'image', data: dataUrl });
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+
 function backToList() { currentPeer = null; loadChats().then(renderChatList); }
 
 // ---------- Settings ----------
@@ -1074,7 +1242,6 @@ function renderSettings() {
     el('div', { class: 'hint' }, 'Mit dieser Nummer und deinem Passwort loggst du dich überall ein.')
   ]));
 
-  // ----- Theme -----
   const theme = profile.theme || {};
   wrap.appendChild(el('div', { class: 'section' }, [
     el('h3', {}, 'Design'),
@@ -1104,7 +1271,6 @@ function renderSettings() {
     ])
   ]));
 
-  // ----- Kontakte -----
   const contactEntries = Object.entries(contacts);
   wrap.appendChild(el('div', { class: 'section' }, [
     el('h3', {}, 'Kontakte'),
@@ -1264,7 +1430,19 @@ const COUNTRIES = [
   { name: '+911',           code: '+911' },
   { name: '+666',           code: '+666' },
   { name: '+404',           code: '+404' },
-  { name: '+112',           code: '+112' }
+  { name: '+112',           code: '+112' },
+  { name: '+111',           code: '+111' },
+  { name: '+222',           code: '+222' },
+  { name: '+333',           code: '+333' },
+  { name: '+444',           code: '+444' },
+  { name: '+321',           code: '+321' },
+  { name: '+369',           code: '+369' },
+  { name: '+420',           code: '+420' },
+  { name: '+500',           code: '+500' },
+  { name: '+600',           code: '+600' },
+  { name: '+700',           code: '+700' },
+  { name: '+800',           code: '+800' },
+  { name: '+900',           code: '+900' }
 ];
 
 let checkState = { country: COUNTRIES[1], number: '', result: null };
@@ -1281,12 +1459,6 @@ function renderNumberCheck() {
   const app = document.getElementById('app');
   app.innerHTML = '';
   const myParsed = parseNumber(me);
-
-  const resultHolder = el('div', { id: 'checkResultInline' });
-  if (checkState.result) {
-    const box = buildCheckResultBox(checkState.result);
-    if (box) resultHolder.appendChild(box);
-  }
 
   const screen = el('div', { class: 'check-screen' }, [
     el('div', { class: 'topbar' }, [
@@ -1314,9 +1486,7 @@ function renderNumberCheck() {
         el('span', { class: 'prefix' }, checkState.country.code),
         el('input', { id: 'checkNumberInput', placeholder: '707-102555', value: checkState.number, inputmode: 'tel',
           oninput: (e) => { checkState.number = e.target.value; } })
-      ]),
-
-      resultHolder
+      ])
     ])
   ]);
   app.appendChild(screen);
@@ -1326,12 +1496,6 @@ function renderNumberCheck() {
     inp?.focus();
     inp?.addEventListener('keydown', e => { if (e.key === 'Enter') runNumberCheck(); });
   }, 50);
-}
-
-function buildCheckResultBox(r) {
-  if (r.locked) return el('div', { class: 'check-result show locked' }, '🔒 ' + r.number + ' ist gesperrt.');
-  if (r.status && r.status !== 200 && !r.banned) return el('div', { class: 'check-result show info' }, 'API-Status: ' + r.status + ' — keine eindeutige Antwort.');
-  return null;
 }
 
 function openCountryPicker() {
@@ -1359,19 +1523,26 @@ async function runNumberCheck() {
   try {
     const res = await fetch('/api/check/' + encodeURIComponent(fullNumber));
     const data = await res.json();
-    checkState.result = { banned: !!data.banned, locked: !!data.locked, status: data.status, number: fullNumber };
 
     if (data.banned) {
       showBanModal(fullNumber, {
         onCancel: () => {},
         onSupport: () => toast('Support: support@whatsapp.com')
       });
+    } else if (data.locked) {
+      showLockedModal(fullNumber, {
+        onCancel: () => {},
+        onSupport: () => toast('Support: support@whatsapp.com')
+      });
+    } else {
+      // freie Nummer → nichts inline, nur stille Info
+      showInfoModal({
+        icon: '✓',
+        text: 'Number is not banned:',
+        number: fullNumber,
+        buttons: [{ label: 'OK' }]
+      });
     }
-
-    const holder = document.getElementById('checkResultInline');
-    holder.innerHTML = '';
-    const box = buildCheckResultBox(checkState.result);
-    if (box) holder.appendChild(box);
   } catch (e) { toast('Fehler: ' + e.message); }
   finally { btn.disabled = false; btn.textContent = 'Prüfen'; }
 }
