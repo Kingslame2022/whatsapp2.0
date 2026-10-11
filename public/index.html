@@ -3,14 +3,15 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OldWhats</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>WhatsApp</title>
 <style>
-  /* ---------- ALTES WHATSAPP LOOK ---------- */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; font-family: 'Roboto', Arial, sans-serif; background: #ece5dd; }
+  /* ---------- ALTES WHATSAPP — Android 4.x Ära ---------- */
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif; background: #000; }
   :root {
     --wa-green: #075e54;
+    --wa-green-dark: #054d44;
     --wa-green-light: #128c7e;
     --wa-bubble-out: #dcf8c6;
     --wa-bubble-in: #ffffff;
@@ -18,135 +19,187 @@
     --wa-header: #075e54;
     --wa-text: #111;
     --wa-meta: #667781;
+    --wa-divider: #d9d9d9;
   }
-
+  body { display: flex; justify-content: center; background: #111; }
   .app {
+    width: 100%; max-width: 480px; height: 100vh;
     display: flex; flex-direction: column;
-    height: 100vh; max-width: 100%; margin: 0 auto;
-    background: var(--wa-bg);
+    background: var(--wa-bg); position: relative; overflow: hidden;
+    box-shadow: 0 0 30px rgba(0,0,0,.6);
   }
-  @media (min-width: 768px) { .app { max-width: 900px; box-shadow: 0 0 20px rgba(0,0,0,.2); } }
+  @media (min-width: 768px) { .app { max-width: 900px; } }
 
-  /* Header */
+  /* ---------- Header ---------- */
   header {
-    background: var(--wa-green);
-    color: #fff;
-    padding: 12px 16px;
-    display: flex; align-items: center; gap: 12px;
-    font-size: 18px; font-weight: 500;
-    box-shadow: 0 1px 3px rgba(0,0,0,.2);
+    background: var(--wa-green); color: #fff;
+    padding: 10px 12px; display: flex; align-items: center; gap: 10px;
+    font-size: 17px; font-weight: 500; flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,.2); z-index: 10;
+  }
+  header .back {
+    background: transparent; border: 0; color: #fff;
+    font-size: 22px; cursor: pointer; padding: 0 6px 0 0; line-height: 1;
   }
   header .avatar {
     width: 36px; height: 36px; border-radius: 50%;
-    background: #128c7e; display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: 700;
+    background: var(--wa-green-light); display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
   }
-  header .title { flex: 1; }
-  header button {
+  header .title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  header .actions { display: flex; gap: 4px; }
+  header .actions button {
     background: transparent; border: 0; color: #fff;
-    font-size: 20px; cursor: pointer; padding: 4px 8px;
+    font-size: 20px; cursor: pointer; padding: 4px 8px; line-height: 1;
   }
+  header .actions button:active { background: rgba(255,255,255,.15); border-radius: 4px; }
 
-  /* Setup screen */
+  /* ---------- Setup ---------- */
   .setup {
-    flex: 1; display: flex; flex-direction: column;
-    justify-content: center; align-items: center; padding: 24px; text-align: center;
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    align-items: center; padding: 24px; text-align: center; background: #fff;
   }
-  .setup h1 { color: var(--wa-green); font-size: 28px; margin-bottom: 8px; }
-  .setup p { color: var(--wa-meta); margin-bottom: 24px; }
+  .setup .logo {
+    width: 72px; height: 72px; border-radius: 50%; background: var(--wa-green);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 32px; margin-bottom: 16px;
+  }
+  .setup h1 { color: var(--wa-green); font-size: 24px; margin-bottom: 6px; }
+  .setup .sub { color: var(--wa-meta); font-size: 13px; margin-bottom: 28px; line-height: 1.4; }
+  .setup .label { color: var(--wa-meta); font-size: 12px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
   .setup .num {
     font-size: 22px; font-weight: 700; color: var(--wa-text);
-    padding: 16px 24px; background: #fff; border: 2px solid var(--wa-green);
-    border-radius: 8px; margin-bottom: 16px; letter-spacing: 1px;
+    padding: 14px 22px; background: #f7f7f7; border: 1px solid var(--wa-divider);
+    border-radius: 6px; margin-bottom: 10px; letter-spacing: 1px; font-family: 'Courier New', monospace;
   }
   .btn {
     background: var(--wa-green); color: #fff; border: 0;
-    padding: 12px 24px; border-radius: 6px; font-size: 16px;
-    cursor: pointer; margin: 4px;
+    padding: 12px 22px; border-radius: 4px; font-size: 15px;
+    cursor: pointer; margin: 4px; font-weight: 500; letter-spacing: .3px;
+    transition: background .15s;
   }
   .btn.secondary { background: var(--wa-green-light); }
-  .btn:active { background: #054d44; }
+  .btn:active { background: var(--wa-green-dark); }
+  .btn:disabled { background: #999; cursor: not-allowed; }
+  .btn-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; justify-content: center; }
+  .banresult { margin-top: 14px; font-size: 13px; min-height: 18px; }
+  .banresult.banned { color: #d32f2f; font-weight: 700; }
+  .banresult.ok { color: var(--wa-green); font-weight: 700; }
+  .banresult.info { color: var(--wa-meta); }
 
-  /* Chat list */
+  /* ---------- Chat-Liste ---------- */
   .chatlist { flex: 1; overflow-y: auto; background: #fff; }
-  .chatlist .empty { padding: 40px; text-align: center; color: var(--wa-meta); }
+  .chatlist .empty {
+    padding: 60px 30px; text-align: center; color: var(--wa-meta); font-size: 14px; line-height: 1.6;
+  }
+  .chatlist .empty .icon { font-size: 48px; opacity: .3; margin-bottom: 12px; }
   .chatitem {
     display: flex; align-items: center; gap: 12px;
-    padding: 12px 16px; border-bottom: 1px solid #e9edef; cursor: pointer;
+    padding: 11px 14px; border-bottom: 1px solid #e9edef; cursor: pointer;
+    background: #fff; transition: background .1s;
   }
-  .chatitem:hover { background: #f5f5f5; }
+  .chatitem:active { background: #f0f0f0; }
   .chatitem .avatar {
-    width: 48px; height: 48px; border-radius: 50%; background: #128c7e;
+    width: 48px; height: 48px; border-radius: 50%; background: var(--wa-green-light);
     color: #fff; display: flex; align-items: center; justify-content: center;
-    font-weight: 700;
+    font-weight: 700; font-size: 16px; flex-shrink: 0;
   }
   .chatitem .info { flex: 1; min-width: 0; }
-  .chatitem .name { font-weight: 500; color: var(--wa-text); }
+  .chatitem .name { font-weight: 500; color: var(--wa-text); font-size: 15px; margin-bottom: 2px; }
   .chatitem .preview {
     color: var(--wa-meta); font-size: 13px;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .chatitem .meta { color: var(--wa-meta); font-size: 12px; text-align: right; }
+  .chatitem .meta { color: var(--wa-meta); font-size: 11px; text-align: right; flex-shrink: 0; }
+  .chatitem .meta .unread {
+    display: inline-block; background: #25d366; color: #fff;
+    border-radius: 10px; padding: 1px 6px; font-size: 10px; margin-top: 4px; font-weight: 700;
+  }
 
-  /* Chat view */
-  .chatview { flex: 1; display: flex; flex-direction: column; background: var(--wa-bg); }
-  .messages { flex: 1; overflow-y: auto; padding: 12px; }
+  /* ---------- Chat-View ---------- */
+  .chatview { flex: 1; display: flex; flex-direction: column; background: var(--wa-bg); overflow: hidden; }
+  .messages {
+    flex: 1; overflow-y: auto; padding: 10px 8px;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,.4) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(255,255,255,.4) 0%, transparent 40%),
+      var(--wa-bg);
+  }
   .msg {
-    max-width: 75%; padding: 8px 12px; margin-bottom: 6px;
-    border-radius: 8px; font-size: 15px; line-height: 1.35;
-    word-wrap: break-word; position: relative;
+    max-width: 78%; padding: 6px 9px 5px; margin-bottom: 4px;
+    border-radius: 7px; font-size: 14.5px; line-height: 1.35;
+    word-wrap: break-word; position: relative; box-shadow: 0 1px 0.5px rgba(0,0,0,.13);
+    animation: pop .12s ease-out;
   }
-  .msg.out {
-    background: var(--wa-bubble-out); margin-left: auto;
-    border-top-right-radius: 0;
-  }
-  .msg.in {
-    background: var(--wa-bubble-in); margin-right: auto;
-    border-top-left-radius: 0;
-  }
-  .msg .time { font-size: 11px; color: var(--wa-meta); text-align: right; margin-top: 2px; }
+  @keyframes pop { from { transform: scale(.96); opacity: .6; } to { transform: scale(1); opacity: 1; } }
+  .msg.out { background: var(--wa-bubble-out); margin-left: auto; border-top-right-radius: 0; }
+  .msg.in  { background: var(--wa-bubble-in); margin-right: auto; border-top-left-radius: 0; }
+  .msg .time { font-size: 10.5px; color: var(--wa-meta); text-align: right; margin-top: 2px; }
+  .msg .tick { color: #4fc3f7; margin-left: 3px; }
   .composer {
-    display: flex; gap: 8px; padding: 8px; background: #f0f0f0;
-    border-top: 1px solid #ddd;
+    display: flex; gap: 6px; padding: 6px 8px; background: #f0f0f0;
+    border-top: 1px solid #ddd; flex-shrink: 0; align-items: flex-end;
   }
   .composer input {
-    flex: 1; padding: 10px 14px; border: 0; border-radius: 20px;
-    font-size: 15px; outline: none;
+    flex: 1; padding: 10px 14px; border: 0; border-radius: 18px;
+    font-size: 15px; outline: none; background: #fff;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.08);
   }
   .composer button {
     background: var(--wa-green); color: #fff; border: 0;
-    border-radius: 50%; width: 42px; height: 42px; font-size: 18px;
-    cursor: pointer;
+    border-radius: 50%; width: 40px; height: 40px; font-size: 17px;
+    cursor: pointer; flex-shrink: 0;
   }
+  .composer button:active { background: var(--wa-green-dark); }
 
-  /* Modal */
+  /* ---------- Modal ---------- */
   .modal {
     position: fixed; inset: 0; background: rgba(0,0,0,.5);
     display: flex; align-items: center; justify-content: center; z-index: 100;
+    padding: 20px; animation: fade .15s;
   }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
   .modal .box {
-    background: #fff; border-radius: 8px; padding: 24px;
-    max-width: 360px; width: 90%; text-align: center;
+    background: #fff; border-radius: 6px; padding: 22px;
+    max-width: 340px; width: 100%; box-shadow: 0 8px 30px rgba(0,0,0,.3);
   }
-  .modal .box h2 { color: #d32f2f; margin-bottom: 12px; font-size: 18px; }
-  .modal .box p { color: var(--wa-text); margin-bottom: 20px; line-height: 1.5; }
-  .modal .box .row { display: flex; gap: 8px; justify-content: center; }
+  .modal .box h2 { color: var(--wa-green); margin-bottom: 10px; font-size: 17px; font-weight: 600; }
+  .modal .box p { color: var(--wa-text); margin-bottom: 16px; line-height: 1.5; font-size: 14px; }
+  .modal .box input {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--wa-divider);
+    border-radius: 4px; font-size: 15px; margin-bottom: 16px; outline: none;
+  }
+  .modal .box input:focus { border-color: var(--wa-green); }
+  .modal .box .row { display: flex; gap: 8px; justify-content: flex-end; }
+  .modal .box .row button {
+    padding: 9px 16px; border: 0; border-radius: 4px; font-size: 14px;
+    cursor: pointer; font-weight: 500;
+  }
+  .modal .box .row .cancel { background: #eee; color: #333; }
+  .modal .box .row .ok { background: var(--wa-green); color: #fff; }
 
-  /* Ban result */
-  .banresult { margin-top: 12px; font-size: 14px; }
-  .banresult.banned { color: #d32f2f; font-weight: 700; }
-  .banresult.ok { color: var(--wa-green); font-weight: 700; }
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,.85); color: #fff; padding: 10px 18px;
+    border-radius: 20px; font-size: 13px; z-index: 200;
+    animation: toastIn .2s ease-out;
+  }
+  @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
 </style>
 </head>
 <body>
 <div class="app" id="app"></div>
-
+<script src="/socket.io/socket.io.js"></script>
 <script>
 // ---------- State ----------
 let me = localStorage.getItem('oldwhats_me') || null;
 let socket = null;
 let currentPeer = null;
-let chatMessages = {};
+let chatMessages = {};   // key = sorted(me|peer)
+let peers = JSON.parse(localStorage.getItem('oldwhats_peers') || '[]');
+
+function savePeers() { localStorage.setItem('oldwhats_peers', JSON.stringify(peers)); }
 
 // ---------- Helpers ----------
 function el(tag, attrs = {}, children = []) {
@@ -154,12 +207,16 @@ function el(tag, attrs = {}, children = []) {
   for (const [k, v] of Object.entries(attrs)) {
     if (k === 'class') e.className = v;
     else if (k === 'onclick') e.onclick = v;
+    else if (k === 'onkeydown') e.onkeydown = v;
+    else if (k === 'style') e.style.cssText = v;
     else if (k.startsWith('data-')) e.setAttribute(k, v);
-    else e[k] = v;
+    else if (k in e) e[k] = v;
+    else e.setAttribute(k, v);
   }
   for (const c of [].concat(children)) {
-    if (typeof c === 'string') e.appendChild(document.createTextNode(c));
-    else if (c) e.appendChild(c);
+    if (c == null || c === false) continue;
+    if (typeof c === 'string' || typeof c === 'number') e.appendChild(document.createTextNode(c));
+    else e.appendChild(c);
   }
   return e;
 }
@@ -168,19 +225,28 @@ function fmtTime(ts) {
   const d = new Date(ts);
   return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
 }
+function initials(num) { return (num || '').replace(/[^\d]/g, '').slice(-2) || '??'; }
 
-function initials(num) { return num.replace(/[^\d]/g, '').slice(-2); }
+function toast(msg) {
+  const t = el('div', { class: 'toast' }, msg);
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2200);
+}
 
 // ---------- Render: Setup ----------
 function renderSetup() {
   const app = document.getElementById('app');
   app.innerHTML = '';
   const wrap = el('div', { class: 'setup' }, [
-    el('h1', {}, 'OldWhats'),
-    el('p', {}, 'Eine Nummer wird dir zugewiesen. Du kannst sie rerolen.'),
+    el('div', { class: 'logo' }, '💬'),
+    el('h1', {}, 'WhatsApp'),
+    el('p', { class: 'sub' }, 'Deine Nummer wird dir zugewiesen. Du kannst sie rerolen.'),
+    el('div', { class: 'label' }, 'Deine Nummer'),
     el('div', { class: 'num', id: 'numDisplay' }, '…'),
-    el('button', { class: 'btn', onclick: rollNumber }, 'Neue Nummer ziehen'),
-    el('button', { class: 'btn secondary', id: 'enterBtn', onclick: enterApp, style: 'display:none' }, 'Weiter'),
+    el('div', { class: 'btn-row' }, [
+      el('button', { class: 'btn secondary', onclick: rollNumber }, 'Neu ziehen'),
+      el('button', { class: 'btn', id: 'enterBtn', onclick: enterApp, disabled: true }, 'Weiter')
+    ]),
     el('div', { class: 'banresult', id: 'banResult' })
   ]);
   app.appendChild(wrap);
@@ -189,29 +255,39 @@ function renderSetup() {
 
 async function rollNumber() {
   const display = document.getElementById('numDisplay');
-  display.textContent = '…';
-  document.getElementById('enterBtn').style.display = 'none';
-  document.getElementById('banResult').textContent = '';
-  const res = await fetch('/api/register', { method: 'POST' });
-  const data = await res.json();
-  display.textContent = data.number;
-  me = data.number;
-  localStorage.setItem('oldwhats_me', me);
-  document.getElementById('enterBtn').style.display = 'inline-block';
-  // Ban-Check
-  const banRes = await fetch('/api/check/' + encodeURIComponent(me));
-  const ban = await banRes.json();
+  const enterBtn = document.getElementById('enterBtn');
   const br = document.getElementById('banResult');
-  if (ban.banned) {
+  display.textContent = '…';
+  enterBtn.disabled = true;
+  br.className = 'banresult info';
+  br.textContent = 'Prüfe Nummer…';
+
+  try {
+    const res = await fetch('/api/register', { method: 'POST' });
+    const data = await res.json();
+    display.textContent = data.number;
+    me = data.number;
+    localStorage.setItem('oldwhats_me', me);
+
+    const banRes = await fetch('/api/check/' + encodeURIComponent(me));
+    const ban = await banRes.json();
+    if (ban.banned) {
+      br.className = 'banresult banned';
+      br.textContent = 'Diese Nummer ist gebannt. Bitte neu ziehen.';
+      enterBtn.disabled = true;
+    } else if (ban.status && ban.status !== 200) {
+      br.className = 'banresult info';
+      br.textContent = 'Ban-API Status ' + ban.status + ' — Nummer wird trotzdem genutzt.';
+      enterBtn.disabled = false;
+    } else {
+      br.className = 'banresult ok';
+      br.textContent = '✓ Nummer frei';
+      enterBtn.disabled = false;
+    }
+  } catch (e) {
     br.className = 'banresult banned';
-    br.textContent = 'Diese Nummer ist gebannt. Bitte neue ziehen.';
-    document.getElementById('enterBtn').style.display = 'none';
-  } else if (ban.status && ban.status !== 200) {
-    br.className = 'banresult';
-    br.textContent = 'Ban-API antwortet mit Status ' + ban.status + ' (evtl. IP-Block).';
-  } else {
-    br.className = 'banresult ok';
-    br.textContent = 'Nummer frei.';
+    br.textContent = 'Fehler: ' + e.message;
+    enterBtn.disabled = false;
   }
 }
 
@@ -219,99 +295,147 @@ function enterApp() {
   if (!me) return;
   if (!socket) {
     socket = io();
-    socket.on('connect', () => socket.emit('join', me));
+    socket.on('connect', () => {
+      socket.emit('join', me);
+      // alle bekannten Peers rejoinen, um Nachrichten zu empfangen
+      for (const p of peers) socket.emit('join', p);
+    });
     socket.on('message', (msg) => {
       const key = [msg.from, msg.to].sort().join('|');
       chatMessages[key] = chatMessages[key] || [];
-      // Duplikate vermeiden
       if (!chatMessages[key].some(m => m.ts === msg.ts && m.from === msg.from)) {
         chatMessages[key].push(msg);
       }
-      if (currentPeer && [msg.from, msg.to].includes(currentPeer)) {
+      // Peer in Liste aufnehmen
+      const peer = msg.from === me ? msg.to : msg.from;
+      if (!peers.includes(peer)) { peers.push(peer); savePeers(); }
+      if (currentPeer && (msg.from === currentPeer || msg.to === currentPeer)) {
         renderChat();
       } else {
         renderChatList();
       }
     });
+    socket.on('connect_error', () => toast('Verbindung fehlgeschlagen'));
   }
   renderChatList();
-  if (!currentPeer) {
-    // Standard: erster Chat oder Hinweis
-    renderChatList();
-  }
 }
 
-// ---------- Render: Chat list ----------
+// ---------- Render: Chat-Liste ----------
 function renderChatList() {
   const app = document.getElementById('app');
   app.innerHTML = '';
-  const header = el('header', {}, [
+  app.appendChild(el('header', {}, [
     el('div', { class: 'avatar' }, initials(me)),
-    el('div', { class: 'title' }, 'OldWhats — ' + me),
-    el('button', { onclick: newChat, title: 'Neuer Chat' }, '+')
-  ]);
-  app.appendChild(header);
+    el('div', { class: 'title' }, 'WhatsApp'),
+    el('div', { class: 'actions' }, [
+      el('button', { onclick: newChat, title: 'Neuer Chat' }, '✎')
+    ])
+  ]));
 
   const list = el('div', { class: 'chatlist' });
-  const peers = new Set();
+
+  // Peers aus chats + gespeicherter Liste
+  const allPeers = new Set(peers);
   for (const key of Object.keys(chatMessages)) {
     const [a, b] = key.split('|');
-    if (a !== me) peers.add(a);
-    if (b !== me) peers.add(b);
+    if (a !== me) allPeers.add(a);
+    if (b !== me) allPeers.add(b);
   }
-  if (peers.size === 0) {
-    list.appendChild(el('div', { class: 'empty' }, 'Noch keine Chats. Tippe + um eine Nummer anzuschreiben.'));
+
+  if (allPeers.size === 0) {
+    list.appendChild(el('div', { class: 'empty' }, [
+      el('div', { class: 'icon' }, '💬'),
+      el('div', {}, 'Noch keine Chats.'),
+      el('div', {}, 'Tippe auf ✎ um eine Nummer anzuschreiben.')
+    ]));
   } else {
-    for (const peer of peers) {
-      const key = [me, peer].sort().join('|');
+    // Sortieren nach letzter Nachricht
+    const arr = [...allPeers].map(p => {
+      const key = [me, p].sort().join('|');
       const msgs = chatMessages[key] || [];
-      const last = msgs[msgs.length - 1];
+      return { peer: p, last: msgs[msgs.length - 1], count: msgs.length };
+    }).sort((a, b) => (b.last?.ts || 0) - (a.last?.ts || 0));
+
+    for (const { peer, last } of arr) {
       list.appendChild(el('div', { class: 'chatitem', onclick: () => openChat(peer) }, [
         el('div', { class: 'avatar' }, initials(peer)),
         el('div', { class: 'info' }, [
           el('div', { class: 'name' }, peer),
-          el('div', { class: 'preview' }, last ? last.text : 'Neuer Chat')
+          el('div', { class: 'preview' }, last ? last.text : 'Tippe um zu chatten')
         ]),
-        last ? el('div', { class: 'meta' }, fmtTime(last.ts)) : null
+        el('div', { class: 'meta' }, [
+          last ? fmtTime(last.ts) : '',
+          el('div', {}, el('span', { class: 'unread' }, ''))
+        ])
       ]));
     }
   }
   app.appendChild(list);
+
+  // Nachrichten für alle Peers vorladen (für Liste)
+  for (const p of allPeers) loadMessages(p);
+}
+
+async function loadMessages(peer) {
+  const key = [me, peer].sort().join('|');
+  try {
+    const r = await fetch('/api/messages/' + encodeURIComponent(me) + '/' + encodeURIComponent(peer));
+    chatMessages[key] = await r.json();
+  } catch {}
 }
 
 function newChat() {
-  const peer = prompt('Nummer eingeben (+979…, +921…, +777…, +888…):');
-  if (!peer) return;
-  openChat(peer.trim());
+  const modal = el('div', { class: 'modal', onclick: (e) => { if (e.target.classList.contains('modal')) modal.remove(); } }, [
+    el('div', { class: 'box' }, [
+      el('h2', {}, 'Neuer Chat'),
+      el('p', {}, 'Nummer eingeben (+979…, +921…, +777…, +888…):'),
+      el('input', { id: 'peerInput', placeholder: '+7771234567', autofocus: true, onkeydown: (e) => { if (e.key === 'Enter') submitNewChat(); } }),
+      el('div', { class: 'row' }, [
+        el('button', { class: 'cancel', onclick: () => modal.remove() }, 'Abbrechen'),
+        el('button', { class: 'ok', onclick: submitNewChat }, 'Öffnen')
+      ])
+    ])
+  ]);
+  document.body.appendChild(modal);
+  setTimeout(() => document.getElementById('peerInput')?.focus(), 50);
+
+  function submitNewChat() {
+    const v = document.getElementById('peerInput').value.trim();
+    if (!v) return;
+    if (v === me) { toast('Das ist deine eigene Nummer'); return; }
+    if (!peers.includes(v)) { peers.push(v); savePeers(); }
+    modal.remove();
+    openChat(v);
+  }
 }
 
 // ---------- Render: Chat ----------
-function openChat(peer) {
+async function openChat(peer) {
   currentPeer = peer;
-  const key = [me, peer].sort().join('|');
-  fetch('/api/messages/' + encodeURIComponent(me) + '/' + encodeURIComponent(peer))
-    .then(r => r.json())
-    .then(msgs => { chatMessages[key] = msgs; renderChat(); });
+  if (!peers.includes(peer)) { peers.push(peer); savePeers(); }
+  await loadMessages(peer);
+  renderChat();
 }
 
 function renderChat() {
   const app = document.getElementById('app');
   app.innerHTML = '';
-  const header = el('header', {}, [
-    el('button', { onclick: backToList }, '←'),
+  app.appendChild(el('header', {}, [
+    el('button', { class: 'back', onclick: backToList }, '←'),
     el('div', { class: 'avatar' }, initials(currentPeer)),
-    el('div', { class: 'title' }, currentPeer)
-  ]);
-  app.appendChild(header);
+    el('div', { class: 'title' }, currentPeer),
+    el('div', { class: 'actions' }, [
+      el('button', { onclick: () => toast('Info: ' + currentPeer) }, '⋮')
+    ])
+  ]));
 
   const view = el('div', { class: 'chatview' });
   const messages = el('div', { class: 'messages', id: 'messages' });
   view.appendChild(messages);
 
   const composer = el('div', { class: 'composer' }, [
-    el('input', { id: 'composerInput', placeholder: 'Nachricht', onkeydown: (e) => {
-      if (e.key === 'Enter') sendMessage();
-    }}),
+    el('input', { id: 'composerInput', placeholder: 'Nachricht', autocomplete: 'off',
+      onkeydown: (e) => { if (e.key === 'Enter') sendMessage(); } }),
     el('button', { onclick: sendMessage }, '➤')
   ]);
   view.appendChild(composer);
@@ -323,10 +447,14 @@ function renderChat() {
     const out = m.from === me;
     messages.appendChild(el('div', { class: 'msg ' + (out ? 'out' : 'in') }, [
       el('div', {}, m.text),
-      el('div', { class: 'time' }, fmtTime(m.ts))
+      el('div', { class: 'time' }, [
+        fmtTime(m.ts),
+        out ? el('span', { class: 'tick' }, '✓✓') : null
+      ])
     ]));
   }
   messages.scrollTop = messages.scrollHeight;
+  setTimeout(() => document.getElementById('composerInput')?.focus(), 50);
 }
 
 function sendMessage() {
@@ -335,6 +463,7 @@ function sendMessage() {
   if (!text || !currentPeer) return;
   socket.emit('message', { me, to: currentPeer, text });
   input.value = '';
+  input.focus();
 }
 
 function backToList() {
@@ -344,7 +473,8 @@ function backToList() {
 
 // ---------- Boot ----------
 if (me) {
-  enterApp();
+  // Wenn schon eine Nummer gespeichert: direkt rein (oder Setup zeigen für reroll)
+  renderSetup();
 } else {
   renderSetup();
 }
