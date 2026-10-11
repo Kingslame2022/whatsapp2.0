@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>WhatsApp</title>
 <style>
-  /* ---------- ALTES WHATSAPP — Android 4.x Ära ---------- */
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif; background: #000; }
   :root {
@@ -162,7 +161,7 @@
   .settings .field .value { font-family: 'Courier New', monospace; font-weight: 700; background: #f7f7f7; color: var(--wa-green-dark); }
   .settings .hint { color: var(--wa-meta); font-size: 12px; margin-top: 8px; line-height: 1.5; }
 
-  /* ---------- Nummern-Check-Screen (WhatsApp Change-Number-Layout) ---------- */
+  /* ---------- Nummern-Check-Screen ---------- */
   .check-screen {
     flex: 1; display: flex; flex-direction: column;
     background: #0a0a0a; color: #fff; overflow: hidden;
@@ -213,7 +212,6 @@
     font-size: 14px; display: none;
   }
   .check-screen .check-result.show { display: block; }
-  .check-screen .check-result.banned { background: #3a1010; color: #ff6b6b; }
   .check-screen .check-result.ok { background: #0f2a14; color: #4caf50; }
   .check-screen .check-result.info { background: #1c1c1e; color: #8e8e93; }
 
@@ -264,10 +262,33 @@
     z-index: 300; padding: 20px;
     animation: fade .15s;
   }
-  .ban-modal { background: #2a2a2a; border-radius: 14px; width: 100%; max-width: 340px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,.5); animation: banIn .2s ease-out; }
-  @keyframes banIn { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
-  .ban-modal .content { padding: 30px 26px; color: #fff; text-align: center; font-size: 15.5px; line-height: 1.55; }
-  .ban-modal .content strong { font-weight: 600; color: #fff; }
+  .ban-modal {
+    background: #2a2a2a;
+    border-radius: 14px;
+    width: 100%; max-width: 340px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,.5);
+    animation: banIn .2s ease-out;
+  }
+  @keyframes banIn {
+    from { opacity: 0; transform: scale(.94); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .ban-modal .content {
+    padding: 32px 26px;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  .ban-modal .content .num-line {
+    display: block;
+    font-weight: 600;
+    font-size: 17px;
+    margin: 2px 0;
+    color: #fff;
+  }
   .ban-modal .buttons { display: flex; border-top: 1px solid #3d3d3d; }
   .ban-modal .buttons button {
     flex: 1; background: transparent; border: 0; color: #25d366;
@@ -331,7 +352,6 @@ function el(tag, attrs = {}, children = []) {
   return e;
 }
 function fmtTime(ts) { const d = new Date(ts); return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0'); }
-function initials(num) { return (num || '').replace(/[^\d]/g, '').slice(-2) || '??'; }
 function toast(msg) { const t = el('div', { class: 'toast' }, msg); document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
@@ -347,7 +367,7 @@ function showBanModal(number, opts = {}) {
   const modal = el('div', { class: 'ban-modal' }, [
     el('div', { class: 'content' }, [
       'Your phone number ',
-      el('strong', {}, number),
+      el('span', { class: 'num-line' }, number),
       ' is banned from using WhatsApp. Please contact customer support for assistance.'
     ]),
     el('div', { class: 'buttons' }, [
@@ -692,7 +712,6 @@ function renderSettings() {
 
   const wrap = el('div', { class: 'settings' });
 
-  // Profil
   const picBox = el('div', { class: 'profile-pic', onclick: () => document.getElementById('picInput').click() });
   if (profile.picture) picBox.appendChild(el('img', { src: profile.picture, alt: '' }));
   else picBox.textContent = (profile.name || me || '').replace(/[^\d]/g, '').slice(-2) || '??';
@@ -721,7 +740,6 @@ function renderSettings() {
     ])
   ]));
 
-  // Nummer
   wrap.appendChild(el('div', { class: 'section' }, [
     el('h3', {}, 'Deine Nummer'),
     el('div', { class: 'field' }, [
@@ -731,14 +749,12 @@ function renderSettings() {
     el('div', { class: 'hint' }, 'Mit dieser Nummer und deinem Passwort loggst du dich überall ein.')
   ]));
 
-  // Ban-Check → Button, führt auf eigenen Screen
   wrap.appendChild(el('div', { class: 'section' }, [
     el('h3', {}, 'Nummern-Check'),
     el('div', { class: 'hint', style: 'margin-bottom:12px' }, 'Prüfe, ob eine beliebige Nummer bei WhatsApp gebannt ist.'),
     el('button', { class: 'btn', style: 'width:100%;margin:0', onclick: () => { checkState.result = null; renderNumberCheck(); } }, 'Nummer prüfen')
   ]));
 
-  // Account
   wrap.appendChild(el('div', { class: 'section' }, [
     el('h3', {}, 'Account'),
     el('div', { class: 'hint', style: 'margin-bottom:12px' }, 'Abmelden entfernt nur dein Token auf diesem Gerät. Deine Daten bleiben auf dem Server.'),
@@ -788,6 +804,7 @@ async function saveProfileSettings() {
 const COUNTRIES = [
   { name: 'Germany',        code: '+49'  },
   { name: 'Morocco',        code: '+212' },
+  { name: 'Vietnam',        code: '+84'  },
   { name: 'USA',            code: '+1'   },
   { name: 'United Kingdom', code: '+44'  },
   { name: 'France',         code: '+33'  },
@@ -809,7 +826,6 @@ let checkState = {
 };
 
 function parseNumber(num) {
-  // längste passende code zuerst
   const sorted = [...COUNTRIES].sort((a, b) => b.code.length - a.code.length);
   for (const c of sorted) {
     if (num.startsWith(c.code)) return { country: c, rest: num.slice(c.code.length) };
@@ -825,7 +841,10 @@ function renderNumberCheck() {
   const myParsed = parseNumber(me);
 
   const resultHolder = el('div', { id: 'checkResultInline' });
-  if (checkState.result) resultHolder.appendChild(buildCheckResultBox(checkState.result));
+  if (checkState.result) {
+    const box = buildCheckResultBox(checkState.result);
+    if (box) resultHolder.appendChild(box);
+  }
 
   const screen = el('div', { class: 'check-screen' }, [
     el('div', { class: 'topbar' }, [
@@ -873,7 +892,7 @@ function renderNumberCheck() {
 }
 
 function buildCheckResultBox(r) {
-  if (r.banned) return el('div', { class: 'check-result show banned' }, '🚫 ' + r.number + ' ist gebannt.');
+  if (r.banned) return null;
   if (r.status && r.status !== 200) return el('div', { class: 'check-result show info' }, 'API-Status: ' + r.status + ' — keine eindeutige Antwort.');
   return el('div', { class: 'check-result show ok' }, '✓ ' + r.number + ' ist frei.');
 }
@@ -920,7 +939,8 @@ async function runNumberCheck() {
 
     const holder = document.getElementById('checkResultInline');
     holder.innerHTML = '';
-    holder.appendChild(buildCheckResultBox(checkState.result));
+    const box = buildCheckResultBox(checkState.result);
+    if (box) holder.appendChild(box);
   } catch (e) {
     toast('Fehler: ' + e.message);
   } finally {
