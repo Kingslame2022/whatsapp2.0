@@ -112,8 +112,10 @@ function ownerAuth(req, res, next) {
 app.use(express.json({ limit: '5mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// ---------- Nummer vorschlagen ----------
 app.post('/api/generate', (req, res) => { res.json(generateNumber()); });
 
+// ---------- Registrierung ----------
 app.post('/api/register', (req, res) => {
   const { number, password } = req.body || {};
   if (!number || !password) return res.status(400).json({ error: 'missing fields' });
@@ -136,6 +138,7 @@ app.post('/api/register', (req, res) => {
   res.json({ number, token });
 });
 
+// ---------- Login ----------
 app.post('/api/login', (req, res) => {
   const { number, password } = req.body || {};
   if (!number || !password) return res.status(400).json({ error: 'missing fields' });
@@ -149,6 +152,7 @@ app.post('/api/login', (req, res) => {
   res.json({ number, token });
 });
 
+// ---------- Logout ----------
 app.post('/api/logout', auth, (req, res) => {
   const h = req.headers.authorization || '';
   const token = h.replace(/^Bearer\s+/i, '').trim();
@@ -157,9 +161,17 @@ app.post('/api/logout', auth, (req, res) => {
   res.json({ ok: true });
 });
 
+// ---------- Profil ----------
 app.get('/api/me', auth, (req, res) => {
   const u = users[req.user];
-  res.json({ number: req.user, name: u.name, picture: u.picture, status: u.status, theme: u.theme || null, createdAt: u.createdAt });
+  res.json({
+    number: req.user,
+    name: u.name,
+    picture: u.picture,
+    status: u.status,
+    theme: u.theme || null,
+    createdAt: u.createdAt
+  });
 });
 
 app.post('/api/profile', auth, (req, res) => {
@@ -170,6 +182,7 @@ app.post('/api/profile', auth, (req, res) => {
   if (typeof picture === 'string' || picture === null) u.picture = picture;
   if (theme && typeof theme === 'object') {
     u.theme = {
+      surface:   String(theme.surface   || '').slice(0, 20),
       bg:        String(theme.bg        || '').slice(0, 20),
       btn:       String(theme.btn       || '').slice(0, 20),
       bubbleOut: String(theme.bubbleOut || '').slice(0, 20),
@@ -183,11 +196,19 @@ app.post('/api/profile', auth, (req, res) => {
 app.get('/api/user/:number', auth, (req, res) => {
   const u = users[req.params.number];
   if (!u) return res.json({ number: req.params.number, exists: false });
-  res.json({ number: req.params.number, exists: true, name: u.name, picture: u.picture, status: u.status });
+  res.json({
+    number: req.params.number,
+    exists: true,
+    name: u.name,
+    picture: u.picture,
+    status: u.status
+  });
 });
 
-// ----- Contacts -----
-app.get('/api/contacts', auth, (req, res) => { res.json(contacts[req.user] || {}); });
+// ---------- Kontakte ----------
+app.get('/api/contacts', auth, (req, res) => {
+  res.json(contacts[req.user] || {});
+});
 
 app.post('/api/contacts', auth, (req, res) => {
   const { number, name } = req.body || {};
@@ -206,7 +227,7 @@ app.delete('/api/contacts/:number', auth, (req, res) => {
   res.json({ ok: true });
 });
 
-// ----- Chats -----
+// ---------- Chats ----------
 app.get('/api/chats', auth, (req, res) => {
   const me = req.user;
   const peers = new Set();
@@ -228,30 +249,35 @@ app.get('/api/messages/:peer', auth, (req, res) => {
   res.json(messages[key] || []);
 });
 
-// ----- Reports -----
+// ---------- Report ----------
 app.post('/api/report', auth, (req, res) => {
   const { target, reason } = req.body || {};
   if (!target) return res.status(400).json({ error: 'missing target' });
   if (target === req.user) return res.status(400).json({ error: 'self_report' });
   const rep = {
     id: crypto.randomBytes(8).toString('hex'),
-    reporter: req.user, target,
+    reporter: req.user,
+    target,
     reason: String(reason || '').slice(0, 500),
-    ts: Date.now(), status: 'pending', decidedAt: null
+    ts: Date.now(),
+    status: 'pending',
+    decidedAt: null
   };
   reports.push(rep);
   save(REPORTS_FILE, reports);
   res.json({ ok: true, id: rep.id });
 });
 
-// ----- Appeals -----
+// ---------- Appeal (Prüfungs-Antrag) ----------
 app.post('/api/appeal', (req, res) => {
   const { number } = req.body || {};
   if (!number) return res.status(400).json({ error: 'missing number' });
   if (!isLocked(number)) return res.status(400).json({ error: 'not_locked' });
+
   const existing = appeals[number];
   if (existing && existing.status === 'pending') return res.json({ ok: true, status: 'pending', ts: existing.ts });
   if (existing && existing.status === 'approved') return res.json({ ok: true, status: 'approved' });
+
   appeals[number] = { ts: Date.now(), status: 'pending', decidedAt: null };
   save(APPEALS_FILE, appeals);
   res.json({ ok: true, status: 'pending' });
@@ -263,7 +289,7 @@ app.get('/api/appeal/:number', (req, res) => {
   res.json({ status: a.status, ts: a.ts, decidedAt: a.decidedAt });
 });
 
-// ----- Owner -----
+// ---------- Owner ----------
 app.post('/api/owner/login', (req, res) => {
   const { username, password } = req.body || {};
   if (username !== OWNER_USER || password !== OWNER_PASS) return res.status(401).json({ error: 'invalid' });
@@ -292,7 +318,9 @@ app.get('/api/owner/reports', ownerAuth, (req, res) => {
 
 app.post('/api/owner/decide', ownerAuth, (req, res) => {
   const { reportId, decision } = req.body || {};
-  if (!reportId || !['lock', 'unlock', 'dismiss'].includes(decision)) return res.status(400).json({ error: 'invalid' });
+  if (!reportId || !['lock', 'unlock', 'dismiss'].includes(decision)) {
+    return res.status(400).json({ error: 'invalid' });
+  }
   const rep = reports.find(r => r.id === reportId);
   if (!rep) return res.status(404).json({ error: 'not_found' });
 
@@ -334,14 +362,16 @@ app.get('/api/owner/appeals', ownerAuth, (req, res) => {
 
 app.post('/api/owner/decide-appeal', ownerAuth, (req, res) => {
   const { number, decision } = req.body || {};
-  if (!number || !['approve', 'deny'].includes(decision)) return res.status(400).json({ error: 'invalid' });
+  if (!number || !['approve', 'deny'].includes(decision)) {
+    return res.status(400).json({ error: 'invalid' });
+  }
   const a = appeals[number];
   if (!a) return res.status(404).json({ error: 'not_found' });
 
   if (decision === 'approve') {
     a.status = 'approved';
     a.decidedAt = Date.now();
-    delete locked[number];           // Nummer freigeben — User kann mit altem Passwort wieder rein
+    delete locked[number];          // Nummer freigeben — User kann mit altem Passwort wieder rein
     save(LOCKED_FILE, locked);
   } else {
     a.status = 'denied';
@@ -351,7 +381,7 @@ app.post('/api/owner/decide-appeal', ownerAuth, (req, res) => {
   res.json({ ok: true, appeal: a });
 });
 
-// ----- Ban-Check -----
+// ---------- Ban-Check (Proxy) ----------
 const BAN_API = 'https://xzc-corporation.biz.id/lrp';
 const BAN_HEADERS = {
   'accept-encoding': 'gzip',
@@ -364,6 +394,7 @@ const BAN_HEADERS = {
 app.get('/api/check/:number', async (req, res) => {
   const cleanNum = String(req.params.number).replace(/[^\d]/g, '');
   const isLockedNow = isLocked(req.params.number) || isLocked('+' + cleanNum);
+
   try {
     const r = await fetch(`${BAN_API}?number=${cleanNum}`, { headers: BAN_HEADERS });
     const data = await r.json().catch(() => null);
@@ -378,7 +409,7 @@ app.get('/api/check/:number', async (req, res) => {
   }
 });
 
-// ----- Socket -----
+// ---------- Socket.IO ----------
 io.use((socket, next) => {
   const token = socket.handshake.auth?.token;
   const num = tokens[token];
@@ -393,7 +424,11 @@ io.on('connection', (socket) => {
   socket.join('user:' + me);
 
   socket.on('message', ({ to, text }) => {
-    if (isLocked(me)) { socket.emit('kicked', { reason: 'locked' }); socket.disconnect(true); return; }
+    if (isLocked(me)) {
+      socket.emit('kicked', { reason: 'locked' });
+      socket.disconnect(true);
+      return;
+    }
     if (!to || !text) return;
     const key = [me, to].sort().join('|');
     const msg = { from: me, to, text: String(text).slice(0, 4000), ts: Date.now() };
