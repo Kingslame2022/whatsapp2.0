@@ -28,7 +28,6 @@
   }
   @media (min-width: 768px) { .app { max-width: 900px; } }
 
-  /* ---------- Header ---------- */
   header {
     background: var(--wa-green); color: #fff;
     padding: 10px 12px; display: flex; align-items: center; gap: 10px;
@@ -47,7 +46,6 @@
   header .actions { display: flex; gap: 4px; }
   header .actions button { background: transparent; border: 0; color: #fff; font-size: 20px; cursor: pointer; padding: 4px 8px; line-height: 1; }
 
-  /* ---------- Auth ---------- */
   .auth {
     flex: 1; display: flex; flex-direction: column; justify-content: center;
     align-items: center; padding: 24px; text-align: center; background: #fff;
@@ -69,6 +67,12 @@
     border-radius: 6px; margin-bottom: 10px; letter-spacing: 1px; font-family: 'Courier New', monospace;
     width: 100%; text-align: center;
   }
+  .auth .tier-badge {
+    display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 10px;
+    margin-bottom: 10px; font-weight: 600; letter-spacing: .3px;
+  }
+  .auth .tier-clean { background: #fff3c4; color: #8a6d00; }
+  .auth .tier-half { background: #e0f2f1; color: #00695c; }
   .auth input[type=text], .auth input[type=password], .auth input[type=tel] {
     width: 100%; padding: 12px 14px; border: 1px solid var(--wa-divider);
     border-radius: 4px; font-size: 15px; outline: none; margin-bottom: 10px;
@@ -87,15 +91,14 @@
   .btn.full { width: 100%; margin: 4px 0; }
   .btn-row { display: flex; gap: 8px; margin-top: 4px; flex-wrap: wrap; justify-content: center; width: 100%; }
   .hint { color: var(--wa-meta); font-size: 12px; margin-top: 10px; line-height: 1.5; }
+  .owner-link { color: var(--wa-meta); font-size: 11px; margin-top: 24px; text-decoration: underline; cursor: pointer; }
 
-  /* ---------- Chat-Liste ---------- */
   .chatlist { flex: 1; overflow-y: auto; background: #fff; }
   .chatlist .empty { padding: 60px 30px; text-align: center; color: var(--wa-meta); font-size: 14px; line-height: 1.6; }
   .chatlist .empty .icon { font-size: 48px; opacity: .3; margin-bottom: 12px; }
   .chatitem {
     display: flex; align-items: center; gap: 12px;
     padding: 11px 14px; border-bottom: 1px solid #e9edef; cursor: pointer; background: #fff;
-    transition: background .1s;
   }
   .chatitem:active { background: #f0f0f0; }
   .chatitem .avatar {
@@ -109,7 +112,6 @@
   .chatitem .preview { color: var(--wa-meta); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .chatitem .meta { color: var(--wa-meta); font-size: 11px; text-align: right; flex-shrink: 0; }
 
-  /* ---------- Chat-View ---------- */
   .chatview { flex: 1; display: flex; flex-direction: column; background: var(--wa-bg); overflow: hidden; }
   .messages {
     flex: 1; overflow-y: auto; padding: 10px 8px;
@@ -132,9 +134,7 @@
   .composer { display: flex; gap: 6px; padding: 6px 8px; background: #f0f0f0; border-top: 1px solid #ddd; flex-shrink: 0; align-items: flex-end; }
   .composer input { flex: 1; padding: 10px 14px; border: 0; border-radius: 18px; font-size: 15px; outline: none; background: #fff; }
   .composer button { background: var(--wa-green); color: #fff; border: 0; border-radius: 50%; width: 40px; height: 40px; font-size: 17px; cursor: pointer; flex-shrink: 0; }
-  .composer button:active { background: var(--wa-green-dark); }
 
-  /* ---------- Settings ---------- */
   .settings { flex: 1; overflow-y: auto; background: #fff; }
   .settings .section { padding: 20px 16px; border-bottom: 1px solid #eee; }
   .settings .section h3 { color: var(--wa-green); font-size: 13px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 14px; font-weight: 600; }
@@ -161,33 +161,17 @@
   .settings .field .value { font-family: 'Courier New', monospace; font-weight: 700; background: #f7f7f7; color: var(--wa-green-dark); }
   .settings .hint { color: var(--wa-meta); font-size: 12px; margin-top: 8px; line-height: 1.5; }
 
-  /* ---------- Nummern-Check-Screen ---------- */
-  .check-screen {
-    flex: 1; display: flex; flex-direction: column;
-    background: #0a0a0a; color: #fff; overflow: hidden;
-  }
-  .check-screen .topbar {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 16px; flex-shrink: 0; font-size: 17px; background: #0a0a0a;
-  }
-  .check-screen .topbar .cancel {
-    color: #fff; background: transparent; border: 0;
-    font-size: 17px; cursor: pointer; padding: 0;
-  }
+  .check-screen { flex: 1; display: flex; flex-direction: column; background: #0a0a0a; color: #fff; overflow: hidden; }
+  .check-screen .topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; flex-shrink: 0; font-size: 17px; background: #0a0a0a; }
+  .check-screen .topbar .cancel { color: #fff; background: transparent; border: 0; font-size: 17px; cursor: pointer; padding: 0; }
   .check-screen .topbar .title { color: #8e8e93; font-weight: 500; }
-  .check-screen .topbar .action {
-    background: transparent; border: 0; color: #25d366;
-    font-size: 17px; font-weight: 500; cursor: pointer; padding: 0;
-  }
+  .check-screen .topbar .action { background: transparent; border: 0; color: #25d366; font-size: 17px; font-weight: 500; cursor: pointer; padding: 0; }
   .check-screen .topbar .action:disabled { color: #3a3a3c; cursor: not-allowed; }
   .check-screen .body { flex: 1; overflow-y: auto; padding: 4px 16px 30px; }
-  .check-screen .section-label {
-    color: #8e8e93; font-size: 14px; margin: 18px 0 10px; font-weight: 400;
-  }
+  .check-screen .section-label { color: #8e8e93; font-size: 14px; margin: 18px 0 10px; font-weight: 400; }
   .check-screen .country-row {
     display: flex; align-items: center; justify-content: space-between;
-    background: #1c1c1e; padding: 14px 16px;
-    border-radius: 10px 10px 0 0;
+    background: #1c1c1e; padding: 14px 16px; border-radius: 10px 10px 0 0;
     cursor: pointer; font-size: 17px;
   }
   .check-screen .country-row.readonly { cursor: default; }
@@ -195,117 +179,108 @@
   .check-screen .number-row {
     display: flex; align-items: center; gap: 12px;
     background: #1c1c1e; padding: 14px 16px;
-    border-radius: 0 0 10px 10px;
-    border-top: 1px solid #2c2c2e;
-    font-size: 17px;
+    border-radius: 0 0 10px 10px; border-top: 1px solid #2c2c2e; font-size: 17px;
   }
   .check-screen .number-row .prefix { color: #8e8e93; font-family: 'Courier New', monospace; }
   .check-screen .number-row input {
     flex: 1; background: transparent; border: 0; outline: none;
-    color: #fff; font-size: 17px; font-family: 'Courier New', monospace;
-    letter-spacing: .5px;
+    color: #fff; font-size: 17px; font-family: 'Courier New', monospace; letter-spacing: .5px;
   }
   .check-screen .number-row input::placeholder { color: #48484a; }
   .check-screen .number-row .display { color: #fff; font-family: 'Courier New', monospace; letter-spacing: .5px; }
-  .check-screen .check-result {
-    margin-top: 18px; padding: 12px 14px; border-radius: 10px;
-    font-size: 14px; display: none;
-  }
+  .check-screen .check-result { margin-top: 18px; padding: 12px 14px; border-radius: 10px; font-size: 14px; display: none; }
   .check-screen .check-result.show { display: block; }
+  .check-screen .check-result.locked { background: #2a1f0a; color: #ffa726; }
   .check-screen .check-result.ok { background: #0f2a14; color: #4caf50; }
   .check-screen .check-result.info { background: #1c1c1e; color: #8e8e93; }
+  .check-screen .report-row { margin-top: 16px; display: flex; justify-content: flex-end; }
 
-  /* ---------- Country-Picker ---------- */
-  .country-picker {
-    position: fixed; inset: 0; background: rgba(0,0,0,.6);
-    display: flex; align-items: flex-end; justify-content: center; z-index: 250;
-  }
-  .country-picker .sheet {
-    background: #1c1c1e; width: 100%; max-width: 480px;
-    max-height: 70vh; border-radius: 14px 14px 0 0;
-    display: flex; flex-direction: column; overflow: hidden; color: #fff;
-  }
-  .country-picker .sheet h3 {
-    padding: 16px; text-align: center; color: #8e8e93;
-    font-size: 14px; font-weight: 500; border-bottom: 1px solid #2c2c2e;
-  }
+  .country-picker { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex; align-items: flex-end; justify-content: center; z-index: 250; }
+  .country-picker .sheet { background: #1c1c1e; width: 100%; max-width: 480px; max-height: 70vh; border-radius: 14px 14px 0 0; display: flex; flex-direction: column; overflow: hidden; color: #fff; }
+  .country-picker .sheet h3 { padding: 16px; text-align: center; color: #8e8e93; font-size: 14px; font-weight: 500; border-bottom: 1px solid #2c2c2e; }
   .country-picker .sheet .list { overflow-y: auto; flex: 1; }
-  .country-picker .sheet .item {
-    padding: 16px; border-bottom: 1px solid #2c2c2e;
-    cursor: pointer; font-size: 16px;
-    display: flex; justify-content: space-between;
-  }
+  .country-picker .sheet .item { padding: 16px; border-bottom: 1px solid #2c2c2e; cursor: pointer; font-size: 16px; display: flex; justify-content: space-between; }
   .country-picker .sheet .item:active { background: #2c2c2e; }
   .country-picker .sheet .item .code { color: #8e8e93; font-family: 'Courier New', monospace; }
 
-  /* ---------- Modal (neu-chat) ---------- */
-  .modal {
-    position: fixed; inset: 0; background: rgba(0,0,0,.5);
-    display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
-    animation: fade .15s;
-  }
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; animation: fade .15s; }
   @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
   .modal .box { background: #fff; border-radius: 6px; padding: 22px; max-width: 340px; width: 100%; box-shadow: 0 8px 30px rgba(0,0,0,.3); }
   .modal .box h2 { color: var(--wa-green); margin-bottom: 10px; font-size: 17px; font-weight: 600; }
   .modal .box p { color: var(--wa-text); margin-bottom: 16px; line-height: 1.5; font-size: 14px; }
-  .modal .box input { width: 100%; padding: 10px 12px; border: 1px solid var(--wa-divider); border-radius: 4px; font-size: 15px; margin-bottom: 16px; outline: none; }
-  .modal .box input:focus { border-color: var(--wa-green); }
+  .modal .box input, .modal .box textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--wa-divider); border-radius: 4px; font-size: 15px; margin-bottom: 12px; outline: none; font-family: inherit; }
+  .modal .box textarea { min-height: 70px; resize: vertical; }
+  .modal .box input:focus, .modal .box textarea:focus { border-color: var(--wa-green); }
   .modal .box .row { display: flex; gap: 8px; justify-content: flex-end; }
   .modal .box .row button { padding: 9px 16px; border: 0; border-radius: 4px; font-size: 14px; cursor: pointer; font-weight: 500; }
   .modal .box .row .cancel { background: #eee; color: #333; }
   .modal .box .row .ok { background: var(--wa-green); color: #fff; }
+  .modal .box .row .danger { background: #c62828; color: #fff; }
 
-  /* ---------- Ban-Modal (WhatsApp Dark) ---------- */
+  /* Ban-Modal — 1/1 Screenshot */
   .ban-modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,.72);
+    position: fixed; inset: 0; background: rgba(0,0,0,.7);
     display: flex; align-items: center; justify-content: center;
     z-index: 300; padding: 20px;
     animation: fade .15s;
   }
   .ban-modal {
     background: #2a2a2a;
-    border-radius: 14px;
-    width: 100%; max-width: 340px;
+    border-radius: 12px;
+    width: 100%; max-width: 280px;
     overflow: hidden;
     box-shadow: 0 10px 40px rgba(0,0,0,.5);
     animation: banIn .2s ease-out;
   }
-  @keyframes banIn {
-    from { opacity: 0; transform: scale(.94); }
-    to   { opacity: 1; transform: scale(1); }
-  }
+  @keyframes banIn { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
   .ban-modal .content {
-    padding: 32px 26px;
+    padding: 22px 18px 20px;
     color: #fff;
     text-align: center;
-    font-size: 16px;
-    line-height: 1.5;
+    font-size: 14.5px;
+    line-height: 1.45;
     font-weight: 400;
   }
   .ban-modal .content .num-line {
     display: block;
     font-weight: 600;
-    font-size: 17px;
-    margin: 2px 0;
+    font-size: 15px;
+    margin: 3px 0;
     color: #fff;
   }
   .ban-modal .buttons { display: flex; border-top: 1px solid #3d3d3d; }
   .ban-modal .buttons button {
     flex: 1; background: transparent; border: 0; color: #25d366;
-    padding: 17px 16px; font-size: 15px; font-weight: 500; cursor: pointer;
+    padding: 14px 16px; font-size: 14.5px; font-weight: 500; cursor: pointer;
     transition: background .12s;
   }
   .ban-modal .buttons button:first-child { border-right: 1px solid #3d3d3d; }
   .ban-modal .buttons button:active { background: rgba(255,255,255,.06); }
 
-  /* ---------- Toast ---------- */
-  .toast {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    background: rgba(0,0,0,.85); color: #fff; padding: 10px 18px;
-    border-radius: 20px; font-size: 13px; z-index: 400;
-    animation: toastIn .2s ease-out;
-  }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.85); color: #fff; padding: 10px 18px; border-radius: 20px; font-size: 13px; z-index: 400; animation: toastIn .2s ease-out; }
   @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+  /* Owner-Panel */
+  .owner-panel { flex: 1; display: flex; flex-direction: column; background: #0a0a0a; color: #fff; overflow: hidden; }
+  .owner-panel .topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #2c2c2e; flex-shrink: 0; }
+  .owner-panel .topbar .title { font-size: 17px; font-weight: 600; }
+  .owner-panel .topbar button { background: transparent; border: 0; color: #ff6b6b; font-size: 14px; cursor: pointer; }
+  .owner-panel .list { flex: 1; overflow-y: auto; padding: 12px; }
+  .owner-panel .report-card { background: #1c1c1e; border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+  .owner-panel .report-card .meta-row { font-size: 12px; color: #8e8e93; margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .owner-panel .report-card .target { font-size: 15px; font-family: 'Courier New', monospace; font-weight: 600; margin-bottom: 4px; }
+  .owner-panel .report-card .reason { font-size: 13px; color: #d1d1d6; margin-bottom: 12px; }
+  .owner-panel .report-card .actions { display: flex; gap: 8px; }
+  .owner-panel .report-card .actions button { flex: 1; padding: 9px 12px; border: 0; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .owner-panel .report-card .actions .lock { background: #c62828; color: #fff; }
+  .owner-panel .report-card .actions .unlock { background: #2e7d32; color: #fff; }
+  .owner-panel .report-card .actions .dismiss { background: #3a3a3c; color: #fff; }
+  .owner-panel .report-card .status { font-size: 11px; padding: 3px 8px; border-radius: 6px; display: inline-block; margin-top: 8px; }
+  .owner-panel .report-card .status.pending { background: #3a2f0a; color: #ffa726; }
+  .owner-panel .report-card .status.locked { background: #3a1010; color: #ff6b6b; }
+  .owner-panel .report-card .status.unlocked { background: #0f2a14; color: #4caf50; }
+  .owner-panel .report-card .status.dismissed { background: #2c2c2e; color: #8e8e93; }
+  .owner-panel .empty { padding: 60px 30px; text-align: center; color: #8e8e93; font-size: 14px; line-height: 1.6; }
 </style>
 </head>
 <body>
@@ -314,6 +289,7 @@
 <script>
 // ---------- State ----------
 let token = localStorage.getItem('oldwhats_token') || null;
+let ownerToken = localStorage.getItem('oldwhats_ownertoken') || null;
 let me = null;
 let profile = null;
 let socket = null;
@@ -324,6 +300,16 @@ let peerProfiles = {};
 function api(path, opts = {}) {
   const headers = Object.assign({ 'Content-Type': 'application/json' }, opts.headers || {});
   if (token) headers['Authorization'] = 'Bearer ' + token;
+  return fetch(path, Object.assign({}, opts, { headers })).then(async r => {
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) throw Object.assign(new Error(data.error || ('http_' + r.status)), { status: r.status, data });
+    return data;
+  });
+}
+
+function ownerApi(path, opts = {}) {
+  const headers = Object.assign({ 'Content-Type': 'application/json' }, opts.headers || {});
+  if (ownerToken) headers['Authorization'] = 'Bearer ' + ownerToken;
   return fetch(path, Object.assign({}, opts, { headers })).then(async r => {
     const data = await r.json().catch(() => ({}));
     if (!r.ok) throw Object.assign(new Error(data.error || ('http_' + r.status)), { status: r.status, data });
@@ -352,8 +338,8 @@ function el(tag, attrs = {}, children = []) {
   return e;
 }
 function fmtTime(ts) { const d = new Date(ts); return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0'); }
+function fmtDate(ts) { const d = new Date(ts); return d.toLocaleDateString() + ' ' + fmtTime(ts); }
 function toast(msg) { const t = el('div', { class: 'toast' }, msg); document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
-function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 function avatarFor(label, size, pic) {
   const div = el('div', { class: 'avatar', style: `width:${size}px;height:${size}px;font-size:${Math.round(size*0.35)}px` });
@@ -362,6 +348,7 @@ function avatarFor(label, size, pic) {
   return div;
 }
 
+// ---------- Modals ----------
 function showBanModal(number, opts = {}) {
   const overlay = el('div', { class: 'ban-modal-overlay' });
   const modal = el('div', { class: 'ban-modal' }, [
@@ -380,10 +367,53 @@ function showBanModal(number, opts = {}) {
   document.body.appendChild(overlay);
 }
 
-// ---------- Auth-Screen ----------
+function showConfirm(title, message, onOk, opts = {}) {
+  const overlay = el('div', { class: 'ban-modal-overlay' });
+  const modal = el('div', { class: 'ban-modal' }, [
+    el('div', { class: 'content' }, [
+      el('div', { style: 'font-weight:600;font-size:15px;margin-bottom:8px' }, title),
+      message
+    ]),
+    el('div', { class: 'buttons' }, [
+      el('button', { onclick: () => { overlay.remove(); } }, 'Cancel'),
+      el('button', { onclick: () => { overlay.remove(); onOk?.(); }, style: opts.okColor ? `color:${opts.okColor}` : '' }, opts.okText || 'OK')
+    ])
+  ]);
+  overlay.appendChild(modal);
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+  document.body.appendChild(overlay);
+}
+
+function showReportModal(target) {
+  const overlay = el('div', { class: 'modal' });
+  const reasonInput = el('textarea', { id: 'reportReason', placeholder: 'Grund (optional)', maxlength: 500 });
+  const box = el('div', { class: 'box' }, [
+    el('h2', {}, 'Nummer melden'),
+    el('p', {}, 'Nummer: ' + target),
+    reasonInput,
+    el('div', { class: 'row' }, [
+      el('button', { class: 'cancel', onclick: () => overlay.remove() }, 'Abbrechen'),
+      el('button', { class: 'ok', onclick: async () => {
+        try {
+          await api('/api/report', { method: 'POST', body: JSON.stringify({ target, reason: reasonInput.value }) });
+          overlay.remove();
+          toast('Meldung gesendet');
+        } catch (e) { toast('Fehler: ' + e.message); }
+      }}, 'Melden')
+    ])
+  ]);
+  overlay.appendChild(box);
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+  document.body.appendChild(overlay);
+  setTimeout(() => reasonInput.focus(), 50);
+}
+
+// ---------- Auth ----------
 function renderAuth(mode = 'register') {
   const app = document.getElementById('app');
   app.innerHTML = '';
+
+  if (mode === 'owner') { renderOwnerLogin(); return; }
 
   const tabs = el('div', { class: 'tabs' }, [
     el('button', { class: mode === 'login' ? '' : 'active', onclick: () => renderAuth('login') }, 'Anmelden'),
@@ -401,7 +431,8 @@ function renderAuth(mode = 'register') {
 
   if (mode === 'register') {
     const numDisplay = el('div', { class: 'num', id: 'numDisplay' }, '…');
-    const rerollBtn = el('button', { class: 'btn secondary', onclick: loadGeneratedNumber }, 'Neu ziehen');
+    const tierBadge = el('div', { id: 'tierBadge' });
+    const rerollBtn = el('button', { class: 'btn secondary', onclick: onRerollClick }, 'Neu ziehen');
     const pwInput = el('input', { type: 'password', id: 'pwInput', placeholder: 'Passwort (min. 4 Zeichen)', autocomplete: 'new-password' });
     const pw2Input = el('input', { type: 'password', id: 'pw2Input', placeholder: 'Passwort wiederholen', autocomplete: 'new-password' });
     const regBtn = el('button', { class: 'btn full', id: 'regBtn', onclick: doRegister }, 'Registrieren');
@@ -409,12 +440,14 @@ function renderAuth(mode = 'register') {
 
     wrap.appendChild(el('div', { class: 'label' }, 'Deine neue Nummer'));
     wrap.appendChild(numDisplay);
+    wrap.appendChild(tierBadge);
     wrap.appendChild(el('div', { class: 'btn-row' }, [rerollBtn]));
     wrap.appendChild(el('div', { class: 'label', style: 'margin-top:14px' }, 'Passwort'));
     wrap.appendChild(pwInput);
     wrap.appendChild(pw2Input);
     wrap.appendChild(el('div', { class: 'btn-row' }, [regBtn]));
     wrap.appendChild(hint);
+    wrap.appendChild(el('div', { class: 'owner-link', onclick: () => renderAuth('owner') }, 'Owner Login'));
 
     app.appendChild(wrap);
     loadGeneratedNumber();
@@ -428,6 +461,7 @@ function renderAuth(mode = 'register') {
     wrap.appendChild(el('div', { class: 'label', style: 'margin-top:14px' }, 'Passwort'));
     wrap.appendChild(pwInput);
     wrap.appendChild(el('div', { class: 'btn-row' }, [loginBtn]));
+    wrap.appendChild(el('div', { class: 'owner-link', onclick: () => renderAuth('owner') }, 'Owner Login'));
 
     app.appendChild(wrap);
     setTimeout(() => numInput.focus(), 50);
@@ -435,21 +469,42 @@ function renderAuth(mode = 'register') {
   }
 }
 
+let currentTier = null;
+
 async function loadGeneratedNumber() {
   const display = document.getElementById('numDisplay');
+  const badge = document.getElementById('tierBadge');
   if (!display) return;
   display.textContent = '…';
+  if (badge) badge.innerHTML = '';
   try {
     const r = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
     const data = await r.json();
     display.textContent = data.number;
     display.dataset.number = data.number;
+    currentTier = data.tier;
+
+    if (badge) {
+      if (data.tier === 'clean') badge.innerHTML = '<span class="tier-badge tier-clean">✨ CLEAN</span>';
+      else if (data.tier === 'half') badge.innerHTML = '<span class="tier-badge tier-half">✦ HALF CLEAN</span>';
+    }
 
     const banRes = await fetch('/api/check/' + encodeURIComponent(data.number));
     const ban = await banRes.json();
     if (ban.banned) showBanModal(data.number);
   } catch (e) {
     display.textContent = 'Fehler';
+  }
+}
+
+function onRerollClick() {
+  if (currentTier === 'clean' || currentTier === 'half') {
+    const label = currentTier === 'clean' ? 'CLEAN' : 'HALF CLEAN';
+    showConfirm('Nummer behalten?', `Deine aktuelle Nummer ist eine ${label}-Nummer. Willst du sie wirklich wegwerfen?`, () => {
+      loadGeneratedNumber();
+    }, { okText: 'Neu ziehen' });
+  } else {
+    loadGeneratedNumber();
   }
 }
 
@@ -471,7 +526,6 @@ async function doRegister() {
     await bootstrapAfterLogin();
   } catch (e) {
     if (e.data?.error === 'number_taken') { toast('Nummer schon vergeben — neu ziehen'); loadGeneratedNumber(); }
-    else if (e.data?.error === 'password_too_short') toast('Passwort zu kurz');
     else toast('Fehler: ' + (e.data?.error || e.message));
     btn.disabled = false; btn.textContent = 'Registrieren';
   }
@@ -481,7 +535,6 @@ async function doLogin() {
   const number = document.getElementById('numInput').value.trim();
   const pw = document.getElementById('pwInput').value;
   if (!number || !pw) { toast('Nummer und Passwort eingeben'); return; }
-
   const btn = document.getElementById('loginBtn');
   btn.disabled = true; btn.textContent = 'Melde an…';
   try {
@@ -495,18 +548,116 @@ async function doLogin() {
   }
 }
 
-// ---------- Bootstrap nach Login ----------
+// ---------- Owner login ----------
+function renderOwnerLogin() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  const userInput = el('input', { type: 'text', id: 'ownerUser', placeholder: 'Benutzername' });
+  const pwInput = el('input', { type: 'password', id: 'ownerPw', placeholder: 'Passwort' });
+  const loginBtn = el('button', { class: 'btn full', id: 'ownerBtn', onclick: doOwnerLogin }, 'Owner anmelden');
+
+  const wrap = el('div', { class: 'auth' }, [
+    el('div', { class: 'logo', style: 'background:#c62828' }, '🔒'),
+    el('h1', { style: 'color:#c62828' }, 'Owner'),
+    el('p', { class: 'sub' }, 'Nur für den Betreiber.'),
+    el('div', { class: 'label' }, 'Benutzername'),
+    userInput,
+    el('div', { class: 'label', style: 'margin-top:14px' }, 'Passwort'),
+    pwInput,
+    el('div', { class: 'btn-row' }, [loginBtn]),
+    el('div', { class: 'owner-link', onclick: () => renderAuth('login') }, 'Zurück zum Login')
+  ]);
+  app.appendChild(wrap);
+  setTimeout(() => userInput.focus(), 50);
+  pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') doOwnerLogin(); });
+}
+
+async function doOwnerLogin() {
+  const username = document.getElementById('ownerUser').value.trim();
+  const password = document.getElementById('ownerPw').value;
+  if (!username || !password) { toast('Felder ausfüllen'); return; }
+  const btn = document.getElementById('ownerBtn');
+  btn.disabled = true; btn.textContent = 'Melde an…';
+  try {
+    const data = await ownerApi('/api/owner/login', { method: 'POST', body: JSON.stringify({ username, password }) });
+    ownerToken = data.token;
+    localStorage.setItem('oldwhats_ownertoken', ownerToken);
+    renderOwnerPanel();
+  } catch (e) {
+    toast('Zugangsdaten falsch');
+    btn.disabled = false; btn.textContent = 'Owner anmelden';
+  }
+}
+
+// ---------- Owner Panel ----------
+async function renderOwnerPanel() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  const panel = el('div', { class: 'owner-panel' });
+  panel.appendChild(el('div', { class: 'topbar' }, [
+    el('div', { class: 'title' }, 'Reports'),
+    el('button', { onclick: () => {
+      ownerApi('/api/owner/logout', { method: 'POST' }).catch(() => {});
+      localStorage.removeItem('oldwhats_ownertoken');
+      ownerToken = null;
+      renderAuth('owner');
+    }}, 'Logout')
+  ]));
+  const list = el('div', { class: 'list', id: 'ownerList' }, [el('div', { class: 'empty' }, 'Lade…')]);
+  panel.appendChild(list);
+  app.appendChild(panel);
+
+  try {
+    const reports = await ownerApi('/api/owner/reports');
+    list.innerHTML = '';
+    if (reports.length === 0) {
+      list.appendChild(el('div', { class: 'empty' }, 'Keine Reports.'));
+      return;
+    }
+    for (const r of reports) {
+      const card = el('div', { class: 'report-card' }, [
+        el('div', { class: 'meta-row' }, [
+          el('span', {}, 'von ' + r.reporter),
+          el('span', {}, fmtDate(r.ts))
+        ]),
+        el('div', { class: 'target' }, r.target),
+        r.reason ? el('div', { class: 'reason' }, r.reason) : null,
+        r.status === 'pending'
+          ? el('div', { class: 'actions' }, [
+              el('button', { class: 'lock', onclick: () => decide(r.id, 'lock') }, 'Sperren'),
+              el('button', { class: 'unlock', onclick: () => decide(r.id, 'unlock') }, 'Freigeben'),
+              el('button', { class: 'dismiss', onclick: () => decide(r.id, 'dismiss') }, 'Verwerfen')
+            ])
+          : el('div', { class: 'status ' + r.status }, r.status)
+      ]);
+      list.appendChild(card);
+    }
+  } catch (e) {
+    list.innerHTML = '';
+    list.appendChild(el('div', { class: 'empty' }, 'Fehler: ' + e.message));
+  }
+
+  async function decide(id, decision) {
+    try {
+      await ownerApi('/api/owner/decide', { method: 'POST', body: JSON.stringify({ reportId: id, decision }) });
+      toast('Entschieden: ' + decision);
+      renderOwnerPanel();
+    } catch (e) {
+      toast('Fehler: ' + e.message);
+    }
+  }
+}
+
+// ---------- Bootstrap ----------
 async function bootstrapAfterLogin() {
   try {
     profile = await api('/api/me');
     me = profile.number;
-
     if (!profile.name) {
       const name = prompt('Wie soll dein Name sein?', 'Anon') || 'Anon';
       await api('/api/profile', { method: 'POST', body: JSON.stringify({ name }) });
       profile.name = name;
     }
-
     connectSocket();
     await loadChats();
     renderChatList();
@@ -525,11 +676,8 @@ function connectSocket() {
     if (!chatMessages[key].some(m => m.ts === msg.ts && m.from === msg.from)) {
       chatMessages[key].push(msg);
     }
-    if (currentPeer && (msg.from === currentPeer || msg.to === currentPeer)) {
-      renderChat();
-    } else {
-      loadChats().then(renderChatList);
-    }
+    if (currentPeer && (msg.from === currentPeer || msg.to === currentPeer)) renderChat();
+    else loadChats().then(renderChatList);
   });
   socket.on('connect_error', () => toast('Socket-Verbindung fehlgeschlagen'));
 }
@@ -541,28 +689,19 @@ async function loadChats() {
     await Promise.all(list.map(c => loadPeerProfile(c.peer)));
   } catch {}
 }
-
 async function loadMessages(peer) {
   const key = [me, peer].sort().join('|');
-  try {
-    const msgs = await api('/api/messages/' + encodeURIComponent(peer));
-    chatMessages[key] = msgs;
-  } catch {}
+  try { chatMessages[key] = await api('/api/messages/' + encodeURIComponent(peer)); } catch {}
 }
-
 async function loadPeerProfile(peer) {
   if (peerProfiles[peer]) return;
-  try {
-    const p = await api('/api/user/' + encodeURIComponent(peer));
-    peerProfiles[peer] = p;
-  } catch {}
+  try { peerProfiles[peer] = await api('/api/user/' + encodeURIComponent(peer)); } catch {}
 }
 
 // ---------- Chat-Liste ----------
 async function renderChatList() {
   const app = document.getElementById('app');
   app.innerHTML = '';
-
   app.appendChild(el('header', {}, [
     avatarFor(profile?.name || me, 36, profile?.picture),
     el('div', { class: 'title' }, 'WhatsApp'),
@@ -579,7 +718,6 @@ async function renderChatList() {
     if (a !== me) allPeers.add(a);
     if (b !== me) allPeers.add(b);
   }
-
   if (allPeers.size === 0) {
     list.appendChild(el('div', { class: 'empty' }, [
       el('div', { class: 'icon' }, '💬'),
@@ -592,7 +730,6 @@ async function renderChatList() {
       const msgs = chatMessages[key] || [];
       return { peer: p, last: msgs[msgs.length - 1] };
     }).sort((a, b) => (b.last?.ts || 0) - (a.last?.ts || 0));
-
     for (const { peer, last } of arr) {
       const pp = peerProfiles[peer] || {};
       const displayName = pp.name || peer;
@@ -613,7 +750,7 @@ function newChat() {
   const modal = el('div', { class: 'modal', onclick: (e) => { if (e.target.classList.contains('modal')) modal.remove(); } }, [
     el('div', { class: 'box' }, [
       el('h2', {}, 'Neuer Chat'),
-      el('p', {}, 'Nummer eingeben (+979…, +921…, +777…, +888…):'),
+      el('p', {}, 'Nummer eingeben:'),
       el('input', { id: 'peerInput', placeholder: '+7771234567', autofocus: true, onkeydown: (e) => { if (e.key === 'Enter') submit(); } }),
       el('div', { class: 'row' }, [
         el('button', { class: 'cancel', onclick: () => modal.remove() }, 'Abbrechen'),
@@ -623,7 +760,6 @@ function newChat() {
   ]);
   document.body.appendChild(modal);
   setTimeout(() => document.getElementById('peerInput')?.focus(), 50);
-
   function submit() {
     const v = document.getElementById('peerInput').value.trim();
     if (!v) return;
@@ -655,6 +791,7 @@ function renderChat() {
       el('div', { class: 'sub' }, currentPeer)
     ]),
     el('div', { class: 'actions' }, [
+      el('button', { onclick: () => showReportModal(currentPeer), title: 'Nummer melden' }, '🚩'),
       el('button', { onclick: () => toast('Nummer: ' + currentPeer) }, '⋮')
     ])
   ]));
@@ -662,7 +799,6 @@ function renderChat() {
   const view = el('div', { class: 'chatview' });
   const messages = el('div', { class: 'messages', id: 'messages' });
   view.appendChild(messages);
-
   const composer = el('div', { class: 'composer' }, [
     el('input', { id: 'composerInput', placeholder: 'Nachricht', autocomplete: 'off',
       onkeydown: (e) => { if (e.key === 'Enter') sendMessage(); } }),
@@ -677,10 +813,7 @@ function renderChat() {
     const out = m.from === me;
     messages.appendChild(el('div', { class: 'msg ' + (out ? 'out' : 'in') }, [
       el('div', {}, m.text),
-      el('div', { class: 'time' }, [
-        fmtTime(m.ts),
-        out ? el('span', { class: 'tick' }, '✓✓') : null
-      ])
+      el('div', { class: 'time' }, [fmtTime(m.ts), out ? el('span', { class: 'tick' }, '✓✓') : null])
     ]));
   }
   messages.scrollTop = messages.scrollHeight;
@@ -695,11 +828,7 @@ function sendMessage() {
   input.value = '';
   input.focus();
 }
-
-function backToList() {
-  currentPeer = null;
-  loadChats().then(renderChatList);
-}
+function backToList() { currentPeer = null; loadChats().then(renderChatList); }
 
 // ---------- Settings ----------
 function renderSettings() {
@@ -709,7 +838,6 @@ function renderSettings() {
     el('button', { class: 'back', onclick: backToList }, '←'),
     el('div', { class: 'title' }, 'Einstellungen')
   ]));
-
   const wrap = el('div', { class: 'settings' });
 
   const picBox = el('div', { class: 'profile-pic', onclick: () => document.getElementById('picInput').click() });
@@ -751,13 +879,13 @@ function renderSettings() {
 
   wrap.appendChild(el('div', { class: 'section' }, [
     el('h3', {}, 'Nummern-Check'),
-    el('div', { class: 'hint', style: 'margin-bottom:12px' }, 'Prüfe, ob eine beliebige Nummer bei WhatsApp gebannt ist.'),
+    el('div', { class: 'hint', style: 'margin-bottom:12px' }, 'Prüfe, ob eine beliebige Nummer gebannt oder gesperrt ist.'),
     el('button', { class: 'btn', style: 'width:100%;margin:0', onclick: () => { checkState.result = null; renderNumberCheck(); } }, 'Nummer prüfen')
   ]));
 
   wrap.appendChild(el('div', { class: 'section' }, [
     el('h3', {}, 'Account'),
-    el('div', { class: 'hint', style: 'margin-bottom:12px' }, 'Abmelden entfernt nur dein Token auf diesem Gerät. Deine Daten bleiben auf dem Server.'),
+    el('div', { class: 'hint', style: 'margin-bottom:12px' }, 'Abmelden entfernt nur dein Token auf diesem Gerät.'),
     el('div', { class: 'btn-row', style: 'justify-content:flex-start' }, [
       el('button', { class: 'btn', style: 'background:#c62828', onclick: logout }, 'Abmelden')
     ])
@@ -795,12 +923,10 @@ async function saveProfileSettings() {
     profile.name = name; profile.status = status;
     toast('Profil gespeichert');
     renderSettings();
-  } catch (e) {
-    toast('Speichern fehlgeschlagen');
-  }
+  } catch (e) { toast('Speichern fehlgeschlagen'); }
 }
 
-// ---------- Nummern-Check-Screen ----------
+// ---------- Nummern-Check ----------
 const COUNTRIES = [
   { name: 'Germany',        code: '+49'  },
   { name: 'Morocco',        code: '+212' },
@@ -813,23 +939,34 @@ const COUNTRIES = [
   { name: 'Netherlands',    code: '+31'  },
   { name: 'Poland',         code: '+48'  },
   { name: 'Turkey',         code: '+90'  },
+  { name: 'Brazil',         code: '+55'  },
+  { name: 'Mexico',         code: '+52'  },
+  { name: 'India',          code: '+91'  },
+  { name: 'Russia',         code: '+7'   },
+  { name: 'China',          code: '+86'  },
+  { name: 'Japan',          code: '+81'  },
+  { name: 'Indonesia',      code: '+62'  },
+  { name: 'Nigeria',        code: '+234' },
+  { name: 'Egypt',          code: '+20'  },
   { name: '+979',           code: '+979' },
   { name: '+921',           code: '+921' },
   { name: '+777',           code: '+777' },
-  { name: '+888',           code: '+888' }
+  { name: '+888',           code: '+888' },
+  { name: '+555',           code: '+555' },
+  { name: '+999',           code: '+999' },
+  { name: '+000',           code: '+000' },
+  { name: '+123',           code: '+123' },
+  { name: '+911',           code: '+911' },
+  { name: '+666',           code: '+666' },
+  { name: '+404',           code: '+404' },
+  { name: '+112',           code: '+112' }
 ];
 
-let checkState = {
-  country: COUNTRIES[1],   // Morocco default
-  number: '',
-  result: null
-};
+let checkState = { country: COUNTRIES[1], number: '', result: null };
 
 function parseNumber(num) {
   const sorted = [...COUNTRIES].sort((a, b) => b.code.length - a.code.length);
-  for (const c of sorted) {
-    if (num.startsWith(c.code)) return { country: c, rest: num.slice(c.code.length) };
-  }
+  for (const c of sorted) if (num.startsWith(c.code)) return { country: c, rest: num.slice(c.code.length) };
   const m = String(num).match(/^(\+\d{1,4})(.*)$/);
   if (m) return { country: { name: m[1], code: m[1] }, rest: m[2] };
   return { country: { name: '—', code: '' }, rest: String(num) };
@@ -870,16 +1007,21 @@ function renderNumberCheck() {
       ]),
       el('div', { class: 'number-row' }, [
         el('span', { class: 'prefix' }, checkState.country.code),
-        el('input', {
-          id: 'checkNumberInput',
-          placeholder: '707-102555',
-          value: checkState.number,
-          inputmode: 'tel',
-          oninput: (e) => { checkState.number = e.target.value; }
-        })
+        el('input', { id: 'checkNumberInput', placeholder: '707-102555', value: checkState.number, inputmode: 'tel',
+          oninput: (e) => { checkState.number = e.target.value; } })
       ]),
 
-      resultHolder
+      resultHolder,
+
+      el('div', { class: 'report-row' }, [
+        el('button', { class: 'btn', style: 'background:#c62828;font-size:13px;padding:8px 14px',
+          onclick: () => {
+            const digits = (checkState.number || '').replace(/\D/g, '');
+            if (!digits) { toast('Erst Nummer eingeben'); return; }
+            showReportModal(checkState.country.code + digits);
+          }
+        }, '🚩 Melden')
+      ])
     ])
   ]);
   app.appendChild(screen);
@@ -893,6 +1035,7 @@ function renderNumberCheck() {
 
 function buildCheckResultBox(r) {
   if (r.banned) return null;
+  if (r.locked) return el('div', { class: 'check-result show locked' }, '🔒 ' + r.number + ' ist gesperrt.');
   if (r.status && r.status !== 200) return el('div', { class: 'check-result show info' }, 'API-Status: ' + r.status + ' — keine eindeutige Antwort.');
   return el('div', { class: 'check-result show ok' }, '✓ ' + r.number + ' ist frei.');
 }
@@ -902,11 +1045,7 @@ function openCountryPicker() {
   const sheet = el('div', { class: 'sheet' }, [
     el('h3', {}, 'Land auswählen'),
     el('div', { class: 'list' }, COUNTRIES.map(c =>
-      el('div', { class: 'item', onclick: () => {
-        checkState.country = c;
-        overlay.remove();
-        renderNumberCheck();
-      }}, [
+      el('div', { class: 'item', onclick: () => { checkState.country = c; overlay.remove(); renderNumberCheck(); } }, [
         el('span', {}, c.name),
         el('span', { class: 'code' }, c.code)
       ])
@@ -920,32 +1059,20 @@ function openCountryPicker() {
 async function runNumberCheck() {
   const digits = (checkState.number || '').replace(/\D/g, '');
   if (digits.length < 4) { toast('Nummer eingeben'); return; }
-
   const fullNumber = checkState.country.code + digits;
   const btn = document.getElementById('checkAction');
   btn.disabled = true; btn.textContent = '…';
-
   try {
     const res = await fetch('/api/check/' + encodeURIComponent(fullNumber));
     const data = await res.json();
-    checkState.result = { banned: !!data.banned, status: data.status, number: fullNumber };
-
-    if (data.banned) {
-      showBanModal(fullNumber, {
-        onCancel: () => {},
-        onSupport: () => toast('Support: support@whatsapp.com')
-      });
-    }
-
+    checkState.result = { banned: !!data.banned, locked: !!data.locked, status: data.status, number: fullNumber };
+    if (data.banned) showBanModal(fullNumber, { onSupport: () => toast('Support: support@whatsapp.com') });
     const holder = document.getElementById('checkResultInline');
     holder.innerHTML = '';
     const box = buildCheckResultBox(checkState.result);
     if (box) holder.appendChild(box);
-  } catch (e) {
-    toast('Fehler: ' + e.message);
-  } finally {
-    btn.disabled = false; btn.textContent = 'Prüfen';
-  }
+  } catch (e) { toast('Fehler: ' + e.message); }
+  finally { btn.disabled = false; btn.textContent = 'Prüfen'; }
 }
 
 function logout() {
@@ -960,6 +1087,7 @@ function logout() {
 
 // ---------- Boot ----------
 (async function boot() {
+  if (ownerToken) { renderOwnerPanel(); return; }
   if (!token) { renderAuth('register'); return; }
   try {
     profile = await api('/api/me');
