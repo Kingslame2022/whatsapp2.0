@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>WhatsApp</title>
 <style>
+  /* ---------- ALTES WHATSAPP — Android 4.x Ära ---------- */
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif; background: #000; }
   :root {
@@ -28,6 +29,7 @@
   }
   @media (min-width: 768px) { .app { max-width: 900px; } }
 
+  /* ---------- Header ---------- */
   header {
     background: var(--wa-green); color: #fff;
     padding: 10px 12px; display: flex; align-items: center; gap: 10px;
@@ -46,7 +48,7 @@
   header .actions { display: flex; gap: 4px; }
   header .actions button { background: transparent; border: 0; color: #fff; font-size: 20px; cursor: pointer; padding: 4px 8px; line-height: 1; }
 
-  /* Auth */
+  /* ---------- Auth ---------- */
   .auth {
     flex: 1; display: flex; flex-direction: column; justify-content: center;
     align-items: center; padding: 24px; text-align: center; background: #fff;
@@ -78,18 +80,23 @@
     background: var(--wa-green); color: #fff; border: 0;
     padding: 12px 22px; border-radius: 4px; font-size: 15px;
     cursor: pointer; margin: 4px; font-weight: 500; letter-spacing: .3px;
+    transition: background .15s;
   }
   .btn.secondary { background: var(--wa-green-light); }
+  .btn:active { background: var(--wa-green-dark); }
   .btn:disabled { background: #999; cursor: not-allowed; }
+  .btn.full { width: 100%; margin: 4px 0; }
   .btn-row { display: flex; gap: 8px; margin-top: 4px; flex-wrap: wrap; justify-content: center; width: 100%; }
   .hint { color: var(--wa-meta); font-size: 12px; margin-top: 10px; line-height: 1.5; }
 
+  /* ---------- Chat-Liste ---------- */
   .chatlist { flex: 1; overflow-y: auto; background: #fff; }
   .chatlist .empty { padding: 60px 30px; text-align: center; color: var(--wa-meta); font-size: 14px; line-height: 1.6; }
   .chatlist .empty .icon { font-size: 48px; opacity: .3; margin-bottom: 12px; }
   .chatitem {
     display: flex; align-items: center; gap: 12px;
     padding: 11px 14px; border-bottom: 1px solid #e9edef; cursor: pointer; background: #fff;
+    transition: background .1s;
   }
   .chatitem:active { background: #f0f0f0; }
   .chatitem .avatar {
@@ -103,6 +110,7 @@
   .chatitem .preview { color: var(--wa-meta); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .chatitem .meta { color: var(--wa-meta); font-size: 11px; text-align: right; flex-shrink: 0; }
 
+  /* ---------- Chat-View ---------- */
   .chatview { flex: 1; display: flex; flex-direction: column; background: var(--wa-bg); overflow: hidden; }
   .messages {
     flex: 1; overflow-y: auto; padding: 10px 8px;
@@ -125,7 +133,9 @@
   .composer { display: flex; gap: 6px; padding: 6px 8px; background: #f0f0f0; border-top: 1px solid #ddd; flex-shrink: 0; align-items: flex-end; }
   .composer input { flex: 1; padding: 10px 14px; border: 0; border-radius: 18px; font-size: 15px; outline: none; background: #fff; }
   .composer button { background: var(--wa-green); color: #fff; border: 0; border-radius: 50%; width: 40px; height: 40px; font-size: 17px; cursor: pointer; flex-shrink: 0; }
+  .composer button:active { background: var(--wa-green-dark); }
 
+  /* ---------- Settings ---------- */
   .settings { flex: 1; overflow-y: auto; background: #fff; }
   .settings .section { padding: 20px 16px; border-bottom: 1px solid #eee; }
   .settings .section h3 { color: var(--wa-green); font-size: 13px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 14px; font-weight: 600; }
@@ -150,50 +160,131 @@
   }
   .settings .field input:focus { border-color: var(--wa-green); }
   .settings .field .value { font-family: 'Courier New', monospace; font-weight: 700; background: #f7f7f7; color: var(--wa-green-dark); }
-  .settings .check-row { display: flex; gap: 8px; }
-  .settings .check-row input { flex: 1; padding: 10px 12px; border: 1px solid var(--wa-divider); border-radius: 4px; font-size: 15px; outline: none; }
-  .settings .check-result { margin-top: 12px; padding: 12px; border-radius: 4px; font-size: 14px; display: none; }
-  .settings .check-result.show { display: block; }
-  .settings .check-result.banned { background: #ffebee; color: #c62828; border-left: 4px solid #c62828; }
-  .settings .check-result.ok { background: #e8f5e9; color: #2e7d32; border-left: 4px solid #2e7d32; }
-  .settings .check-result.info { background: #f5f5f5; color: var(--wa-meta); border-left: 4px solid var(--wa-meta); }
   .settings .hint { color: var(--wa-meta); font-size: 12px; margin-top: 8px; line-height: 1.5; }
 
+  /* ---------- Nummern-Check-Screen (WhatsApp Change-Number-Layout) ---------- */
+  .check-screen {
+    flex: 1; display: flex; flex-direction: column;
+    background: #0a0a0a; color: #fff; overflow: hidden;
+  }
+  .check-screen .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; flex-shrink: 0; font-size: 17px; background: #0a0a0a;
+  }
+  .check-screen .topbar .cancel {
+    color: #fff; background: transparent; border: 0;
+    font-size: 17px; cursor: pointer; padding: 0;
+  }
+  .check-screen .topbar .title { color: #8e8e93; font-weight: 500; }
+  .check-screen .topbar .action {
+    background: transparent; border: 0; color: #25d366;
+    font-size: 17px; font-weight: 500; cursor: pointer; padding: 0;
+  }
+  .check-screen .topbar .action:disabled { color: #3a3a3c; cursor: not-allowed; }
+  .check-screen .body { flex: 1; overflow-y: auto; padding: 4px 16px 30px; }
+  .check-screen .section-label {
+    color: #8e8e93; font-size: 14px; margin: 18px 0 10px; font-weight: 400;
+  }
+  .check-screen .country-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #1c1c1e; padding: 14px 16px;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer; font-size: 17px;
+  }
+  .check-screen .country-row.readonly { cursor: default; }
+  .check-screen .country-row .chev { color: #8e8e93; font-size: 18px; }
+  .check-screen .number-row {
+    display: flex; align-items: center; gap: 12px;
+    background: #1c1c1e; padding: 14px 16px;
+    border-radius: 0 0 10px 10px;
+    border-top: 1px solid #2c2c2e;
+    font-size: 17px;
+  }
+  .check-screen .number-row .prefix { color: #8e8e93; font-family: 'Courier New', monospace; }
+  .check-screen .number-row input {
+    flex: 1; background: transparent; border: 0; outline: none;
+    color: #fff; font-size: 17px; font-family: 'Courier New', monospace;
+    letter-spacing: .5px;
+  }
+  .check-screen .number-row input::placeholder { color: #48484a; }
+  .check-screen .number-row .display { color: #fff; font-family: 'Courier New', monospace; letter-spacing: .5px; }
+  .check-screen .check-result {
+    margin-top: 18px; padding: 12px 14px; border-radius: 10px;
+    font-size: 14px; display: none;
+  }
+  .check-screen .check-result.show { display: block; }
+  .check-screen .check-result.banned { background: #3a1010; color: #ff6b6b; }
+  .check-screen .check-result.ok { background: #0f2a14; color: #4caf50; }
+  .check-screen .check-result.info { background: #1c1c1e; color: #8e8e93; }
+
+  /* ---------- Country-Picker ---------- */
+  .country-picker {
+    position: fixed; inset: 0; background: rgba(0,0,0,.6);
+    display: flex; align-items: flex-end; justify-content: center; z-index: 250;
+  }
+  .country-picker .sheet {
+    background: #1c1c1e; width: 100%; max-width: 480px;
+    max-height: 70vh; border-radius: 14px 14px 0 0;
+    display: flex; flex-direction: column; overflow: hidden; color: #fff;
+  }
+  .country-picker .sheet h3 {
+    padding: 16px; text-align: center; color: #8e8e93;
+    font-size: 14px; font-weight: 500; border-bottom: 1px solid #2c2c2e;
+  }
+  .country-picker .sheet .list { overflow-y: auto; flex: 1; }
+  .country-picker .sheet .item {
+    padding: 16px; border-bottom: 1px solid #2c2c2e;
+    cursor: pointer; font-size: 16px;
+    display: flex; justify-content: space-between;
+  }
+  .country-picker .sheet .item:active { background: #2c2c2e; }
+  .country-picker .sheet .item .code { color: #8e8e93; font-family: 'Courier New', monospace; }
+
+  /* ---------- Modal (neu-chat) ---------- */
   .modal {
     position: fixed; inset: 0; background: rgba(0,0,0,.5);
     display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+    animation: fade .15s;
   }
-  .modal .box { background: #fff; border-radius: 6px; padding: 22px; max-width: 340px; width: 100%; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  .modal .box { background: #fff; border-radius: 6px; padding: 22px; max-width: 340px; width: 100%; box-shadow: 0 8px 30px rgba(0,0,0,.3); }
   .modal .box h2 { color: var(--wa-green); margin-bottom: 10px; font-size: 17px; font-weight: 600; }
   .modal .box p { color: var(--wa-text); margin-bottom: 16px; line-height: 1.5; font-size: 14px; }
   .modal .box input { width: 100%; padding: 10px 12px; border: 1px solid var(--wa-divider); border-radius: 4px; font-size: 15px; margin-bottom: 16px; outline: none; }
+  .modal .box input:focus { border-color: var(--wa-green); }
   .modal .box .row { display: flex; gap: 8px; justify-content: flex-end; }
   .modal .box .row button { padding: 9px 16px; border: 0; border-radius: 4px; font-size: 14px; cursor: pointer; font-weight: 500; }
   .modal .box .row .cancel { background: #eee; color: #333; }
   .modal .box .row .ok { background: var(--wa-green); color: #fff; }
 
-  /* Ban-Modal (WhatsApp Dark) */
+  /* ---------- Ban-Modal (WhatsApp Dark) ---------- */
   .ban-modal-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,.72);
     display: flex; align-items: center; justify-content: center;
     z-index: 300; padding: 20px;
+    animation: fade .15s;
   }
-  .ban-modal { background: #2a2a2a; border-radius: 14px; width: 100%; max-width: 340px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
+  .ban-modal { background: #2a2a2a; border-radius: 14px; width: 100%; max-width: 340px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,.5); animation: banIn .2s ease-out; }
+  @keyframes banIn { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
   .ban-modal .content { padding: 30px 26px; color: #fff; text-align: center; font-size: 15.5px; line-height: 1.55; }
   .ban-modal .content strong { font-weight: 600; color: #fff; }
   .ban-modal .buttons { display: flex; border-top: 1px solid #3d3d3d; }
   .ban-modal .buttons button {
     flex: 1; background: transparent; border: 0; color: #25d366;
     padding: 17px 16px; font-size: 15px; font-weight: 500; cursor: pointer;
+    transition: background .12s;
   }
   .ban-modal .buttons button:first-child { border-right: 1px solid #3d3d3d; }
   .ban-modal .buttons button:active { background: rgba(255,255,255,.06); }
 
+  /* ---------- Toast ---------- */
   .toast {
     position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
     background: rgba(0,0,0,.85); color: #fff; padding: 10px 18px;
     border-radius: 20px; font-size: 13px; z-index: 400;
+    animation: toastIn .2s ease-out;
   }
+  @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
 </style>
 </head>
 <body>
@@ -202,12 +293,12 @@
 <script>
 // ---------- State ----------
 let token = localStorage.getItem('oldwhats_token') || null;
-let me = null;                // number
-let profile = null;           // { number, name, picture, status }
+let me = null;
+let profile = null;
 let socket = null;
 let currentPeer = null;
-let chatMessages = {};        // key: "a|b" sorted
-let peerProfiles = {};        // number -> { name, picture, status, exists }
+let chatMessages = {};
+let peerProfiles = {};
 
 function api(path, opts = {}) {
   const headers = Object.assign({ 'Content-Type': 'application/json' }, opts.headers || {});
@@ -226,6 +317,7 @@ function el(tag, attrs = {}, children = []) {
     if (k === 'class') e.className = v;
     else if (k === 'onclick') e.onclick = v;
     else if (k === 'onkeydown') e.onkeydown = v;
+    else if (k === 'oninput') e.oninput = v;
     else if (k === 'style') e.style.cssText = v;
     else if (k.startsWith('data-')) e.setAttribute(k, v);
     else if (k in e) e[k] = v;
@@ -268,7 +360,7 @@ function showBanModal(number, opts = {}) {
   document.body.appendChild(overlay);
 }
 
-// ---------- Auth screen ----------
+// ---------- Auth-Screen ----------
 function renderAuth(mode = 'register') {
   const app = document.getElementById('app');
   app.innerHTML = '';
@@ -333,7 +425,6 @@ async function loadGeneratedNumber() {
     display.textContent = data.number;
     display.dataset.number = data.number;
 
-    // Ban-Check direkt
     const banRes = await fetch('/api/check/' + encodeURIComponent(data.number));
     const ban = await banRes.json();
     if (ban.banned) showBanModal(data.number);
@@ -424,12 +515,9 @@ function connectSocket() {
 }
 
 async function loadChats() {
-  // Chats-Liste vom Server holen
   try {
     const list = await api('/api/chats');
-    // Für jeden Peer die Nachrichten vorladen
     await Promise.all(list.map(c => loadMessages(c.peer)));
-    // Peer-Profile laden
     await Promise.all(list.map(c => loadPeerProfile(c.peer)));
   } catch {}
 }
@@ -465,8 +553,6 @@ async function renderChatList() {
   ]));
 
   const list = el('div', { class: 'chatlist' });
-
-  // Peers aus geladenen Nachrichten
   const allPeers = new Set();
   for (const key of Object.keys(chatMessages)) {
     const [a, b] = key.split('|');
@@ -645,15 +731,11 @@ function renderSettings() {
     el('div', { class: 'hint' }, 'Mit dieser Nummer und deinem Passwort loggst du dich überall ein.')
   ]));
 
-  // Ban-Check
+  // Ban-Check → Button, führt auf eigenen Screen
   wrap.appendChild(el('div', { class: 'section' }, [
     el('h3', {}, 'Nummern-Check'),
     el('div', { class: 'hint', style: 'margin-bottom:12px' }, 'Prüfe, ob eine beliebige Nummer bei WhatsApp gebannt ist.'),
-    el('div', { class: 'check-row' }, [
-      el('input', { id: 'checkInput', placeholder: '+212 707-102555' }),
-      el('button', { class: 'btn', onclick: runBanCheck, id: 'checkBtn' }, 'Prüfen')
-    ]),
-    el('div', { class: 'check-result', id: 'checkResult' })
+    el('button', { class: 'btn', style: 'width:100%;margin:0', onclick: () => { checkState.result = null; renderNumberCheck(); } }, 'Nummer prüfen')
   ]));
 
   // Account
@@ -666,15 +748,11 @@ function renderSettings() {
   ]));
 
   app.appendChild(wrap);
-  setTimeout(() => {
-    document.getElementById('checkInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') runBanCheck(); });
-  }, 50);
 }
 
 function onPicChange(e) {
   const file = e.target.files[0];
   if (!file) return;
-  // Downscale auf max 240px, damit users.json nicht explodiert
   const img = new Image();
   const reader = new FileReader();
   reader.onload = ev => {
@@ -706,37 +784,145 @@ async function saveProfileSettings() {
   }
 }
 
-async function runBanCheck() {
-  const input = document.getElementById('checkInput');
-  const result = document.getElementById('checkResult');
-  const btn = document.getElementById('checkBtn');
-  const raw = input.value.trim();
-  if (!raw) { toast('Nummer eingeben'); return; }
+// ---------- Nummern-Check-Screen ----------
+const COUNTRIES = [
+  { name: 'Germany',        code: '+49'  },
+  { name: 'Morocco',        code: '+212' },
+  { name: 'USA',            code: '+1'   },
+  { name: 'United Kingdom', code: '+44'  },
+  { name: 'France',         code: '+33'  },
+  { name: 'Spain',          code: '+34'  },
+  { name: 'Italy',          code: '+39'  },
+  { name: 'Netherlands',    code: '+31'  },
+  { name: 'Poland',         code: '+48'  },
+  { name: 'Turkey',         code: '+90'  },
+  { name: '+979',           code: '+979' },
+  { name: '+921',           code: '+921' },
+  { name: '+777',           code: '+777' },
+  { name: '+888',           code: '+888' }
+];
 
-  btn.disabled = true; btn.textContent = 'Prüfe…';
-  result.className = 'check-result show info';
-  result.textContent = 'Frage API ab…';
+let checkState = {
+  country: COUNTRIES[1],   // Morocco default
+  number: '',
+  result: null
+};
+
+function parseNumber(num) {
+  // längste passende code zuerst
+  const sorted = [...COUNTRIES].sort((a, b) => b.code.length - a.code.length);
+  for (const c of sorted) {
+    if (num.startsWith(c.code)) return { country: c, rest: num.slice(c.code.length) };
+  }
+  const m = String(num).match(/^(\+\d{1,4})(.*)$/);
+  if (m) return { country: { name: m[1], code: m[1] }, rest: m[2] };
+  return { country: { name: '—', code: '' }, rest: String(num) };
+}
+
+function renderNumberCheck() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  const myParsed = parseNumber(me);
+
+  const resultHolder = el('div', { id: 'checkResultInline' });
+  if (checkState.result) resultHolder.appendChild(buildCheckResultBox(checkState.result));
+
+  const screen = el('div', { class: 'check-screen' }, [
+    el('div', { class: 'topbar' }, [
+      el('button', { class: 'cancel', onclick: () => { checkState.result = null; renderSettings(); } }, 'Cancel'),
+      el('div', { class: 'title' }, 'Nummern-Check'),
+      el('button', { class: 'action', id: 'checkAction', onclick: runNumberCheck }, 'Prüfen')
+    ]),
+    el('div', { class: 'body' }, [
+      el('div', { class: 'section-label' }, 'Deine Nummer:'),
+      el('div', { class: 'country-row readonly' }, [
+        el('span', {}, myParsed.country.name),
+        el('span', { class: 'chev' }, '›')
+      ]),
+      el('div', { class: 'number-row' }, [
+        el('span', { class: 'prefix' }, myParsed.country.code),
+        el('span', { class: 'display' }, myParsed.rest || me)
+      ]),
+
+      el('div', { class: 'section-label' }, 'Zu prüfende Nummer:'),
+      el('div', { class: 'country-row', onclick: openCountryPicker }, [
+        el('span', { id: 'countryName' }, checkState.country.name),
+        el('span', { class: 'chev' }, '›')
+      ]),
+      el('div', { class: 'number-row' }, [
+        el('span', { class: 'prefix' }, checkState.country.code),
+        el('input', {
+          id: 'checkNumberInput',
+          placeholder: '707-102555',
+          value: checkState.number,
+          inputmode: 'tel',
+          oninput: (e) => { checkState.number = e.target.value; }
+        })
+      ]),
+
+      resultHolder
+    ])
+  ]);
+  app.appendChild(screen);
+
+  setTimeout(() => {
+    const inp = document.getElementById('checkNumberInput');
+    inp?.focus();
+    inp?.addEventListener('keydown', e => { if (e.key === 'Enter') runNumberCheck(); });
+  }, 50);
+}
+
+function buildCheckResultBox(r) {
+  if (r.banned) return el('div', { class: 'check-result show banned' }, '🚫 ' + r.number + ' ist gebannt.');
+  if (r.status && r.status !== 200) return el('div', { class: 'check-result show info' }, 'API-Status: ' + r.status + ' — keine eindeutige Antwort.');
+  return el('div', { class: 'check-result show ok' }, '✓ ' + r.number + ' ist frei.');
+}
+
+function openCountryPicker() {
+  const overlay = el('div', { class: 'country-picker' });
+  const sheet = el('div', { class: 'sheet' }, [
+    el('h3', {}, 'Land auswählen'),
+    el('div', { class: 'list' }, COUNTRIES.map(c =>
+      el('div', { class: 'item', onclick: () => {
+        checkState.country = c;
+        overlay.remove();
+        renderNumberCheck();
+      }}, [
+        el('span', {}, c.name),
+        el('span', { class: 'code' }, c.code)
+      ])
+    ))
+  ]);
+  overlay.appendChild(sheet);
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+  document.body.appendChild(overlay);
+}
+
+async function runNumberCheck() {
+  const digits = (checkState.number || '').replace(/\D/g, '');
+  if (digits.length < 4) { toast('Nummer eingeben'); return; }
+
+  const fullNumber = checkState.country.code + digits;
+  const btn = document.getElementById('checkAction');
+  btn.disabled = true; btn.textContent = '…';
 
   try {
-    const res = await fetch('/api/check/' + encodeURIComponent(raw));
+    const res = await fetch('/api/check/' + encodeURIComponent(fullNumber));
     const data = await res.json();
+    checkState.result = { banned: !!data.banned, status: data.status, number: fullNumber };
+
     if (data.banned) {
-      result.className = 'check-result';
-      result.textContent = '';
-      showBanModal(raw, {
+      showBanModal(fullNumber, {
         onCancel: () => {},
         onSupport: () => toast('Support: support@whatsapp.com')
       });
-    } else if (data.status && data.status !== 200) {
-      result.className = 'check-result show info';
-      result.textContent = 'API-Status: ' + data.status + ' — keine eindeutige Antwort.';
-    } else {
-      result.className = 'check-result show ok';
-      result.innerHTML = '✓ <strong>' + escapeHtml(raw) + '</strong> ist frei.';
     }
+
+    const holder = document.getElementById('checkResultInline');
+    holder.innerHTML = '';
+    holder.appendChild(buildCheckResultBox(checkState.result));
   } catch (e) {
-    result.className = 'check-result show info';
-    result.textContent = 'Fehler: ' + e.message;
+    toast('Fehler: ' + e.message);
   } finally {
     btn.disabled = false; btn.textContent = 'Prüfen';
   }
@@ -748,6 +934,7 @@ function logout() {
   localStorage.removeItem('oldwhats_token');
   token = null; me = null; profile = null;
   chatMessages = {}; peerProfiles = {}; currentPeer = null;
+  checkState = { country: COUNTRIES[1], number: '', result: null };
   renderAuth('login');
 }
 
