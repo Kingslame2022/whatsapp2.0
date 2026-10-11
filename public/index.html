@@ -657,4 +657,31 @@ async function runBanCheck() {
       result.innerHTML = '🚫 <strong>' + escapeHtml(raw) + '</strong> ist gebannt.';
     } else if (data.status && data.status !== 200) {
       result.className = 'check-result show info';
-      result.textContent = 'API-Status: ' + data.status + '
+      result.textContent = 'API-Status: ' + data.status + ' — keine eindeutige Antwort.';
+    } else {
+      result.className = 'check-result show ok';
+      result.innerHTML = '✓ <strong>' + escapeHtml(raw) + '</strong> ist frei.';
+    }
+  } catch (e) {
+    result.className = 'check-result show info';
+    result.textContent = 'Fehler: ' + e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Prüfen';
+  }
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ---------- Boot ----------
+if (me) {
+  // Nummer schon da — Setup zeigt sie trotzdem, damit reroll möglich
+  renderSetup();
+} else {
+  renderSetup();
+}
+</script>
+</body>
+</html>
