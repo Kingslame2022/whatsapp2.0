@@ -1,5 +1,5 @@
 // language: JavaScript, file: server.js, runtime: Node 18+, target: Render
-// Accounts, Chats, Reports, Owner-Panel, Ban-API-Proxy, Locked-Liste.
+// Accounts, Chats, Reports, Appeals, Owner-Panel, Ban-API-Proxy, Locked = Kick + Block.
 
 const express = require('express');
 const http = require('http');
@@ -22,16 +22,18 @@ const TOKENS_FILE  = path.join(DATA_DIR, 'tokens.json');
 const REPORTS_FILE = path.join(DATA_DIR, 'reports.json');
 const LOCKED_FILE  = path.join(DATA_DIR, 'locked.json');
 const OWNER_FILE   = path.join(DATA_DIR, 'ownertokens.json');
+const APPEALS_FILE = path.join(DATA_DIR, 'appeals.json');
 
 function load(f, fb) { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return fb; } }
 function save(f, d) { fs.writeFileSync(f, JSON.stringify(d, null, 2)); }
 
-let users    = load(USERS_FILE, {});
-let messages = load(MSGS_FILE, {});
-let tokens   = load(TOKENS_FILE, {});
-let reports  = load(REPORTS_FILE, []);      // [{ id, reporter, target, reason, ts, status, decidedAt }]
-let locked   = load(LOCKED_FILE, {});        // { "+212707102555": { lockedAt, reportId } }
-let ownerTokens = load(OWNER_FILE, {});      // { token: true }
+let users       = load(USERS_FILE, {});
+let messages    = load(MSGS_FILE, {});
+let tokens      = load(TOKENS_FILE, {});
+let reports     = load(REPORTS_FILE, []);
+let locked      = load(LOCKED_FILE, {});
+let ownerTokens = load(OWNER_FILE, {});
+let appeals     = load(APPEALS_FILE, {});   // { "+num": { ts, status, decidedAt } }
 
 const OWNER_USER = 'Tayy';
 const OWNER_PASS = '0873@adv';
@@ -41,8 +43,8 @@ const REAL_RANGES = ['+979', '+921', '+777', '+888', '+555', '+999', '+000', '+1
 function randDigits(n) { let s = ''; for (let i = 0; i < n; i++) s += Math.floor(Math.random() * 10); return s; }
 function hashPw(pw, salt) { return crypto.scryptSync(pw, salt, 64).toString('hex'); }
 function makeToken() { return crypto.randomBytes(32).toString('hex'); }
+function isLocked(num) { return !!locked[num]; }
 
-// tier: 'clean' (alle gleich, 0.1%) | 'half' (alternierend, 5%) | 'random'
 function generateNumber() {
   for (let attempt = 0; attempt < 800; attempt++) {
     const range = REAL_RANGES[Math.floor(Math.random() * REAL_RANGES.length)];
@@ -64,12 +66,28 @@ function generateNumber() {
       tier = 'random';
     }
     const candidate = range + local;
-    if (!users[candidate]) return { number: candidate, tier };
+    if (!users[candidate] && !locked[candidate]) return { number: candidate, tier };
   }
-  // Fallback
   let n;
-  do { n = REAL_RANGES[0] + randDigits(7); } while (users[n]);
+  do { n = REAL_RANGES[0] + randDigits(7); } while (users[n] || locked[n]);
   return { number: n, tier: 'random' };
+}
+
+function kickUser(number, reason = 'locked') {
+  let removed = 0;
+  for (const [t, n] of Object.entries(tokens)) {
+    if (n === number) { delete tokens[t]; removed++; }
+  }
+  if (removed) save(TOKENS_FILE, tokens);
+
+  io.to('user:' + number).emit('kicked', { reason });
+  const room = io.sockets.adapter.rooms.get('user:' + number);
+  if (room) {
+    for (const sid of room) {
+      const s = io.sockets.sockets.get(sid);
+      if (s) s.disconnect(true);
+    }
+  }
 }
 
 function auth(req, res, next) {
@@ -77,6 +95,7 @@ function auth(req, res, next) {
   const token = h.replace(/^Bearer\s+/i, '').trim();
   const num = tokens[token];
   if (!num || !users[num]) return res.status(401).json({ error: 'unauthorized' });
+  if (isLocked(num)) return res.status(403).json({ error: 'locked' });
   req.user = num;
   next();
 }
@@ -91,28 +110,18 @@ function ownerAuth(req, res, next) {
 app.use(express.json({ limit: '5mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ----- Nummer vorschlagen -----
-app.post('/api/generate', (req, res) => {
-  res.json(generateNumber());
-});
+app.post('/api/generate', (req, res) => { res.json(generateNumber()); });
 
-// ----- Registrierung -----
 app.post('/api/register', (req, res) => {
   const { number, password } = req.body || {};
   if (!number || !password) return res.status(400).json({ error: 'missing fields' });
   if (!REAL_RANGES.some(r => number.startsWith(r))) return res.status(400).json({ error: 'invalid range' });
   if (String(password).length < 4) return res.status(400).json({ error: 'password_too_short' });
+  if (isLocked(number)) return res.status(403).json({ error: 'locked' });
   if (users[number]) return res.status(409).json({ error: 'number_taken' });
 
   const salt = crypto.randomBytes(16).toString('hex');
-  users[number] = {
-    hash: hashPw(password, salt),
-    salt,
-    name: '',
-    picture: null,
-    status: 'Hey! Nutze OldWhats.',
-    createdAt: Date.now()
-  };
+  users[number] = { hash: hashPw(password, salt), salt, name: '', picture: null, status: 'Hey! Nutze OldWhats.', createdAt: Date.now() };
   save(USERS_FILE, users);
 
   const token = makeToken();
@@ -121,10 +130,10 @@ app.post('/api/register', (req, res) => {
   res.json({ number, token });
 });
 
-// ----- Login -----
 app.post('/api/login', (req, res) => {
   const { number, password } = req.body || {};
   if (!number || !password) return res.status(400).json({ error: 'missing fields' });
+  if (isLocked(number)) return res.status(403).json({ error: 'locked' });
   const u = users[number];
   if (!u) return res.status(401).json({ error: 'invalid' });
   if (hashPw(password, u.salt) !== u.hash) return res.status(401).json({ error: 'invalid' });
@@ -142,7 +151,6 @@ app.post('/api/logout', auth, (req, res) => {
   res.json({ ok: true });
 });
 
-// ----- Profil -----
 app.get('/api/me', auth, (req, res) => {
   const u = users[req.user];
   res.json({ number: req.user, name: u.name, picture: u.picture, status: u.status, createdAt: u.createdAt });
@@ -164,7 +172,6 @@ app.get('/api/user/:number', auth, (req, res) => {
   res.json({ number: req.params.number, exists: true, name: u.name, picture: u.picture, status: u.status });
 });
 
-// ----- Chats -----
 app.get('/api/chats', auth, (req, res) => {
   const me = req.user;
   const peers = new Set();
@@ -186,31 +193,43 @@ app.get('/api/messages/:peer', auth, (req, res) => {
   res.json(messages[key] || []);
 });
 
-// ----- Report -----
 app.post('/api/report', auth, (req, res) => {
   const { target, reason } = req.body || {};
   if (!target) return res.status(400).json({ error: 'missing target' });
   if (target === req.user) return res.status(400).json({ error: 'self_report' });
-  const rep = {
-    id: crypto.randomBytes(8).toString('hex'),
-    reporter: req.user,
-    target,
-    reason: String(reason || '').slice(0, 500),
-    ts: Date.now(),
-    status: 'pending',
-    decidedAt: null
-  };
+  const rep = { id: crypto.randomBytes(8).toString('hex'), reporter: req.user, target, reason: String(reason || '').slice(0, 500), ts: Date.now(), status: 'pending', decidedAt: null };
   reports.push(rep);
   save(REPORTS_FILE, reports);
   res.json({ ok: true, id: rep.id });
 });
 
+// ----- Appeal (Prüfungs-Antrag) -----
+// Öffentlich, weil der User schon gekickt sein kann (kein Token mehr)
+app.post('/api/appeal', (req, res) => {
+  const { number } = req.body || {};
+  if (!number) return res.status(400).json({ error: 'missing number' });
+  if (!isLocked(number)) return res.status(400).json({ error: 'not_locked' });
+
+  const existing = appeals[number];
+  if (existing && existing.status === 'pending') return res.json({ ok: true, status: 'pending', ts: existing.ts });
+  if (existing && existing.status === 'approved') return res.json({ ok: true, status: 'approved' });
+
+  appeals[number] = { ts: Date.now(), status: 'pending', decidedAt: null };
+  save(APPEALS_FILE, appeals);
+  res.json({ ok: true, status: 'pending' });
+});
+
+// Status abfragen (public)
+app.get('/api/appeal/:number', (req, res) => {
+  const a = appeals[req.params.number];
+  if (!a) return res.json({ status: null });
+  res.json({ status: a.status, ts: a.ts, decidedAt: a.decidedAt });
+});
+
 // ----- Owner -----
 app.post('/api/owner/login', (req, res) => {
   const { username, password } = req.body || {};
-  if (username !== OWNER_USER || password !== OWNER_PASS) {
-    return res.status(401).json({ error: 'invalid' });
-  }
+  if (username !== OWNER_USER || password !== OWNER_PASS) return res.status(401).json({ error: 'invalid' });
   const token = makeToken();
   ownerTokens[token] = true;
   save(OWNER_FILE, ownerTokens);
@@ -226,7 +245,6 @@ app.post('/api/owner/logout', ownerAuth, (req, res) => {
 });
 
 app.get('/api/owner/reports', ownerAuth, (req, res) => {
-  // sortiert: pending zuerst, dann nach ts desc
   const sorted = [...reports].sort((a, b) => {
     if (a.status === 'pending' && b.status !== 'pending') return -1;
     if (b.status === 'pending' && a.status !== 'pending') return 1;
@@ -237,9 +255,7 @@ app.get('/api/owner/reports', ownerAuth, (req, res) => {
 
 app.post('/api/owner/decide', ownerAuth, (req, res) => {
   const { reportId, decision } = req.body || {};
-  if (!reportId || !['lock', 'unlock', 'dismiss'].includes(decision)) {
-    return res.status(400).json({ error: 'invalid' });
-  }
+  if (!reportId || !['lock', 'unlock', 'dismiss'].includes(decision)) return res.status(400).json({ error: 'invalid' });
   const rep = reports.find(r => r.id === reportId);
   if (!rep) return res.status(404).json({ error: 'not_found' });
 
@@ -247,6 +263,7 @@ app.post('/api/owner/decide', ownerAuth, (req, res) => {
     rep.status = 'locked';
     locked[rep.target] = { lockedAt: Date.now(), reportId: rep.id };
     save(LOCKED_FILE, locked);
+    kickUser(rep.target, 'locked');
   } else if (decision === 'unlock') {
     rep.status = 'unlocked';
     delete locked[rep.target];
@@ -259,7 +276,47 @@ app.post('/api/owner/decide', ownerAuth, (req, res) => {
   res.json({ ok: true, report: rep });
 });
 
-// ----- Ban-Check (öffentlich) + locked-Status -----
+// Appeals-Liste für Owner — kombiniert mit locked-Infos
+app.get('/api/owner/appeals', ownerAuth, (req, res) => {
+  const out = Object.entries(appeals).map(([number, a]) => {
+    const lockInfo = locked[number] || null;
+    return {
+      number,
+      appealStatus: a.status,
+      appealTs: a.ts,
+      decidedAt: a.decidedAt,
+      isLocked: !!lockInfo,
+      lockedAt: lockInfo?.lockedAt || null
+    };
+  }).sort((a, b) => {
+    if (a.appealStatus === 'pending' && b.appealStatus !== 'pending') return -1;
+    if (b.appealStatus === 'pending' && a.appealStatus !== 'pending') return 1;
+    return b.appealTs - a.appealTs;
+  });
+  res.json(out);
+});
+
+app.post('/api/owner/decide-appeal', ownerAuth, (req, res) => {
+  const { number, decision } = req.body || {};
+  if (!number || !['approve', 'deny'].includes(decision)) return res.status(400).json({ error: 'invalid' });
+  const a = appeals[number];
+  if (!a) return res.status(404).json({ error: 'not_found' });
+
+  if (decision === 'approve') {
+    a.status = 'approved';
+    a.decidedAt = Date.now();
+    // Nummer freigeben
+    delete locked[number];
+    save(LOCKED_FILE, locked);
+  } else {
+    a.status = 'denied';
+    a.decidedAt = Date.now();
+  }
+  save(APPEALS_FILE, appeals);
+  res.json({ ok: true, appeal: a });
+});
+
+// ----- Ban-Check -----
 const BAN_API = 'https://xzc-corporation.biz.id/lrp';
 const BAN_HEADERS = {
   'accept-encoding': 'gzip',
@@ -271,23 +328,22 @@ const BAN_HEADERS = {
 
 app.get('/api/check/:number', async (req, res) => {
   const cleanNum = String(req.params.number).replace(/[^\d]/g, '');
-  const isLocked = !!locked[req.params.number] || !!locked['+' + cleanNum];
-
+  const isLockedNow = isLocked(req.params.number) || isLocked('+' + cleanNum);
   try {
     const r = await fetch(`${BAN_API}?number=${cleanNum}`, { headers: BAN_HEADERS });
-    if (!r.ok) return res.json({ banned: false, locked: isLocked, status: r.status });
+    if (!r.ok) return res.json({ banned: false, locked: isLockedNow, status: r.status });
     const data = await r.json().catch(() => null);
-    return res.json({ banned: !!data?.banned, locked: isLocked, status: r.status, raw: data });
+    return res.json({ banned: !!data?.banned, locked: isLockedNow, status: r.status, raw: data });
   } catch (e) {
-    return res.json({ banned: false, locked: isLocked, status: 0, error: e.message });
+    return res.json({ banned: false, locked: isLockedNow, status: 0, error: e.message });
   }
 });
 
-// ----- Socket -----
 io.use((socket, next) => {
   const token = socket.handshake.auth?.token;
   const num = tokens[token];
   if (!num || !users[num]) return next(new Error('unauthorized'));
+  if (isLocked(num)) return next(new Error('locked'));
   socket.data.me = num;
   next();
 });
@@ -297,6 +353,7 @@ io.on('connection', (socket) => {
   socket.join('user:' + me);
 
   socket.on('message', ({ to, text }) => {
+    if (isLocked(me)) { socket.emit('kicked', { reason: 'locked' }); socket.disconnect(true); return; }
     if (!to || !text) return;
     const key = [me, to].sort().join('|');
     const msg = { from: me, to, text: String(text).slice(0, 4000), ts: Date.now() };
