@@ -18,6 +18,10 @@
     --wa-text: #111;
     --wa-meta: #667781;
     --wa-divider: #d9d9d9;
+    --wa-surface: #ffffff;
+    --wa-surface-text: #111;
+    --wa-surface-sub: #667781;
+    --wa-surface-border: #e9edef;
   }
   body { display: flex; justify-content: center; background: #111; }
   .app {
@@ -28,6 +32,7 @@
   }
   @media (min-width: 768px) { .app { max-width: 900px; } }
 
+  /* ---------- Header ---------- */
   header { background: var(--wa-green); color: #fff; padding: 10px 12px; display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 500; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,.2); z-index: 10; }
   header .back { background: transparent; border: 0; color: #fff; font-size: 22px; cursor: pointer; padding: 0 6px 0 0; line-height: 1; }
   header .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--wa-green-light); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; overflow: hidden; }
@@ -37,6 +42,7 @@
   header .actions { display: flex; gap: 4px; }
   header .actions button { background: transparent; border: 0; color: #fff; font-size: 20px; cursor: pointer; padding: 4px 8px; line-height: 1; }
 
+  /* ---------- Auth ---------- */
   .auth { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; text-align: center; background: #fff; overflow-y: auto; }
   .auth .logo { width: 72px; height: 72px; border-radius: 50%; background: var(--wa-green); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 16px; }
   .auth h1 { color: var(--wa-green); font-size: 24px; margin-bottom: 6px; }
@@ -61,6 +67,7 @@
   .hint { color: var(--wa-meta); font-size: 12px; margin-top: 10px; line-height: 1.5; }
   .owner-link { color: var(--wa-meta); font-size: 11px; margin-top: 24px; text-decoration: underline; cursor: pointer; }
 
+  /* ---------- Banned-Screen ---------- */
   .banned-screen { flex: 1; display: flex; flex-direction: column; background: #0a0a0a; color: #fff; justify-content: center; align-items: center; padding: 32px 24px; text-align: center; }
   .banned-screen .icon { width: 88px; height: 88px; border-radius: 50%; background: #3a1010; color: #ff6b6b; display: flex; align-items: center; justify-content: center; font-size: 42px; margin-bottom: 26px; border: 2px solid #4a1818; }
   .banned-screen h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; letter-spacing: .3px; }
@@ -78,36 +85,54 @@
   .banned-screen .actions .success { background: #2e7d32; color: #fff; }
   .banned-screen .actions button:active { transform: scale(.98); }
 
-  .chatlist { flex: 1; overflow-y: auto; background: #fff; }
-  .chatlist .empty { padding: 60px 30px; text-align: center; color: var(--wa-meta); font-size: 14px; line-height: 1.6; }
+  /* ---------- Chat-Liste ---------- */
+  .chatlist-wrap { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+  .chatlist { flex: 1; overflow-y: auto; background: var(--wa-surface); }
+  .chatlist .empty { padding: 60px 30px; text-align: center; color: var(--wa-surface-sub); font-size: 14px; line-height: 1.6; }
   .chatlist .empty .icon { font-size: 48px; opacity: .3; margin-bottom: 12px; }
-  .chatitem { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-bottom: 1px solid #e9edef; cursor: pointer; background: #fff; }
-  .chatitem:active { background: #f0f0f0; }
+  .chatitem { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-bottom: 1px solid var(--wa-surface-border); cursor: pointer; background: var(--wa-surface); }
+  .chatitem:active { background: rgba(0,0,0,.05); }
   .chatitem .avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--wa-green-light); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; overflow: hidden; }
   .chatitem .avatar img { width: 100%; height: 100%; object-fit: cover; }
   .chatitem .info { flex: 1; min-width: 0; }
-  .chatitem .name { font-weight: 500; color: var(--wa-text); font-size: 15px; margin-bottom: 2px; }
-  .chatitem .preview { color: var(--wa-meta); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .chatitem .meta { color: var(--wa-meta); font-size: 11px; text-align: right; flex-shrink: 0; }
+  .chatitem .name { font-weight: 500; color: var(--wa-surface-text); font-size: 15px; margin-bottom: 2px; }
+  .chatitem .preview { color: var(--wa-surface-sub); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chatitem .meta { color: var(--wa-surface-sub); font-size: 11px; text-align: right; flex-shrink: 0; }
 
+  /* ---------- FAB unten links ---------- */
+  .fab {
+    position: absolute;
+    left: 16px; bottom: 16px;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #25d366; color: #fff;
+    border: 0; font-size: 30px; line-height: 1;
+    cursor: pointer; z-index: 20;
+    box-shadow: 0 4px 12px rgba(0,0,0,.3);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .12s;
+  }
+  .fab:active { transform: scale(.94); }
+
+  /* ---------- Chat-View ---------- */
   .chatview { flex: 1; display: flex; flex-direction: column; background: var(--wa-bg); overflow: hidden; }
   .messages {
     flex: 1; overflow-y: auto; padding: 10px 8px;
     background:
-      radial-gradient(circle at 20% 20%, rgba(255,255,255,.4) 0%, transparent 40%),
-      radial-gradient(circle at 80% 70%, rgba(255,255,255,.4) 0%, transparent 40%),
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,.18) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(255,255,255,.18) 0%, transparent 40%),
       var(--wa-bg);
   }
   .msg { max-width: 78%; padding: 6px 9px 5px; margin-bottom: 4px; border-radius: 7px; font-size: 14.5px; line-height: 1.35; word-wrap: break-word; box-shadow: 0 1px 0.5px rgba(0,0,0,.13); animation: pop .12s ease-out; }
   @keyframes pop { from { transform: scale(.96); opacity: .6; } to { transform: scale(1); opacity: 1; } }
-  .msg.out { background: var(--wa-bubble-out); margin-left: auto; border-top-right-radius: 0; }
-  .msg.in  { background: var(--wa-bubble-in); margin-right: auto; border-top-left-radius: 0; }
+  .msg.out { background: var(--wa-bubble-out); margin-left: auto; border-top-right-radius: 0; color: var(--wa-text); }
+  .msg.in  { background: var(--wa-bubble-in); margin-right: auto; border-top-left-radius: 0; color: var(--wa-text); }
   .msg .time { font-size: 10.5px; color: var(--wa-meta); text-align: right; margin-top: 2px; }
   .msg .tick { color: #4fc3f7; margin-left: 3px; }
   .composer { display: flex; gap: 6px; padding: 6px 8px; background: #f0f0f0; border-top: 1px solid #ddd; flex-shrink: 0; align-items: flex-end; }
   .composer input { flex: 1; padding: 10px 14px; border: 0; border-radius: 18px; font-size: 15px; outline: none; background: #fff; }
   .composer button { background: var(--wa-green); color: #fff; border: 0; border-radius: 50%; width: 40px; height: 40px; font-size: 17px; cursor: pointer; flex-shrink: 0; }
 
+  /* ---------- Settings ---------- */
   .settings { flex: 1; overflow-y: auto; background: #fff; }
   .settings .section { padding: 20px 16px; border-bottom: 1px solid #eee; }
   .settings .section h3 { color: var(--wa-green); font-size: 13px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 14px; font-weight: 600; }
@@ -122,6 +147,7 @@
   .settings .field .value { font-family: 'Courier New', monospace; font-weight: 700; background: #f7f7f7; color: var(--wa-green-dark); }
   .settings .hint { color: var(--wa-meta); font-size: 12px; margin-top: 8px; line-height: 1.5; }
 
+  /* ---------- Nummern-Check ---------- */
   .check-screen { flex: 1; display: flex; flex-direction: column; background: #0a0a0a; color: #fff; overflow: hidden; }
   .check-screen .topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; flex-shrink: 0; font-size: 17px; background: #0a0a0a; }
   .check-screen .topbar .cancel { color: #fff; background: transparent; border: 0; font-size: 17px; cursor: pointer; padding: 0; }
@@ -151,9 +177,10 @@
   .country-picker .sheet .item:active { background: #2c2c2e; }
   .country-picker .sheet .item .code { color: #8e8e93; font-family: 'Courier New', monospace; }
 
+  /* ---------- Modal ---------- */
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; animation: fade .15s; }
   @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
-  .modal .box { background: #fff; border-radius: 6px; padding: 22px; max-width: 340px; width: 100%; box-shadow: 0 8px 30px rgba(0,0,0,.3); max-height: 80vh; overflow-y: auto; }
+  .modal .box { background: #fff; border-radius: 6px; padding: 22px; max-width: 360px; width: 100%; box-shadow: 0 8px 30px rgba(0,0,0,.3); max-height: 80vh; overflow-y: auto; }
   .modal .box h2 { color: var(--wa-green); margin-bottom: 10px; font-size: 17px; font-weight: 600; }
   .modal .box p { color: var(--wa-text); margin-bottom: 16px; line-height: 1.5; font-size: 14px; }
   .modal .box input, .modal .box textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--wa-divider); border-radius: 4px; font-size: 15px; margin-bottom: 12px; outline: none; font-family: inherit; }
@@ -163,7 +190,13 @@
   .modal .box .row button { padding: 9px 16px; border: 0; border-radius: 4px; font-size: 14px; cursor: pointer; font-weight: 500; }
   .modal .box .row .cancel { background: #eee; color: #333; }
   .modal .box .row .ok { background: var(--wa-green); color: #fff; }
+  .modal .contact-item { padding: 10px 12px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .modal .contact-item:active { background: #f5f5f5; }
+  .modal .contact-item .cname { font-weight: 500; font-size: 14px; color: var(--wa-text); }
+  .modal .contact-item .cnum { font-size: 12px; color: var(--wa-meta); font-family: 'Courier New', monospace; }
+  .modal .contact-list { max-height: 240px; overflow-y: auto; margin-bottom: 12px; border: 1px solid var(--wa-divider); border-radius: 4px; }
 
+  /* ---------- Ban-Modal ---------- */
   .ban-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: flex; align-items: center; justify-content: center; z-index: 300; padding: 20px; animation: fade .15s; }
   .ban-modal { background: #2a2a2a; border-radius: 12px; width: 100%; max-width: 280px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,.5); animation: banIn .2s ease-out; }
   @keyframes banIn { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
@@ -174,9 +207,11 @@
   .ban-modal .buttons button:first-child { border-right: 1px solid #3d3d3d; }
   .ban-modal .buttons button:active { background: rgba(255,255,255,.06); }
 
+  /* ---------- Toast ---------- */
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.85); color: #fff; padding: 10px 18px; border-radius: 20px; font-size: 13px; z-index: 400; animation: toastIn .2s ease-out; }
   @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
+  /* ---------- Owner-Panel ---------- */
   .owner-panel { flex: 1; display: flex; flex-direction: column; background: #0a0a0a; color: #fff; overflow: hidden; }
   .owner-panel .topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #2c2c2e; flex-shrink: 0; }
   .owner-panel .topbar .title { font-size: 17px; font-weight: 600; }
@@ -274,25 +309,38 @@ function avatarFor(label, size, pic) {
   return div;
 }
 
-// ---------- Theme ----------
+// ---------- Color utils ----------
+function hexToRgb(hex) {
+  const h = (hex || '').replace('#', '');
+  if (h.length === 3) return { r: parseInt(h[0]+h[0],16), g: parseInt(h[1]+h[1],16), b: parseInt(h[2]+h[2],16) };
+  if (h.length !== 6) return null;
+  return { r: parseInt(h.slice(0,2),16), g: parseInt(h.slice(2,4),16), b: parseInt(h.slice(4,6),16) };
+}
 function hexShade(hex, percent) {
-  const h = (hex || '#075e54').replace('#', '');
-  if (h.length !== 6) return hex;
-  const num = parseInt(h, 16);
-  let r = (num >> 16) + Math.round(255 * percent / 100);
-  let g = ((num >> 8) & 0x00ff) + Math.round(255 * percent / 100);
-  let b = (num & 0x0000ff) + Math.round(255 * percent / 100);
-  r = Math.max(0, Math.min(255, r));
-  g = Math.max(0, Math.min(255, g));
-  b = Math.max(0, Math.min(255, b));
+  const rgb = hexToRgb(hex);
+  if (!rgb) return hex;
+  let r = Math.max(0, Math.min(255, rgb.r + Math.round(255 * percent / 100)));
+  let g = Math.max(0, Math.min(255, rgb.g + Math.round(255 * percent / 100)));
+  let b = Math.max(0, Math.min(255, rgb.b + Math.round(255 * percent / 100)));
   return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
 }
+function isLight(hex) {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return true;
+  const lum = (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b);
+  return lum > 155;
+}
 
+// ---------- Theme ----------
 function applyTheme(theme) {
   const root = document.documentElement;
   const t = theme || {};
-  if (t.bg)        root.style.setProperty('--wa-bg', t.bg);
-  else             root.style.removeProperty('--wa-bg');
+
+  // Chat-Hintergrund
+  if (t.bg) root.style.setProperty('--wa-bg', t.bg);
+  else      root.style.removeProperty('--wa-bg');
+
+  // Buttons / Header
   if (t.btn) {
     root.style.setProperty('--wa-green', t.btn);
     root.style.setProperty('--wa-green-dark', hexShade(t.btn, -18));
@@ -302,10 +350,26 @@ function applyTheme(theme) {
     root.style.removeProperty('--wa-green-dark');
     root.style.removeProperty('--wa-green-light');
   }
+
+  // Bubbles
   if (t.bubbleOut) root.style.setProperty('--wa-bubble-out', t.bubbleOut);
   else             root.style.removeProperty('--wa-bubble-out');
   if (t.bubbleIn)  root.style.setProperty('--wa-bubble-in', t.bubbleIn);
   else             root.style.removeProperty('--wa-bubble-in');
+
+  // Home / Chat-Liste Surface
+  if (t.surface) {
+    root.style.setProperty('--wa-surface', t.surface);
+    const light = isLight(t.surface);
+    root.style.setProperty('--wa-surface-text', light ? '#111' : '#f5f5f5');
+    root.style.setProperty('--wa-surface-sub',  light ? '#667781' : '#a0a0a8');
+    root.style.setProperty('--wa-surface-border', light ? '#e9edef' : 'rgba(255,255,255,.08)');
+  } else {
+    root.style.removeProperty('--wa-surface');
+    root.style.removeProperty('--wa-surface-text');
+    root.style.removeProperty('--wa-surface-sub');
+    root.style.removeProperty('--wa-surface-border');
+  }
 }
 
 // ---------- Modals ----------
@@ -606,7 +670,7 @@ async function doLogin() {
   }
 }
 
-// ---------- Owner login ----------
+// ---------- Owner Login ----------
 function renderOwnerLogin() {
   const app = document.getElementById('app');
   app.innerHTML = '';
@@ -801,7 +865,7 @@ async function loadPeerProfile(peer) {
   try { peerProfiles[peer] = await api('/api/user/' + encodeURIComponent(peer)); } catch {}
 }
 
-// ---------- Chat-Liste ----------
+// ---------- Chat-Liste mit FAB ----------
 async function renderChatList() {
   const app = document.getElementById('app');
   app.innerHTML = '';
@@ -809,12 +873,13 @@ async function renderChatList() {
     avatarFor(profile?.name || me, 36, profile?.picture),
     el('div', { class: 'title' }, 'WhatsApp'),
     el('div', { class: 'actions' }, [
-      el('button', { onclick: newChat, title: 'Neuer Chat' }, '✎'),
       el('button', { onclick: renderSettings, title: 'Einstellungen' }, '⋮')
     ])
   ]));
 
+  const wrap = el('div', { class: 'chatlist-wrap' });
   const list = el('div', { class: 'chatlist' });
+
   const allPeers = new Set();
   for (const key of Object.keys(chatMessages)) {
     const [a, b] = key.split('|');
@@ -825,7 +890,7 @@ async function renderChatList() {
     list.appendChild(el('div', { class: 'empty' }, [
       el('div', { class: 'icon' }, '💬'),
       el('div', {}, 'Noch keine Chats.'),
-      el('div', {}, 'Tippe auf ✎ um eine Nummer anzuschreiben.')
+      el('div', {}, 'Tippe auf + unten links um einen Kontakt anzuschreiben.')
     ]));
   } else {
     const arr = [...allPeers].map(p => {
@@ -846,49 +911,60 @@ async function renderChatList() {
       ]));
     }
   }
-  app.appendChild(list);
+  wrap.appendChild(list);
+
+  // FAB unten links
+  wrap.appendChild(el('button', { class: 'fab', title: 'Neuer Chat', onclick: openContactsSheet }, '+'));
+  app.appendChild(wrap);
 }
 
-function newChat() {
+// ---------- Kontakte-Sheet ----------
+function openContactsSheet() {
   const contactNumbers = Object.keys(contacts);
-  const modal = el('div', { class: 'modal', onclick: (e) => { if (e.target.classList.contains('modal')) modal.remove(); } });
+  const overlay = el('div', { class: 'modal', onclick: (e) => { if (e.target.classList.contains('modal')) overlay.remove(); } });
   const box = el('div', { class: 'box' });
   box.appendChild(el('h2', {}, 'Neuer Chat'));
 
   if (contactNumbers.length > 0) {
-    box.appendChild(el('p', {}, 'Kontakt auswählen oder Nummer eingeben:'));
-    const list = el('div', { style: 'max-height:200px;overflow-y:auto;margin-bottom:12px;border:1px solid var(--wa-divider);border-radius:4px' });
-    for (const num of contactNumbers) {
+    box.appendChild(el('p', {}, 'Kontakt auswählen:'));
+    const list = el('div', { class: 'contact-list' });
+    const sorted = [...contactNumbers].sort((a, b) => (contacts[a] || '').localeCompare(contacts[b] || ''));
+    for (const num of sorted) {
       list.appendChild(el('div', {
-        style: 'padding:10px 12px;border-bottom:1px solid #eee;cursor:pointer;display:flex;justify-content:space-between;align-items:center',
-        onclick: () => { modal.remove(); openChat(num); }
+        class: 'contact-item',
+        onclick: () => { overlay.remove(); openChat(num); }
       }, [
         el('div', {}, [
-          el('div', { style: 'font-weight:500;font-size:14px;color:var(--wa-text)' }, contacts[num]),
-          el('div', { style: 'font-size:12px;color:var(--wa-meta);font-family:Courier New,monospace' }, num)
+          el('div', { class: 'cname' }, contacts[num]),
+          el('div', { class: 'cnum' }, num)
         ]),
-        el('span', { style: 'color:var(--wa-green);font-size:18px' }, '›')
+        el('span', { style: 'color:var(--wa-green);font-size:20px' }, '›')
       ]));
     }
     box.appendChild(list);
   } else {
-    box.appendChild(el('p', {}, 'Nummer eingeben:'));
+    box.appendChild(el('p', {}, 'Noch keine Kontakte. Füge welche in den Einstellungen hinzu — oder gib direkt eine Nummer ein.'));
   }
 
-  box.appendChild(el('input', { id: 'peerInput', placeholder: '+7771234567', autofocus: true, onkeydown: (e) => { if (e.key === 'Enter') submit(); } }));
+  box.appendChild(el('div', { style: 'border-top:1px solid #eee;padding-top:12px;margin-top:4px' }, [
+    el('div', { style: 'font-size:12px;color:var(--wa-meta);text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px' }, 'Neue Nummer'),
+    el('input', { id: 'peerInput', placeholder: '+7771234567', inputmode: 'tel',
+      onkeydown: (e) => { if (e.key === 'Enter') submit(); } })
+  ]));
+
   box.appendChild(el('div', { class: 'row' }, [
-    el('button', { class: 'cancel', onclick: () => modal.remove() }, 'Abbrechen'),
+    el('button', { class: 'cancel', onclick: () => overlay.remove() }, 'Schließen'),
     el('button', { class: 'ok', onclick: submit }, 'Öffnen')
   ]));
-  modal.appendChild(box);
-  document.body.appendChild(modal);
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
   setTimeout(() => document.getElementById('peerInput')?.focus(), 50);
 
   function submit() {
     const v = document.getElementById('peerInput').value.trim();
     if (!v) return;
     if (v === me) { toast('Das ist deine eigene Nummer'); return; }
-    modal.remove();
+    overlay.remove();
     openChat(v);
   }
 }
@@ -1003,7 +1079,11 @@ function renderSettings() {
   wrap.appendChild(el('div', { class: 'section' }, [
     el('h3', {}, 'Design'),
     el('div', { class: 'field' }, [
-      el('label', {}, 'Hintergrund'),
+      el('label', {}, 'Home / Chat-Liste Hintergrund'),
+      el('input', { type: 'color', id: 'themeSurface', value: theme.surface || '#ffffff', style: 'height:40px;padding:4px;cursor:pointer' })
+    ]),
+    el('div', { class: 'field' }, [
+      el('label', {}, 'Chat-Hintergrund'),
       el('input', { type: 'color', id: 'themeBg', value: theme.bg || '#ece5dd', style: 'height:40px;padding:4px;cursor:pointer' })
     ]),
     el('div', { class: 'field' }, [
@@ -1126,6 +1206,7 @@ async function saveProfileSettings() {
 
 async function saveTheme() {
   const theme = {
+    surface:   document.getElementById('themeSurface').value,
     bg:        document.getElementById('themeBg').value,
     btn:       document.getElementById('themeBtn').value,
     bubbleOut: document.getElementById('themeBubbleOut').value,
@@ -1140,7 +1221,7 @@ async function saveTheme() {
 }
 
 async function resetTheme() {
-  const theme = { bg: '', btn: '', bubbleOut: '', bubbleIn: '' };
+  const theme = { surface: '', bg: '', btn: '', bubbleOut: '', bubbleIn: '' };
   try {
     await api('/api/profile', { method: 'POST', body: JSON.stringify({ theme }) });
     profile.theme = null;
@@ -1250,7 +1331,7 @@ function renderNumberCheck() {
 function buildCheckResultBox(r) {
   if (r.locked) return el('div', { class: 'check-result show locked' }, '🔒 ' + r.number + ' ist gesperrt.');
   if (r.status && r.status !== 200 && !r.banned) return el('div', { class: 'check-result show info' }, 'API-Status: ' + r.status + ' — keine eindeutige Antwort.');
-  return null;   // frei / banned → keine Box (banned zeigt Modal)
+  return null;
 }
 
 function openCountryPicker() {
